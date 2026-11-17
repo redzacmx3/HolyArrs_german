@@ -1,5 +1,6 @@
 // Status page rows: linked apps, checks and jobs as one kind of row, grouped in a fixed order.
 import { t } from '#lib/core/i18n/i18n.svelte.ts';
+import { serverWords } from '#lib/core/i18n/server-words.ts';
 import type { AlertView, HealthCheck } from '../core/types.ts';
 import type { OutsideList } from '../requests/index.ts';
 import type { StageState } from './types.ts';
@@ -83,7 +84,8 @@ const checkFix: Record<string, string> = {
 	save_folder: '/settings/downloaders',
 	no_downloader: '/settings/downloaders',
 	same_downloader: '/settings/downloaders',
-	pick_rules: '/settings/pick-rules'
+	pick_rules: '/settings/pick-rules',
+	people_check: '/settings/media-servers'
 };
 const checkName: Record<string, string> = {
 	get library_folder() { return t('health.check.folder'); },
@@ -96,7 +98,8 @@ const checkName: Record<string, string> = {
 	get clear_waiting() { return t('health.check.clearWaiting'); },
 	get save_folder() { return t('health.check.saveFolder'); },
 	get same_downloader() { return t('health.check.sameDownloader'); },
-	get pick_rules() { return t('mediafiles.copy.pickRules'); }
+	get pick_rules() { return t('mediafiles.copy.pickRules'); },
+	get people_check() { return t('health.check.peopleCheck'); }
 };
 
 // The server's own steps need a shell, so say what a container screen can do.
@@ -180,6 +183,8 @@ export function jobTone(s: ScheduleRow, now = Date.now()): { tone: Tone; word: s
 	return { tone: 'ok', word: t('health.result.ok'), reason: '' };
 }
 
+const downloaderChecks = new Set(['save_folder', 'no_downloader', 'same_downloader']);
+
 // One pass per kind of input, so group order is set later by groupRows.
 
 export function buildRows(i: StatusInput): StatusRow[] {
@@ -189,10 +194,12 @@ export function buildRows(i: StatusInput): StatusRow[] {
 		if (!m) continue;
 		const id = linkId(s.key);
 		const check: CheckAction | undefined = id && (s.kind === 'source' || s.kind === 'downloader') ? { kind: s.kind, id } : undefined;
-		rows.push({ group: m.g, key: s.key, name: s.name, ...linkTone(s), reason: s.reason, at: realTime(s.since), fix: m.fix, check });
+		rows.push({ group: m.g, key: s.key, name: s.name, ...linkTone(s), reason: serverWords(s.reason), at: realTime(s.since), fix: m.fix, check });
 	}
 	for (const c of i.checks ?? []) {
 		if (typeof checkFix[c.kind] !== 'string') continue;
+		// A passing Downloader-group check is not a Downloader; shown, it looks like a ghost one.
+		if (c.state === 'ok' && downloaderChecks.has(c.kind)) continue;
 		const tone: Tone = c.state === 'ok' ? 'ok' : c.state === 'warning' ? 'wait' : 'fail';
 		rows.push({
 			group: c.kind === 'update' ? 'app' : c.kind === 'save_folder' || c.kind === 'no_downloader' || c.kind === 'same_downloader' ? 'downloaders' : 'library',
@@ -200,7 +207,7 @@ export function buildRows(i: StatusInput): StatusRow[] {
 			name: checkTitle(c),
 			tone,
 			word: tone === 'ok' ? t('health.word.working') : tone === 'wait' ? t('health.state.warning') : t('health.word.broken'),
-			reason: c.kind === 'config_folder' && c.state !== 'ok' ? t('health.check.configSteps') : c.kind === 'save_folder' && c.state !== 'ok' ? t('health.check.saveFolderWhy', { app: c.subject }) : c.kind === 'no_downloader' && c.state !== 'ok' ? t(c.subject === 'usenet' ? 'health.check.noUsenetDl' : 'health.check.noTorrentDl') : c.kind === 'same_downloader' && c.state !== 'ok' ? t('health.check.sameDownloaderWhy', { app: c.subject }) : c.kind === 'pick_rules' ? pickRulesWhy(c.message) : c.message,
+			reason: c.kind === 'config_folder' && c.state !== 'ok' ? t('health.check.configSteps') : c.kind === 'save_folder' && c.state !== 'ok' ? t('health.check.saveFolderWhy', { app: c.subject }) : c.kind === 'no_downloader' && c.state !== 'ok' ? t(c.subject === 'usenet' ? 'health.check.noUsenetDl' : 'health.check.noTorrentDl') : c.kind === 'same_downloader' && c.state !== 'ok' ? t('health.check.sameDownloaderWhy', { app: c.subject }) : c.kind === 'pick_rules' ? pickRulesWhy(c.message) : c.key === 'backups:key' && c.state === 'ok' && c.message ? keyKitNote(c.message) : c.message,
 			at: c.checked_at || c.since,
 			fix: c.kind === 'pick_rules' ? `/settings/pick-rules/${c.key.split(':')[1]}` : checkFix[c.kind] || undefined,
 			check: { kind: 'checks' }
@@ -209,7 +216,7 @@ export function buildRows(i: StatusInput): StatusRow[] {
 	for (const l of i.lists ?? []) {
 		const base = { group: 'lists' as const, key: `list:${l.id}`, name: l.name, at: l.last_synced_at, fix: '/settings/outside-lists' };
 		if (!l.enabled) rows.push({ ...base, tone: 'idle', word: t('health.run.off'), reason: '' });
-		else if (l.last_error) rows.push({ ...base, tone: 'fail', word: t('health.word.broken'), reason: l.last_error });
+		else if (l.last_error) rows.push({ ...base, tone: 'fail', word: t('health.word.broken'), reason: serverWords(l.last_error) });
 		else if (!l.last_synced_at) rows.push({ ...base, tone: 'idle', word: t('health.word.notSynced'), reason: '' });
 		else rows.push({ ...base, tone: 'ok', word: t('health.word.working'), reason: l.last_result });
 	}
@@ -305,4 +312,9 @@ function checkTitle(c: Pick<HealthCheck, 'kind' | 'subject'>): string {
 	if (c.kind === 'no_downloader') return c.subject === 'usenet' ? t('health.check.usenetDl') : t('health.check.torrentDl');
 	if (!c.subject || c.subject === n || c.kind === 'waiting_downloads' || c.kind === 'clear_waiting' || c.kind.startsWith('config_')) return n;
 	return c.kind === 'update' ? c.subject : `${n} ${c.subject}`;
+}
+
+// The key kit's calm note, in the picked language; the owner's words differ from everyone else's.
+function keyKitNote(message: string): string {
+	return /owner/i.test(message) ? t('health.check.keyKitRecommendedOthers') : t('health.check.keyKitRecommended');
 }
