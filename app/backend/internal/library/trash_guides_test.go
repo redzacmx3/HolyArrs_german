@@ -9,7 +9,8 @@ import (
 
 // TestBuild: a profile brings its own formats and its default groups'
 // ones; scores past the Pick rules bound are cut; a format with a test
-// kind HolyArrs cannot run is skipped and named, never half-taken.
+// kind HolyArrs cannot run is skipped and named, never half-taken;
+// language tests come across.
 func TestBuild(t *testing.T) {
 	c := NewTrashGuides()
 	c.Raw, c.API = trashtest.Serve(t, trashtest.Files)
@@ -29,7 +30,7 @@ func TestBuild(t *testing.T) {
 			t.Errorf("trait %+v lacks its source or tests", pl.Trait)
 		}
 	}
-	want := map[string]int{"HEVC": -500, "Good group": 1700, "LQ": -20000}
+	want := map[string]int{"HEVC": -500, "Good group": 1700, "Lang only": -10000, "LQ": -20000}
 	if len(got) != len(want) {
 		t.Fatalf("traits %v, want %v", got, want)
 	}
@@ -38,10 +39,15 @@ func TestBuild(t *testing.T) {
 			t.Errorf("%s = %d, want %d", k, got[k], v)
 		}
 	}
-	if len(plan.Skipped) != 1 || plan.Skipped[0].Name != "Lang only" || len(plan.Skipped[0].Kinds) != 1 || plan.Skipped[0].Kinds[0] != "language" {
+	if len(plan.Skipped) != 1 || plan.Skipped[0].Name != "Flag only" || len(plan.Skipped[0].Kinds) != 1 || plan.Skipped[0].Kinds[0] != "indexer flag" {
 		t.Fatalf("skipped: %+v", plan.Skipped)
 	}
 	for _, pl := range plan.Traits {
+		if pl.Trait.Name == "Lang only" {
+			if s := pl.Trait.Specs[0]; s.Kind != "language" || s.Value != "en" || !s.Negate {
+				t.Errorf("language test: %+v", s)
+			}
+		}
 		if pl.Trait.Name == "Good group" {
 			if s := pl.Trait.Specs[1]; s.Kind != "source" || s.Value != "web_dl" {
 				t.Errorf("source test: %+v", s)

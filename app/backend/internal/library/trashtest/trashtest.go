@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-// Files is the made-up sonarr tree: one profile, three formats (a name
-// test, a group-and-source test, and one with a language test HolyArrs
-// skips) and one default group adding a fourth.
+// Files is the made-up sonarr tree: one profile, four formats (a name
+// test, a group-and-source test, a language test, and one with an indexer
+// flag test HolyArrs skips) and one default group adding a fifth.
 var Files = map[string]string{
 	"docs/json/sonarr/quality-profiles/test-1080p.json": `{"trash_id":"p1","name":"Test 1080p","trash_description":"Line one<br>line two",
 		"minFormatScore":0,"cutoffFormatScore":10000,"minUpgradeFormatScore":1,
-		"formatItems":{"HEVC":"f1","Good group":"f2","Lang only":"f3"}}`,
+		"formatItems":{"HEVC":"f1","Good group":"f2","Lang only":"f3","Flag only":"f5"}}`,
 	"docs/json/sonarr/cf/hevc.json": `{"trash_id":"f1","name":"HEVC","trash_scores":{"default":-500},
 		"specifications":[{"name":"x265","implementation":"ReleaseTitleSpecification","negate":false,"required":true,"fields":{"value":"[xh][ ._-]?265|\\bHEVC\\b"}}]}`,
 	"docs/json/sonarr/cf/good-group.json": `{"trash_id":"f2","name":"Good group","trash_scores":{"default":1700},
@@ -24,6 +24,8 @@ var Files = map[string]string{
 		{"name":"WEB","implementation":"SourceSpecification","negate":false,"required":false,"fields":{"value":3}}]}`,
 	"docs/json/sonarr/cf/lang.json": `{"trash_id":"f3","name":"Lang only","trash_scores":{"default":-10000},
 		"specifications":[{"name":"Not English","implementation":"LanguageSpecification","negate":true,"required":false,"fields":{"value":1}}]}`,
+	"docs/json/sonarr/cf/flag.json": `{"trash_id":"f5","name":"Flag only","trash_scores":{"default":50},
+		"specifications":[{"name":"Freeleech","implementation":"IndexerFlagSpecification","negate":false,"required":false,"fields":{"value":1}}]}`,
 	"docs/json/sonarr/cf/lq.json": `{"trash_id":"f4","name":"LQ","trash_scores":{"default":-20000},
 		"specifications":[{"name":"LQ","implementation":"ReleaseGroupSpecification","negate":false,"required":false,"fields":{"value":"^(BADGRP)$"}}]}`,
 	"docs/json/sonarr/cf-groups/unwanted.json": `{"name":"Unwanted","default":"true",

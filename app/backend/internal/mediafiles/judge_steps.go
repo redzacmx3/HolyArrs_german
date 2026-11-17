@@ -136,8 +136,10 @@ var langNames = map[string]string{"en": "English", "fr": "French", "de": "German
 
 func (v *Verdict) language(p releasename.Result, rules PickRulesBody, t *TitleRef) {
 	langs := p.Languages
-	if len(langs) == 0 && rules.Synced.OldApp() && t.OriginalLanguage != "" {
+	if len(langs) == 0 && t.OriginalLanguage != "" && (rules.Synced.OldApp() || len(rules.Language.Wanted) > 0) {
 		// As the old apps: no language word means the original language.
+		// Rules that name languages read it so too, or an untagged English
+		// Release would pass rules that want German only.
 		langs = []string{t.OriginalLanguage}
 	}
 	if len(langs) == 0 {

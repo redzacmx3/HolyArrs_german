@@ -29,6 +29,9 @@ type FormatSpec struct {
 // TRaSH sync keeps its earlier kinds, so its traits never change.
 type ConvertOptions struct {
 	MoreKinds bool
+	// Languages takes language tests on their own (TRaSH sync turns it on,
+	// so the German and other language formats come across).
+	Languages bool
 }
 
 // ConvertFormat turns a format's tests into trait tests; skipped lists the
@@ -103,7 +106,7 @@ func ConvertFormat(app string, in []FormatSpec, opt ConvertOptions) (specs []med
 			}
 		case "LanguageSpecification":
 			code := s.Language
-			if !opt.MoreKinds || code == "" || s.Except && code == "any" {
+			if !opt.MoreKinds && !opt.Languages || code == "" || s.Except && code == "any" {
 				bad["language"] = true
 				continue
 			}

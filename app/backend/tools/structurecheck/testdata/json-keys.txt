@@ -551,6 +551,7 @@ event_kind
 every_minutes
 every_s
 everyone
+exceptLanguage
 exception
 exclusions
 exists
@@ -1125,6 +1126,7 @@ origin_country
 original
 originalLanguage
 originalNetwork
+original_audio
 original_language
 original_name
 original_ok
@@ -1651,6 +1653,7 @@ stuck
 studio
 studios
 sub
+sub_languages
 subdl
 subject
 subtitle

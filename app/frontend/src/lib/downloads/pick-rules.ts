@@ -153,6 +153,13 @@ export function checkOwnTrait(name: string, terms: string[]): Record<string, str
 	return err;
 }
 
+/** Finds what the server would refuse in a language trait: 1 to 10 lines, each a two-letter code (pt-br too) or "original", "!" before one for "not". */
+export function checkLanguageTrait(name: string, terms: string[]): Record<string, string> {
+	const err = checkOwnTrait(name, ['x']);
+	if (terms.length === 0 || terms.length > 10 || terms.some((t) => !/^!?\s*([a-z]{2}(-[a-z]{2})?|original)$/i.test(t.trim()))) err.terms = say('downloads.pr.err.languageTerms');
+	return err;
+}
+
 /** A size trait's one term, "over-upto" in GB; an empty end is open. */
 export function sizeTerm(over: string, upTo: string): string {
 	return `${over.trim()}-${upTo.trim()}`;

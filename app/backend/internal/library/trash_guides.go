@@ -65,6 +65,8 @@ type TrashSpec struct {
 		// Size tests give their ends in GB.
 		Min float64 `json:"min"`
 		Max float64 `json:"max"`
+		// ExceptLanguage turns a language test into "any language but this one".
+		ExceptLanguage bool `json:"exceptLanguage"`
 	} `json:"fields"`
 }
 
@@ -266,7 +268,6 @@ type TrashPlan struct {
 
 // trashSkippedKinds names the test kinds HolyArrs skips, for the app and docs.
 var trashSkippedKinds = map[string]string{
-	"LanguageSpecification":    "language",
 	"IndexerFlagSpecification": "indexer flag",
 	"ReleaseTypeSpecification": "release type",
 	"YearSpecification":        "year",
@@ -359,8 +360,47 @@ func trashConvert(app string, in []TrashSpec) ([]mediafiles.OwnSpec, []string) {
 		} else {
 			_ = json.Unmarshal(s.Fields.Value, &str)
 		}
-		specs = append(specs, FormatSpec{Name: s.Name, Implementation: s.Implementation, Negate: s.Negate, Required: s.Required,
-			Value: str, Min: s.Fields.Min, Max: s.Fields.Max})
+		fs := FormatSpec{Name: s.Name, Implementation: s.Implementation, Negate: s.Negate, Required: s.Required,
+			Value: str, Min: s.Fields.Min, Max: s.Fields.Max, Except: s.Fields.ExceptLanguage}
+		if s.Implementation == "LanguageSpecification" {
+			fs.Language = trashLanguage(app, num)
+		}
+		specs = append(specs, fs)
 	}
-	return ConvertFormat(app, specs, ConvertOptions{})
+	return ConvertFormat(app, specs, ConvertOptions{Languages: true})
 }
+
+// trashLanguage maps an old app's language id, as TRaSH formats give it,
+// to a language test's value: a code, "original" or "any"; "" when
+// HolyArrs has none. Ids up to 25 are the same in both apps.
+func trashLanguage(app string, id int) string {
+	switch id {
+	case -2:
+		return "original"
+	case -1:
+		if app == "radarr" {
+			return "any"
+		}
+		return ""
+	}
+	if id >= 1 && id <= 25 {
+		return trashSharedLanguages[id]
+	}
+	if app == "radarr" {
+		return trashRadarrLanguages[id]
+	}
+	return trashSonarrLanguages[id]
+}
+
+var (
+	trashSharedLanguages = map[int]string{1: "en", 2: "fr", 3: "es", 4: "de", 5: "it", 6: "da", 7: "nl", 8: "ja", 9: "is",
+		10: "zh", 11: "ru", 12: "pl", 13: "vi", 14: "sv", 15: "no", 16: "fi", 17: "tr", 18: "pt", 19: "nl", 20: "el",
+		21: "ko", 22: "hu", 23: "he", 24: "lt", 25: "cs"}
+	trashRadarrLanguages = map[int]string{26: "hi", 27: "ro", 28: "th", 29: "bg", 30: "pt", 31: "ar", 32: "uk", 33: "fa",
+		34: "bn", 35: "sk", 36: "lv", 37: "es", 38: "ca", 39: "hr", 40: "sr", 41: "bs", 42: "et", 43: "ta", 44: "id",
+		45: "te", 46: "mk", 47: "sl", 48: "ml", 49: "kn", 50: "sq", 51: "af", 52: "mr", 53: "tl", 54: "ur", 55: "rm",
+		56: "mn", 57: "ka"}
+	trashSonarrLanguages = map[int]string{26: "ar", 27: "hi", 28: "bg", 29: "ml", 30: "uk", 31: "sk", 32: "th", 33: "pt",
+		34: "es", 35: "ro", 36: "lv", 37: "fa", 38: "ca", 39: "hr", 40: "sr", 41: "bs", 42: "et", 43: "ta", 44: "id",
+		45: "mk", 46: "sl"}
+)

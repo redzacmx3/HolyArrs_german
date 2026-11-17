@@ -70,3 +70,66 @@ func TestOwnTraitsKeptBySizeMigration(t *testing.T) {
 		t.Fatal("a second trait named remux was accepted")
 	}
 }
+
+// 0123 rebuilds own_traits to allow the language kind and keeps every trait,
+// its id, the AUTOINCREMENT mark and the formats that point at a trait.
+func TestOwnTraitsKeptByLanguageMigration(t *testing.T) {
+	dir := t.TempDir()
+	ctx := context.Background()
+	old, err := Open(dir, Options{MainMigrations: upTo(t, 122)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = old.Write(ctx, func(tx *sql.Tx) error {
+		_, err := tx.Exec(`INSERT INTO own_traits (id, created_at, updated_at, name, match, terms, source, source_id, specs) VALUES
+			(4, 'c', 'u', 'Huge', 'size', '["60-"]', '', '', '[]'),
+			(8, 'c', 'u', 'German DL', 'name', '[]', 'trash', 'radarr:x', '[{"kind":"language","value":"de"}]')`)
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(`INSERT INTO own_traits (id, created_at, updated_at, name, match) VALUES (20, 'c', 'u', 'Gone', 'name')`)
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(`DELETE FROM own_traits WHERE id = 20`)
+		return err
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = old.Close()
+
+	s, err := Open(dir, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Close()
+	var n int
+	if err := s.Read().QueryRow(`SELECT count(*) FROM own_traits WHERE
+		(id = 4 AND match = 'size' AND terms = '["60-"]') OR
+		(id = 8 AND source = 'trash' AND source_id = 'radarr:x')`).Scan(&n); err != nil || n != 2 {
+		t.Fatalf("traits kept %d %v", n, err)
+	}
+	var id int64
+	err = s.Write(ctx, func(tx *sql.Tx) error {
+		r, err := tx.Exec(`INSERT INTO own_traits (created_at, updated_at, name, match, terms) VALUES ('c', 'u', 'German', 'language', '["de"]')`)
+		if err != nil {
+			return err
+		}
+		id, err = r.LastInsertId()
+		return err
+	})
+	if err != nil {
+		t.Fatalf("language trait: %v", err)
+	}
+	if id <= 20 {
+		t.Fatalf("a removed trait's id came back: %d", id)
+	}
+	err = s.Write(ctx, func(tx *sql.Tx) error {
+		_, err := tx.Exec(`INSERT INTO own_traits (created_at, updated_at, name, match) VALUES ('c', 'u', 'x', 'title')`)
+		return err
+	})
+	if err == nil {
+		t.Fatal("an unknown match was accepted")
+	}
+}

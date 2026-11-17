@@ -137,15 +137,31 @@ func (s ownSpec) match(trait, text string) bool {
 	return hit
 }
 
+// originalMark stands in a language list for the title's original
+// language while that language is not known (German DL of an unmatched
+// name), so an "original" test still finds it.
+const originalMark = "original"
+
 // languagesOf is the language list a language test reads: a library
-// file's audio tracks, else the languages in the name, else the title's
+// file's audio tracks, else the languages in the name (with the original
+// language when the name claims it, as German DL does), else the title's
 // original language (what a Release with no language word is in).
 func languagesOf(p releasename.Result) []string {
 	if len(p.AudioLanguages) > 0 {
 		return p.AudioLanguages
 	}
 	if len(p.Languages) > 0 {
-		return p.Languages
+		if !p.OriginalAudio {
+			return p.Languages
+		}
+		orig := p.OriginalLanguage
+		if orig == "" {
+			orig = originalMark
+		}
+		if slices.ContainsFunc(p.Languages, func(l string) bool { return strings.EqualFold(l, orig) }) {
+			return p.Languages
+		}
+		return append(slices.Clone(p.Languages), orig)
 	}
 	if p.OriginalLanguage != "" {
 		return []string{p.OriginalLanguage}
@@ -163,12 +179,15 @@ func (s ownSpec) language(p releasename.Result) (hit, known bool) {
 	case "any":
 		return true, true
 	case "original":
-		if p.OriginalLanguage == "" {
-			// Not known: it is in no list, so it never fits (negate turns
-			// that into a fit) and every language is another one.
-			return s.except, true
-		}
 		want = p.OriginalLanguage
+		if want == "" {
+			if !slices.Contains(langs, originalMark) {
+				// Not known: it is in no list, so it never fits (negate turns
+				// that into a fit) and every language is another one.
+				return s.except, true
+			}
+			want = originalMark
+		}
 	}
 	for _, l := range langs {
 		if s.except && !strings.EqualFold(l, want) || !s.except && strings.EqualFold(l, want) {

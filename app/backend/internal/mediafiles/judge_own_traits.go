@@ -45,6 +45,13 @@ func SetOwnTraits(ts []OwnTrait) {
 			m[t.ID] = o
 			continue
 		}
+		if t.Match == "language" {
+			// A language trait runs as language tests that must all pass.
+			o.specs, o.bad = compileSpecs(languageSpecs(t.Terms))
+			o.bad = !o.bad
+			m[t.ID] = o
+			continue
+		}
 		if t.Match == "size" {
 			r := sizeRange{}
 			ok := len(t.Terms) == 1

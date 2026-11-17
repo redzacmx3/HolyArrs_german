@@ -33,7 +33,7 @@ func TestApplyTrash(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if res.Added != 3 || res.Updated != 0 || len(res.Skipped) != 1 {
+	if res.Added != 4 || res.Updated != 0 || len(res.Skipped) != 1 {
 		t.Fatalf("first sync: %+v", res)
 	}
 	b := res.PickRules.Body
@@ -60,7 +60,7 @@ func TestApplyTrash(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if again.Added != 0 || again.Updated != 3 {
+	if again.Added != 0 || again.Updated != 4 {
 		t.Fatalf("re-sync: %+v", again)
 	}
 	if ts2, _ := OwnTraits(ctx, st); len(ts2) != len(ts) {

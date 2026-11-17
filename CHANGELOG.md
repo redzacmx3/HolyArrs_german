@@ -2,6 +2,19 @@
 
 All notable changes to HolyArrs are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- German Usenet releases are read as Radarr and Sonarr read them: German DL also holds the original language, German ML the original and English, and German Subbed or OmU are subtitles, not audio.
+- TRaSH Guides sync takes language tests, so the German profiles' German DL, German, German Subbed and booster entries score.
+- Your own traits can look at a Release's languages (`de`, `original`, `!en`).
+
+### Changed
+
+- Pick rules that name the languages they take read a Release with no language word as the title's original language, as imported rules already did.
+- **Dubbed only** no longer fits German DL releases marked Dubbed, which keep the original audio.
+
 ## 1.1.4
 
 ### Added

@@ -223,7 +223,8 @@ func traitMatches(trait string, p releasename.Result) (bool, string) {
 	case "upscaled":
 		return p.Has("upscaled"), "marked as upscaled"
 	case "dubbed_only":
-		return p.Has("dubbed"), "dubbed only"
+		// German.DL.Dubbed keeps the original audio beside the dub.
+		return p.Has("dubbed") && !p.OriginalAudio && !p.Has("dual") && !p.Has("multi"), "dubbed only"
 	case "hardcoded_subs":
 		return p.Has("hardcoded_subs"), "has hardcoded subtitles"
 	case "3d":
