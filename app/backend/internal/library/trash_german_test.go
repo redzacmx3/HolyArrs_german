@@ -120,6 +120,13 @@ func TestTrashGermanProfileRanksGermanFirst(t *testing.T) {
 	if rules.Order != "points_then_quality" || !slices.Contains(rules.Language.Wanted, "de") || !rules.Language.OriginalOK {
 		t.Fatalf("order %s language %+v", rules.Order, rules.Language)
 	}
+	// A sync keeps the languages the owner already chose.
+	mine := mediafiles.GoodEveryday()
+	mine.Language = mediafiles.LanguageRule{Wanted: []string{"de"}, OriginalOK: true}
+	trashShape(&mine, prof)
+	if !slices.Equal(mine.Language.Wanted, []string{"de"}) || !mine.Language.OriginalOK {
+		t.Fatalf("own choice overwritten: %+v", mine.Language)
+	}
 	if err := mediafiles.CheckPickRules("German", []string{"movie"}, rules); err != nil {
 		t.Fatalf("rules refused: %v", err)
 	}
