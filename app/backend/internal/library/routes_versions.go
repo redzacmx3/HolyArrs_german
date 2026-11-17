@@ -28,11 +28,13 @@ type VersionHandlers struct {
 	DownloadPaths func(r *http.Request) []string
 }
 
-// Routes registers POST, PUT and DELETE /api/v1/titles/{id}/versions.
+// Routes registers POST, PUT and DELETE /api/v1/titles/{id}/versions and the
+// title's wishes.
 func (h *VersionHandlers) Routes(m *http.ServeMux) {
 	m.HandleFunc("POST /api/v1/titles/{id}/versions", h.addVersion)
 	m.HandleFunc("PUT /api/v1/titles/{id}/versions/{vid}", h.editVersion)
 	m.HandleFunc("DELETE /api/v1/titles/{id}/versions/{vid}", h.deleteVersion)
+	h.wishRoutes(m)
 }
 
 // actor is the signed-in person, or the owner when no session is attached.

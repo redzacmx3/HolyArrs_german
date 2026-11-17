@@ -68,6 +68,7 @@ func (s *Searcher) loadSlot(ctx context.Context, slotID int64) (slotCtx, error) 
 	if err := mediafiles.LoadPickRules(ctx, db, c.ver.PickRulesID, &c.pr); err != nil {
 		return c, err
 	}
+	c.pr = mediafiles.RulesFor(ctx, db, c.pr, c.sl.ItemID)
 
 	c.cur = currentOf(ctx, db, c.sl, c.pr)
 	return c, nil

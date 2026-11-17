@@ -26523,6 +26523,470 @@
         "x-holyarrs-scope": "admin"
       }
     },
+    "/api/v1/settings/wishes/{kind}": {
+      "get": {
+        "description": "Reads the wish laid over the Pick rules of every movie or every show, with each set in use.",
+        "operationId": "getKindWish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "saved": {
+                      "type": "boolean"
+                    },
+                    "sets": {
+                      "items": {
+                        "properties": {
+                          "after": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "before": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "pick_rules_id": {
+                            "type": "integer"
+                          },
+                          "titles": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "wish": {
+                      "properties": {
+                        "languages": {
+                          "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "original_ok": {
+                          "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                          "type": "boolean"
+                        },
+                        "quality": {
+                          "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                          "enum": [
+                            "720p",
+                            "1080p",
+                            "2160p"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "description": "The kind is not movie or show."
+          }
+        },
+        "summary": "Read the language and quality wish for every movie or show",
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "settings",
+        "x-holyarrs-scope": "read"
+      },
+      "put": {
+        "description": "Saves the wish for every movie or show and re-checks which files are good enough.",
+        "operationId": "putKindWish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "languages": {
+                    "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "original_ok": {
+                    "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                    "type": "boolean"
+                  },
+                  "quality": {
+                    "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                    "enum": [
+                      "720p",
+                      "1080p",
+                      "2160p"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "saved": {
+                      "type": "boolean"
+                    },
+                    "sets": {
+                      "items": {
+                        "properties": {
+                          "after": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "before": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "pick_rules_id": {
+                            "type": "integer"
+                          },
+                          "titles": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "wish": {
+                      "properties": {
+                        "languages": {
+                          "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "original_ok": {
+                          "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                          "type": "boolean"
+                        },
+                        "quality": {
+                          "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                          "enum": [
+                            "720p",
+                            "1080p",
+                            "2160p"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "An unknown quality, language or kind."
+          }
+        },
+        "summary": "Save the language and quality wish for every movie or show",
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "settings",
+        "x-holyarrs-scope": "write"
+      }
+    },
+    "/api/v1/settings/wishes/{kind}/preview": {
+      "post": {
+        "description": "Shows what each Pick rules set in use would ask for with the wish, without saving it.",
+        "operationId": "previewKindWish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "languages": {
+                    "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "original_ok": {
+                    "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                    "type": "boolean"
+                  },
+                  "quality": {
+                    "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                    "enum": [
+                      "720p",
+                      "1080p",
+                      "2160p"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "saved": {
+                      "type": "boolean"
+                    },
+                    "sets": {
+                      "items": {
+                        "properties": {
+                          "after": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "before": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "pick_rules_id": {
+                            "type": "integer"
+                          },
+                          "titles": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "wish": {
+                      "properties": {
+                        "languages": {
+                          "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "original_ok": {
+                          "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                          "type": "boolean"
+                        },
+                        "quality": {
+                          "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                          "enum": [
+                            "720p",
+                            "1080p",
+                            "2160p"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "An unknown quality, language or kind."
+          }
+        },
+        "summary": "Show what a wish for every movie or show would change",
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "settings",
+        "x-holyarrs-scope": "write"
+      }
+    },
     "/api/v1/shows": {
       "post": {
         "description": "Adds a show with which seasons to keep up to date, what happens to new seasons, its episode order and details source. Seasons, episodes and one Slot per episode are written at once; each episode is not out yet until it airs, then missing. A folder look follows as a Job. With search_on_add, the whole show is searched after the folder look, the same search POST /titles/{id}/search starts for a show. With more_versions, each extra Version (such as 4K) gets one Slot per episode too. A field the request leaves out (library_folder_id, pick_rules_id, keep_up_to_date, search_on_add) takes the saved Movies and TV default for shows, only when that default has been saved.",
@@ -30838,6 +31302,456 @@
           }
         },
         "summary": "Adopt an existing movie copy",
+        "x-holyarrs-part": "title",
+        "x-holyarrs-permission": "manage_library",
+        "x-holyarrs-scope": "write"
+      }
+    },
+    "/api/v1/titles/{id}/wishes": {
+      "get": {
+        "description": "Reads the wishes saved for the title, its seasons and episodes, and the one for every title of its kind.",
+        "operationId": "getTitleWishes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "kind": {
+                      "properties": {
+                        "languages": {
+                          "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "original_ok": {
+                          "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                          "type": "boolean"
+                        },
+                        "quality": {
+                          "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                          "enum": [
+                            "720p",
+                            "1080p",
+                            "2160p"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "wishes": {
+                      "items": {
+                        "properties": {
+                          "item_id": {
+                            "description": "The episode; 0 or left out for the title or season.",
+                            "type": "integer"
+                          },
+                          "part_id": {
+                            "description": "The season; 0 or left out for the whole title.",
+                            "type": "integer"
+                          },
+                          "title_id": {
+                            "type": "integer"
+                          },
+                          "wish": {
+                            "properties": {
+                              "languages": {
+                                "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "original_ok": {
+                                "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                                "type": "boolean"
+                              },
+                              "quality": {
+                                "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                                "enum": [
+                                  "720p",
+                                  "1080p",
+                                  "2160p"
+                                ],
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "description": "No such title."
+          }
+        },
+        "summary": "Read the language and quality wishes of a title",
+        "x-holyarrs-part": "title",
+        "x-holyarrs-permission": "manage_library",
+        "x-holyarrs-scope": "read"
+      },
+      "put": {
+        "description": "Saves a wish for the title, a season or an episode (an empty wish removes it) and re-checks which files are good enough.",
+        "operationId": "putTitleWish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "item_id": {
+                    "description": "The episode; 0 or left out for the title or season.",
+                    "type": "integer"
+                  },
+                  "part_id": {
+                    "description": "The season; 0 or left out for the whole title.",
+                    "type": "integer"
+                  },
+                  "title_id": {
+                    "type": "integer"
+                  },
+                  "wish": {
+                    "properties": {
+                      "languages": {
+                        "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "original_ok": {
+                        "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                        "type": "boolean"
+                      },
+                      "quality": {
+                        "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                        "enum": [
+                          "720p",
+                          "1080p",
+                          "2160p"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "description": "Episodes (or the movie) the wish reaches.",
+                      "type": "integer"
+                    },
+                    "saved": {
+                      "type": "boolean"
+                    },
+                    "slot_changes": {
+                      "type": "integer"
+                    },
+                    "versions": {
+                      "items": {
+                        "properties": {
+                          "after": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "before": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "files": {
+                            "type": "integer"
+                          },
+                          "good_enough_after": {
+                            "type": "integer"
+                          },
+                          "good_enough_before": {
+                            "type": "integer"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "version_id": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "An unknown quality or language, or a season or episode of another title."
+          },
+          "404": {
+            "description": "No such title."
+          }
+        },
+        "summary": "Save a wish for a title, season or episode",
+        "x-holyarrs-part": "title",
+        "x-holyarrs-permission": "manage_library",
+        "x-holyarrs-scope": "write"
+      }
+    },
+    "/api/v1/titles/{id}/wishes/preview": {
+      "post": {
+        "description": "Shows what a wish would change for each Version, without saving it.",
+        "operationId": "previewTitleWish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "item_id": {
+                    "description": "The episode; 0 or left out for the title or season.",
+                    "type": "integer"
+                  },
+                  "part_id": {
+                    "description": "The season; 0 or left out for the whole title.",
+                    "type": "integer"
+                  },
+                  "title_id": {
+                    "type": "integer"
+                  },
+                  "wish": {
+                    "properties": {
+                      "languages": {
+                        "description": "Language codes wanted instead of the Pick rules' own; left out keeps them, an empty list with original_ok means the original language only.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "original_ok": {
+                        "description": "Whether the original language passes too; left out keeps the Pick rules' choice.",
+                        "type": "boolean"
+                      },
+                      "quality": {
+                        "description": "The resolution aimed for; left out keeps the Pick rules' steps.",
+                        "enum": [
+                          "720p",
+                          "1080p",
+                          "2160p"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "description": "Episodes (or the movie) the wish reaches.",
+                      "type": "integer"
+                    },
+                    "saved": {
+                      "type": "boolean"
+                    },
+                    "slot_changes": {
+                      "type": "integer"
+                    },
+                    "versions": {
+                      "items": {
+                        "properties": {
+                          "after": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "before": {
+                            "properties": {
+                              "allowed": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "good_enough_at": {
+                                "type": "string"
+                              },
+                              "languages": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "original_ok": {
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "files": {
+                            "type": "integer"
+                          },
+                          "good_enough_after": {
+                            "type": "integer"
+                          },
+                          "good_enough_before": {
+                            "type": "integer"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "version_id": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "An unknown quality or language, or a season or episode of another title."
+          },
+          "404": {
+            "description": "No such title."
+          }
+        },
+        "summary": "Show what a wish for a title, season or episode would change",
         "x-holyarrs-part": "title",
         "x-holyarrs-permission": "manage_library",
         "x-holyarrs-scope": "write"
