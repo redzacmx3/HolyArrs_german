@@ -21,6 +21,11 @@ func TestAdviseRules(t *testing.T) {
 	if got := AdviseRules(german("points_then_quality", 35000)); got != nil {
 		t.Fatalf("TRaSH's high good enough is its own choice: %q", got)
 	}
+	empty := german("points_then_quality", 0)
+	empty.GoodEnoughPoints = nil
+	if got := AdviseRules(empty); !slices.Equal(got, []string{AdviceGoodEnough}) {
+		t.Fatalf("an empty good enough counts by the step alone: %q", got)
+	}
 	plain := GoodEveryday()
 	zero := 0
 	plain.GoodEnoughPoints = &zero

@@ -171,7 +171,7 @@ describe('pick rules check', () => {
 			]
 		});
 		const r = rows.find((x) => x.key === 'pick_rules:8');
-		expect(r?.fix).toBe('/settings/pick-rules/8');
+		expect(r?.fix).toBe('/settings/pick-rules/8?fix=advice');
 		expect(r?.tone).toBe('wait');
 		expect(r?.reason).toMatch(/^Quality ranks before points here/);
 		expect(pickRulesWhy('Good enough is 0 points, so …')).toMatch(/never replaced/);

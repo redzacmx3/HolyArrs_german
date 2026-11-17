@@ -377,3 +377,17 @@ function listProblem(values: string[], allowed: string[], what: string): string 
 	if (safetyTraits.includes(bad)) return say('downloads.pr.err.cannotBe', { trait: traitLabel(bad), what });
 	return isOwnTrait(bad) ? say('downloads.pr.err.ownRemoved') : say('downloads.pr.err.notTrait', { bad });
 }
+
+// The profile check's fix for a set whose language trait cannot win: points
+// before quality, and good enough at the least language trait's points, so a
+// copy in that language ends the search and one without it is replaced.
+// Gives the body unchanged when the set has no language trait (1000 points
+// or more) or already picks as its traits ask.
+export function adviceFix(body: PickRulesBody): PickRulesBody {
+	const lang = body.traits.map((t) => t.points).filter((p) => p >= 1000);
+	if (!lang.length) return body;
+	const next = structuredClone(body);
+	if (next.order !== 'points_then_quality' && next.steps.filter((s) => s.allowed).length > 1) next.order = 'points_then_quality';
+	if (next.good_enough_points == null || next.good_enough_points <= 0) next.good_enough_points = Math.min(...lang);
+	return next;
+}

@@ -1,5 +1,6 @@
 export type * from './types.ts';
 export { activeDownloads } from './active.svelte.ts';
+export { adviceFix } from './pick-rules.ts';
 export { applyPatch } from './dl-store.ts';
 export { applySize } from './pick-rules.ts';
 export { blankBody } from './pick-rules.ts';
