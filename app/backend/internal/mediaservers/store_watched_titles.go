@@ -25,3 +25,8 @@ func WatchedTitles(ctx context.Context, q database.Lister) (map[int64]bool, bool
 	}
 	return out, len(out) > 0, rows.Err()
 }
+
+// WatchedReader reads WatchedTitles from q each time it is called.
+func WatchedReader(q database.Lister) func(context.Context) (map[int64]bool, bool, error) {
+	return func(ctx context.Context) (map[int64]bool, bool, error) { return WatchedTitles(ctx, q) }
+}

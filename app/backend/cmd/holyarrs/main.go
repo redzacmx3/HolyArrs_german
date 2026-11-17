@@ -459,7 +459,7 @@ func serve(ctx context.Context, c config, o runOpts) error {
 			HTTP: artworkHTTP, Fallback: library.TMDBPassThrough(hosted.Service.Base())}}
 	// TMDB copies are kept at most six months (TMDB's rule).
 	go lib.Artwork.KeepTMDBFresh(ctx)
-	lib.Shows, lib.WatchedTitles = showMD, func(ctx context.Context) (map[int64]bool, bool, error) { return mediaservers.WatchedTitles(ctx, s.Read()) }
+	lib.Shows, lib.WatchedTitles = showMD, mediaservers.WatchedReader(s.Read())
 	lib.EpisodeGroups = hosted.TMDB()
 	lib.AnimeNames = func(ctx context.Context, kind, tmdbID, name string) []string {
 		by := "tmdb_tv"
