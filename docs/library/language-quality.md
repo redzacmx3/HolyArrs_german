@@ -16,10 +16,9 @@ Change what HolyArrs looks for after a title is added: a different language, or 
 | For | Open |
 |---|---|
 | Every movie or every show | **Settings > Movies and TV defaults**, then **Language & quality for all movies** or **Language & quality for all shows** |
-| One movie | The movie page, **⋯**, then **Language & quality** |
-| One show | The show page, **⋯**, then **Language & quality** |
-| One season | The season's menu on the show page, then **Language & quality** |
-| One episode | The episode's menu, then **Language & quality** |
+| One movie or show | The title page, **⋯** next to the main button, then **Language & quality** |
+| One season | The title page's **Library** tab, **⋯** on the season's row, then **Language & quality** |
+| One episode | Open the episode on the **Library** tab, then **Language & quality** |
 
 ## Choose
 
