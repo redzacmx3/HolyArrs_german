@@ -19,6 +19,7 @@
 	import { audienceStatus } from '#lib/ui/title-status.ts';
 	import TitleSection from '#lib/ui/TitleSection.svelte';
 	import '#lib/ui/title-page.css';
+	import { WishSheet } from '../downloads/index.ts';
 	import { RenamePreview, ShowDeleteDialog, ShowReleases, CopyControls, artName, crumbFor, qualityBadges, slotKind, type ReleaseScope } from '../mediafiles/index.ts';
 	import { SubtitlePanel } from '../subtitles/index.ts';
 	import { groupDownloads, HistoryLine as CompactRow, isRoutine, NoDownloaderNote } from '../downloads/index.ts';
@@ -128,6 +129,7 @@
 		{ kind: 'separator' },
 		{ label: t('shows.page.edit'), icon: 'tools', onselect: openEdit },
 		{ label: t('shows.page.renameFiles'), icon: 'copy', onselect: openRename },
+		{ label: t('library.wish.menu'), icon: 'sliders', onselect: () => openWish(title.name) },
 		{ label: t('shows.page.refreshMenu'), icon: 'refresh', onselect: refresh, disabled: refreshing },
 		{ label: t('shows.page.allHistory'), icon: 'clock', href: to(`/downloads/history?title=${title.id}`) },
 		{ kind: 'separator' },
@@ -322,9 +324,16 @@
 		if (mainSlot(ep)) items.push({ label: t('shows.page.chooseRelease'), icon: 'grid', onselect: () => searchEpisode(ep, true), disabled: searching === `e${ep.id}l` });
 		if (ep.slots.some((x) => x.file_id)) items.push({ label: t('shows.sheet.subtitles'), icon: 'subtitle', onselect: () => openSubtitles(ep) });
 		items.push({ label: t('shows.tools.history'), icon: 'clock', href: to(`/downloads/history?title=${title.id}&episode=${ep.id}`) });
+		items.push({ label: t('library.wish.menu'), icon: 'sliders', onselect: () => openWish(`${title.name} · ${code}`, undefined, ep.id) });
 		items.push({ label: t('shows.page.keepNamed', { name: code }), checked: ep.keep_up_to_date, disabled: busy === `e${ep.id}`, onselect: () => setEpisode(ep, !ep.keep_up_to_date) });
 		items.push({ kind: 'separator' }, { label: t('shows.tools.delete', { season: code }), icon: 'trash', destructive: true, onselect: () => deleter?.open({ episodeIds: [ep.id], label: code }) });
 		return items;
+	}
+
+	// The language and quality assistant, for the show, a season or an episode.
+	let wish = $state<{ open: boolean; label: string; season?: number; itemId?: number }>({ open: false, label: '' });
+	function openWish(label: string, season?: number, itemId?: number) {
+		wish = { open: true, label, season, itemId };
 	}
 
 	function toLibrary() {
@@ -438,6 +447,7 @@
 		{ label: t('shows.page.searchSeason'), icon: 'search', onselect: () => searchSeason(n), disabled: searching === `s${n}` },
 		{ label: t('shows.page.chooseRelease'), icon: 'grid', onselect: () => searchSeason(n, true), disabled: searching === `s${n}l` },
 		{ label: t('shows.page.keepNamed', { name: seasonName(n) }), checked: keep, disabled: busy === `s${n}`, onselect: () => setSeason(n, !keep) },
+		{ label: t('library.wish.menu'), icon: 'sliders', onselect: () => openWish(`${title.name} · ${seasonName(n)}`, n) },
 		{ kind: 'separator' },
 		{ label: t('shows.tools.delete', { season: seasonName(n) }), icon: 'trash', destructive: true, onselect: () => deleter?.open({ season: n, label: seasonName(n) }) }
 	];
@@ -616,6 +626,7 @@
 
 {#if staff}
 	<ShowDeleteDialog bind:this={deleter} titleId={title.id} name={title.name} ondone={deleted} />
+	<WishSheet bind:open={wish.open} kind="show" titleId={title.id} season={wish.season} itemId={wish.itemId} label={wish.label} onsaved={() => void reload()} />
 {/if}
 
 <dialog bind:this={subDialog} class="modal wide" aria-label={t('shows.page.episodeSubsLabel')} onclose={() => (subEpisode = null)} data-testid="episode-subtitles-dialog">

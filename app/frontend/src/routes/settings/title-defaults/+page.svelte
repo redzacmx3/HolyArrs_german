@@ -6,6 +6,8 @@
 	import PageHeader from '#lib/ui/PageHeader.svelte';
 	import SettingsCard from '#lib/ui/SettingsCard.svelte';
 	import SaveBar from '#lib/ui/SaveBar.svelte';
+	import Button from '#lib/ui/Button.svelte';
+	import { WishSheet } from '#lib/downloads/index.ts';
 	import LoadError from '#lib/ui/LoadError.svelte';
 	import { savedDefaults, changedParts, foldersFor, gateChoices, rulesFor } from '#lib/mediafiles/index.ts';
 	import { detailsSources, episodeOrders, seasonChoices } from '#lib/shows/index.ts';
@@ -92,6 +94,13 @@
 			busy = false;
 		}
 	}
+	// The language and quality assistant for every movie or every show.
+	let wishFor = $state<'movie' | 'show'>('movie');
+	let wishOpen = $state(false);
+	function openWish(kind: 'movie' | 'show') {
+		wishFor = kind;
+		wishOpen = true;
+	}
 </script>
 
 <svelte:head><title>{t('settings.titleDefaults.title')} · HolyArrs</title></svelte:head>
@@ -120,6 +129,10 @@
 					{#each movieRules as r (r.id)}<option value={r.id}>{r.name}</option>{/each}
 				</select>
 			</Field>
+			<div class="wish-line">
+				<Button type="button" icon="sliders" onclick={() => openWish('movie')} data-testid="wish-movie">{t('library.wish.allMovies')}</Button>
+				<span class="hint">{t('library.wish.allHint')}</span>
+			</div>
 			<label class="checkline">
 				<input id="td-movie-keep" type="checkbox" bind:checked={form.defaults.movie.keep_up_to_date} />
 				<span><b>{t('settings.titleDefaults.keep')}</b><br /><span class="hint">{t('settings.titleDefaults.keepHint')}</span></span>
@@ -153,6 +166,10 @@
 					{#each showRules as r (r.id)}<option value={r.id}>{r.name}</option>{/each}
 				</select>
 			</Field>
+			<div class="wish-line">
+				<Button type="button" icon="sliders" onclick={() => openWish('show')} data-testid="wish-show">{t('library.wish.allShows')}</Button>
+				<span class="hint">{t('library.wish.allHint')}</span>
+			</div>
 			<label class="checkline">
 				<input id="td-show-keep" type="checkbox" bind:checked={form.defaults.show.keep_up_to_date} />
 				<span><b>{t('settings.titleDefaults.keep')}</b></span>
@@ -193,6 +210,9 @@
 		{#if error}<p class="form-error" role="alert">{error}</p>{/if}
 	</form>
 	{#if mayEdit}<SaveBar {dirty} form="title-defaults-form" saving={busy} ondiscard={() => (form = JSON.parse(saved))} />{/if}
+	{#if mayEdit}
+		<WishSheet bind:open={wishOpen} kind={wishFor} label={t(wishFor === 'movie' ? 'library.wish.allMovies' : 'library.wish.allShows')} />
+	{/if}
 {/if}
 
 <style>
@@ -201,4 +221,5 @@
 	.narrow { max-width: 160px; }
 	.where { margin-top: 4px; }
 	.where :global(a) { color: var(--accent-text); font-weight: 600; }
+	.wish-line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); margin: var(--s-2) 0; }
 </style>

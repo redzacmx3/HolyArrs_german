@@ -84,3 +84,4 @@ export type { RulesKind } from './pick-rules.ts';
 export type { SizeFields } from './pick-rules.ts';
 export type { SteerMode } from './manage.ts';
 export type { Sync } from './dl-store.ts';
+export { default as WishSheet } from './WishSheet.svelte';
