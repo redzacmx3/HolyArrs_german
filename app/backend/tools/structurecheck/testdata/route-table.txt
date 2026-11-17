@@ -248,7 +248,7 @@ GET /api/v1/trailer/stream/{id}/seg/{n} auth=signed_in scope=read assurance=fals
 GET /api/v1/trailer/{kind}/{tmdb_id} auth=signed_in scope=read assurance=false part=media
 GET /api/v1/trash/profiles auth=settings scope=admin assurance=false part=media
 GET /api/v1/turned-down auth=manage_library scope=read assurance=false part=media
-GET /api/v1/upkeep auth=manage_library scope=admin assurance=false part=media
+GET /api/v1/upkeep auth=manage_library scope=read assurance=false part=media
 GET /api/v1/users auth=users scope=admin assurance=false part=core
 GET /api/v1/users/invites auth=users scope=admin assurance=false part=core
 GET /api/v1/users/{id}/avatar auth=signed_in scope=read assurance=false part=core
