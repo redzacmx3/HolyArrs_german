@@ -29,6 +29,7 @@ Checks run every 5 minutes, at start, and right after an import is refused for l
 | Backups | A recent backup exists | No backup yet, or the newest is old | The last scheduled backup failed |
 | Key kit | A key kit was saved for the current master key | No key kit saved yet | |
 | Trailer reader (when trailers are on) | Lookups work | 5 different videos failed in a row. If YouTube refuses the reader sooner, the row says so | |
+| Pick rules | Each set in use ranks a language bonus as meant | A set with a big language bonus ranks quality before points, or its good enough points are 0, so a copy without your language is kept. **Fix** opens the set | |
 | Update | You run the newest version | A newer HolyArrs is out | |
 
 A paused source or downloader counts as fine.
