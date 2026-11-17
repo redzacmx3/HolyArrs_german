@@ -115,6 +115,7 @@ var tableOwner = map[string]string{
 	"never_add":               "mediafiles",
 	"own_traits":              "mediafiles",
 	"pick_rules":              "mediafiles",
+	"pick_wishes":             "mediafiles",
 	"movie_collections":       "mediafiles",
 	"movie_collection_titles": "mediafiles",
 	"pressings":               "mediafiles",

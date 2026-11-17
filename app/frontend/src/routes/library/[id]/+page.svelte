@@ -10,6 +10,7 @@
 	import '#lib/ui/title-page.css';
 	import PageLoader from '#lib/ui/PageLoader.svelte';
 	import { TitleEmpty as EmptyState } from '#lib/mediafiles/index.ts';
+	import { WishSheet } from '#lib/downloads/index.ts';
 	import TitleHero, { richMetadata, runtimeWords, shortFolder, type RichMeta } from '#lib/ui/TitleHero.svelte';
 	import ActionButton from '#lib/ui/ActionButton.svelte';
 	import FollowButton from '#lib/ui/FollowButton.svelte';
@@ -243,6 +244,7 @@
 		{ label: tr('shows.page.edit'), icon: 'tools', onselect: editFlow.openEdit },
 		{ label: tr('shows.page.renameFiles'), icon: 'copy', onselect: removeFlow.openRename },
 		{ label: tr('movies.versions.add'), icon: 'plus', onselect: versionsFlow.openVersion },
+		{ label: tr('library.wish.menu'), icon: 'sliders', onselect: () => (wishOpen = true) },
 		{ label: tr('library.title.refreshDetails'), icon: 'refresh', onselect: searchFlow.refresh, disabled: refreshing },
 		{ label: tr('shows.page.allHistory'), icon: 'clock', href: to(`/downloads/history?title=${id}`) },
 		{ kind: 'separator' },
@@ -250,6 +252,8 @@
 	]);
 	// Report a problem: anyone, once the movie has a file; members get it as their only More item.
 	let reportOpen = $state(false);
+	// The language and quality assistant for this movie.
+	let wishOpen = $state(false);
 	const mayReport = $derived(!!title && files.length > 0);
 	const moreItems = $derived<MenuItem[]>([...(manage ? heroItems : []), ...(mayReport ? [...(manage ? [{ kind: 'separator' as const }] : []), { label: tr('library.title.report'), icon: 'alert' as const, onselect: () => (reportOpen = true) }] : [])]);
 	function toLibrary() {
@@ -326,6 +330,7 @@
 			{/snippet}
 		</TitleHero>
 		{#if mayReport && title}<ReportSheet bind:open={reportOpen} {title} />{/if}
+		{#if manage && title}<WishSheet bind:open={wishOpen} kind="movie" titleId={title.id} label={title.name} onsaved={() => load('title')} />{/if}
 
 		{#if title.slots.some((s) => s.download)}
 			<div class="tp-dls">

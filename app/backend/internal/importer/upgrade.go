@@ -41,7 +41,7 @@ func checkUpgrade(ctx context.Context, db *sql.DB, sl mediafiles.Slot, ver media
 	if err := database.Get(ctx, db, "pick_rules", ver.PickRulesID, &pr); err != nil {
 		return u, err
 	}
-	u.rules = pr.Body
+	u.rules = mediafiles.RulesFor(ctx, db, pr, sl.ItemID).Body
 	if d.ReleaseID != nil {
 		_ = db.QueryRowContext(ctx, "SELECT name FROM releases WHERE id = ?", *d.ReleaseID).Scan(&u.relName)
 	}

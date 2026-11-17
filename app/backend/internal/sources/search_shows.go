@@ -55,6 +55,10 @@ type epSlot struct {
 	// finished airing a while ago; it does not hold back the season's packs.
 	placeholder bool
 	runtime     int
+	// wish is the episode's pick wish as a key ("" for none) and pr the
+	// Version's rules with it laid on.
+	wish string
+	pr   mediafiles.PickRules
 }
 
 // showSet is a show search: the show's episodes in one Version and the Slots asked for.
@@ -176,6 +180,12 @@ func (s *Searcher) loadShow(ctx context.Context, ti mediafiles.Title, ver mediaf
 	if err != nil {
 		return set, err
 	}
+	wishes, err := mediafiles.WishesOfTitle(ctx, db, ti.ID)
+	if err != nil {
+		return set, err
+	}
+	// The wish for every show comes first, so the show's own lays over it.
+	wishes = append([]mediafiles.PickWish{{Wish: mediafiles.KindWish(ctx, db, "show")}}, wishes...)
 	slots, err := mediafiles.VersionSlotsOfTitle(ctx, db, ver.ID, ti.ID)
 	if err != nil {
 		return set, err
@@ -208,8 +218,9 @@ func (s *Searcher) loadShow(ctx context.Context, ti mediafiles.Title, ver mediaf
 		}
 		e.soon = it.AirDate != nil && !it.AirDate.After(soon)
 		e.kept = it.KeepUpToDate && ver.KeepUpToDate && ti.KeepUpToDate && (it.PartID == nil || partKept[*it.PartID])
+		e.wish, e.pr = wishOf(wishes, it, set.pr)
 		if e.sl != nil {
-			e.cur = currentOf(ctx, db, *e.sl, set.pr)
+			e.cur = currentOf(ctx, db, *e.sl, e.pr)
 		}
 		set.eps = append(set.eps, e)
 	}
@@ -313,7 +324,8 @@ func (s *Searcher) judgeShow(ctx context.Context, set showSet, all []found, hand
 	}
 	tref := set.ref()
 	checks := Checks(ctx, s.Store.Read())
-	body := withVersionAudio(set.pr.Body, set.ver.AudioLanguages)
+	w := set.wished()
+	body := w.body(w.target(set))
 	rels := make([]mediafiles.ReleaseFacts, len(all))
 	vs := make([]mediafiles.Verdict, len(all))
 	for i, f := range all {
@@ -325,7 +337,7 @@ func (s *Searcher) judgeShow(ctx context.Context, set showSet, all []found, hand
 		if ss.Match.Title != nil {
 			set.lines(&ss, rels[i], refs, byItem, rules, turnedFor)
 		}
-		vs[i] = copyChoiceVerdict(set.ti, set.ver, rels[i], mediafiles.Judge(rels[i], ss, body))
+		vs[i] = copyChoiceVerdict(set.ti, set.ver, rels[i], w.judge(rels[i], ss, body))
 	}
 	if set.window > 0 {
 		// A pack is taken only when no single episode passes for its episodes.
@@ -456,7 +468,7 @@ func (set showSet) lines(ss *mediafiles.SlotSet, rel mediafiles.ReleaseFacts, re
 			targetTurned = targetTurned || isTarget
 			continue
 		}
-		if !mediafiles.Gains(rel, set.pr.Body, e.cur) {
+		if !mediafiles.Gains(rel, e.pr.Body, e.cur) {
 			noGain = append(noGain, e.ref.Label()+" already has a copy as good")
 			continue
 		}
@@ -578,7 +590,7 @@ func (set showSet) windowLines(ss *mediafiles.SlotSet, rel mediafiles.ReleaseFac
 	for i, e := range win {
 		ss.SlotIDs = append(ss.SlotIDs, e.sl.ID)
 		labels[i] = e.ref.Label()
-		if !mediafiles.Gains(rel, set.pr.Body, e.cur) {
+		if !mediafiles.Gains(rel, e.pr.Body, e.cur) {
 			ss.MatchReasons = append(ss.MatchReasons, matchFail("no_gain", e.ref.Label()+" already has a copy as good"))
 		}
 	}
