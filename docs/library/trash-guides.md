@@ -22,9 +22,12 @@ HolyArrs then:
 
 - makes one trait for each scored TRaSH entry it can test, listed under **Your traits > From TRaSH Guides**,
 - puts those traits in **Traits and points** with the TRaSH score as points,
-- sets **Fewest points a Release needs**, the good enough points and **Points a better copy must add** to the profile's numbers.
+- sets **Fewest points a Release needs**, the good enough points and **Points a better copy must add** to the profile's numbers,
+- takes the profile's allowed qualities as the allowed quality steps and its cutoff as **Good enough at**,
+- ranks on points before quality step when the profile puts several qualities into one group (the German profiles' "Merged QPs": a German WEB-DL with more points beats an English Blu-ray, as in Radarr),
+- sets **Languages to take** from the profile's language (Any takes every language, Original only the original).
 
-Points you gave built-in traits or your own traits stay as they are. Your quality steps and **Good enough at** stay too; set them to match the profile yourself.
+Points you gave built-in traits or your own traits stay as they are. A profile that names no qualities or language leaves those settings as they are.
 
 ## Sync again
 

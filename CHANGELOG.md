@@ -9,6 +9,7 @@ All notable changes to HolyArrs are listed here. The format follows [Keep a Chan
 - German Usenet releases are read as Radarr and Sonarr read them: German DL also holds the original language, German ML the original and English, and German Subbed or OmU are subtitles, not audio.
 - TRaSH Guides sync takes language tests, so the German profiles' German DL, German, German Subbed and booster entries score.
 - Your own traits can look at a Release's languages (`de`, `original`, `!en`).
+- Applying a TRaSH profile also takes its qualities, cutoff and language, and a merged quality group ranks on points first, so German profiles put German releases on top.
 
 ### Changed
 

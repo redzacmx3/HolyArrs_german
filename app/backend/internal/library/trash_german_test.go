@@ -91,3 +91,56 @@ func TestTrashGermanFormats(t *testing.T) {
 		}
 	}
 }
+
+// TestTrashGermanProfileRanksGermanFirst applies the shape of TRaSH's
+// "[German] HD Bluray + WEB" (testdata/trash_german_profile, MIT): its merged
+// 720p/1080p group ranks on points first and it takes any language, so a
+// German DL WEB-DL beats an English Blu-ray of the same film, as in Radarr.
+func TestTrashGermanProfileRanksGermanFirst(t *testing.T) {
+	body, err := os.ReadFile(filepath.Join("testdata", "trash_german_profile", "german-hd-bluray-web.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var r rawTrashProfile
+	if err := json.Unmarshal(body, &r); err != nil {
+		t.Fatal(err)
+	}
+	prof := TrashProfile{Name: r.Name, Language: r.Language, Items: r.Items, Cutoff: r.Cutoff}
+	rules := mediafiles.GoodEveryday()
+	trashShape(&rules, prof)
+	var allowed []string
+	for _, s := range rules.Steps {
+		if s.Allowed {
+			allowed = append(allowed, s.Quality)
+		}
+	}
+	if !slices.Equal(allowed, []string{"720p_web", "720p_bluray", "1080p_web", "1080p_bluray"}) || rules.GoodEnoughAt != "1080p_bluray" {
+		t.Fatalf("steps %v good enough at %s", allowed, rules.GoodEnoughAt)
+	}
+	if rules.Order != "points_then_quality" || !slices.Contains(rules.Language.Wanted, "de") || !rules.Language.OriginalOK {
+		t.Fatalf("order %s language %+v", rules.Order, rules.Language)
+	}
+	if err := mediafiles.CheckPickRules("German", []string{"movie"}, rules); err != nil {
+		t.Fatalf("rules refused: %v", err)
+	}
+
+	mediafiles.SetOwnTraits([]mediafiles.OwnTrait{{Meta: database.Meta{ID: 1}, Name: "German DL", Match: "language", Terms: []string{"de", "original"}}})
+	t.Cleanup(func() { mediafiles.SetOwnTraits(nil) })
+	rules.Traits = []mediafiles.TraitPoints{{Trait: mediafiles.OwnTraitKey(1), Points: 11000}}
+	title := &mediafiles.TitleRef{ID: 1, Name: "Film", Year: 2020, Runtime: 120, OriginalLanguage: "en"}
+	set := mediafiles.SlotSet{Match: mediafiles.Match{Title: title, Conf: releasename.Sure}, SlotIDs: []int64{1}, RuntimeMinutes: 120, Out: true}
+	var rels []mediafiles.ReleaseFacts
+	var vs []mediafiles.Verdict
+	for _, n := range []string{"Film.2020.1080p.BluRay.x264-ENG", "Film.2020.German.DL.1080p.WEB.H264-GER"} {
+		rel := mediafiles.ReleaseFacts{Name: n, Parse: releasename.Parse(n, releasename.Hints{}), Size: 6 << 30, Protocol: "usenet"}
+		v := mediafiles.Judge(rel, set, rules)
+		if !v.Passed {
+			t.Fatalf("%s refused: %+v", n, v.Reasons)
+		}
+		rels, vs = append(rels, rel), append(vs, v)
+	}
+	mediafiles.Rank(rels, vs, rules)
+	if vs[1].Rank != 1 {
+		t.Fatalf("German DL ranked %d (points %d vs %d)", vs[1].Rank, vs[1].Points, vs[0].Points)
+	}
+}

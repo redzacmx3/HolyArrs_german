@@ -32,6 +32,20 @@ type TrashProfile struct {
 	CutoffScore     int               `json:"good_enough_points"`
 	MinUpgradeScore int               `json:"upgrade_min_points"`
 	FormatItems     map[string]string `json:"-"` // name -> trash id
+	// Language is the profile's language ("Any", "Original", "German"),
+	// Items its qualities and quality groups, Cutoff the item it is good
+	// enough at.
+	Language string             `json:"-"`
+	Items    []TrashProfileItem `json:"-"`
+	Cutoff   string             `json:"-"`
+}
+
+// TrashProfileItem is one quality, or a group of qualities that rank as
+// one (the German profiles' "Merged QPs"), in a TRaSH profile.
+type TrashProfileItem struct {
+	Name    string   `json:"name"`
+	Allowed bool     `json:"allowed"`
+	Items   []string `json:"items"`
 }
 
 type rawTrashProfile struct {
@@ -44,6 +58,9 @@ type rawTrashProfile struct {
 	CutoffScore     int               `json:"cutoffFormatScore"`
 	MinUpgradeScore int               `json:"minUpgradeFormatScore"`
 	FormatItems     map[string]string `json:"formatItems"`
+	Language        string             `json:"language"`
+	Items           []TrashProfileItem `json:"items"`
+	Cutoff          string             `json:"cutoff"`
 }
 
 // TrashFormat is one TRaSH release format.
@@ -167,7 +184,7 @@ func (c *TrashGuides) Load(ctx context.Context, app string) (*TrashData, error) 
 					d.Profiles = append(d.Profiles, TrashProfile{ID: r.TrashID, App: app, Name: r.Name,
 						Description: trashPlain(r.Description), URL: r.URL, ScoreSet: r.ScoreSet,
 						MinScore: r.MinFormatScore, CutoffScore: r.CutoffScore, MinUpgradeScore: r.MinUpgradeScore,
-						FormatItems: r.FormatItems})
+						FormatItems: r.FormatItems, Language: r.Language, Items: r.Items, Cutoff: r.Cutoff})
 				}
 			case "cf":
 				var f TrashFormat
