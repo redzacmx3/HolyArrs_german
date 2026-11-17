@@ -4,6 +4,7 @@
 	import type { OwnedTitle } from './title-owned.svelte.ts';
 	import { ReportSheet } from '#lib/requests/index.ts';
 	import { ReleaseSheet, DeleteSheet, RenamePreview } from '#lib/mediafiles/index.ts';
+	import { WishSheet } from '#lib/downloads/index.ts';
 
 	let { own }: { own: OwnedTitle } = $props();
 </script>
@@ -16,6 +17,7 @@
 		<Sheet bind:open={own.renameOpen} title={t('discover.titleOwnedSheets.renameFiles')} description={o.name} size="md">
 			{#if own.renameOpen}<RenamePreview titleId={o.id} onDone={() => { own.renameOpen = false; void own.loadOwned(o.id); }} />{/if}
 		</Sheet>
+		{#if o.kind === 'movie' || o.kind === 'show'}<WishSheet bind:open={own.wish.open} kind={o.kind} titleId={o.id} season={own.wish.season} itemId={own.wish.itemId} label={own.wish.label} onsaved={() => own.loadOwned(o.id)} />{/if}
 		<DeleteSheet bind:open={own.deleteOpen} titleId={o.id} name={o.name} kind={o.kind === 'show' ? 'show' : 'movie'} ondone={() => { own.owned = null; own.ownedEvents = []; own.ownTab = 'overview'; }} />
 	{/if}
 {/if}

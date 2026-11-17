@@ -39,8 +39,9 @@
 		manage = false,
 		show = null,
 		onchange,
-		ondelete
-	}: { open?: boolean; ep: SheetEpisode | null; titleId: number; tmdb?: string; manage?: boolean; show?: TitleView | null; onchange?: () => void; ondelete?: () => void } = $props();
+		ondelete,
+		onwish
+	}: { open?: boolean; ep: SheetEpisode | null; titleId: number; tmdb?: string; manage?: boolean; show?: TitleView | null; onchange?: () => void; ondelete?: () => void; onwish?: () => void } = $props();
 
 	let story = $state('');
 	let events = $state<EventRecord[]>([]);
@@ -218,6 +219,7 @@
 							</div>
 						</div>
 					{/if}
+					{#if onwish}<button type="button" class="es-row" onclick={onwish} data-testid="episode-wish"><span><b>{t('library.wish.menu')}</b></span><Icon name="sliders" size={16} /></button>{/if}
 					{#if ondelete}<button type="button" class="es-row danger" onclick={ondelete}><span><b>{t('shows.sheet.delete')}</b></span><Icon name="trash" size={16} /></button>{/if}
 				</div>
 				{#if subsMore && ep.season != null}

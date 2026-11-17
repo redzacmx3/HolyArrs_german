@@ -19,6 +19,7 @@
 		episodes,
 		onchange,
 		ondelete,
+		onwish,
 		packWindow = 0
 	}: {
 		open?: boolean;
@@ -28,6 +29,8 @@
 		episodes: SheetEpisode[];
 		onchange?: () => void;
 		ondelete?: () => void;
+		/** Opens the language and quality assistant for this season. */
+		onwish?: () => void;
 		// Episodes ahead this show takes from a season pack; 0 is the whole season.
 		packWindow?: number;
 	} = $props();
@@ -121,6 +124,7 @@
 				{:else}<li class="muted">{loadingEvents ? t('shows.tools.loading') : t('shows.tools.nothingYet')}</li>{/each}
 			</ol>
 		{/if}
+		{#if onwish}<button type="button" class="st-wish" onclick={onwish} data-testid="season-wish"><Icon name="sliders" size={16} />{t('library.wish.menu')}</button>{/if}
 		{#if ondelete}<button type="button" class="st-del" onclick={ondelete}><Icon name="trash" size={16} />{t('shows.tools.delete', { season: seasonName(season) })}</button>{/if}
 	</div>
 </Sheet>
@@ -135,6 +139,8 @@
 	.st-seg button.on { background: var(--surface-1, var(--bg)); color: var(--text); box-shadow: 0 1px 3px rgb(0 0 0 / 18%); }
 	.st-del { justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--surface-2); color: var(--fail-text); font: 600 14px/1 var(--font-ui); cursor: pointer; }
 	.st-del:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+	.st-wish { justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--surface-2); color: var(--text); font: 600 14px/1 var(--font-ui); cursor: pointer; }
+	.st-wish:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 	.st-pack { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); font: 500 13.5px/1.35 var(--font-ui); }
 	.st-pack span { min-width: 0; color: var(--text); }
 	.st-next { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 0; border-radius: 10px; background: var(--accent-fill); color: var(--text-on-red); font: 600 13.5px/1 var(--font-ui); cursor: pointer; }

@@ -105,7 +105,7 @@ export function createOwnedTitle() {
 			}
 		}
 		// Every manager tool, grouped; all of them open on this page (sheets, or the Library tab).
-		type OwnTool = { label: string; icon: 'search' | 'grid' | 'copy' | 'plus' | 'tools' | 'check' | 'refresh' | 'clock' | 'trash'; href?: string; run?: () => void; busy?: boolean; danger?: boolean };
+		type OwnTool = { label: string; icon: 'search' | 'grid' | 'copy' | 'plus' | 'tools' | 'check' | 'refresh' | 'clock' | 'trash' | 'sliders'; href?: string; run?: () => void; busy?: boolean; danger?: boolean };
 		const ownTools = $derived.by((): { group: string; items: OwnTool[] }[] => {
 			const o = owned;
 			if (!o) return [];
@@ -117,7 +117,8 @@ export function createOwnedTitle() {
 				{ group: t('discover.titleOwned.groupFiles'), items: [
 					{ label: t('discover.titleOwned.renameFiles'), icon: 'copy', run: () => (renameOpen = true) },
 					{ label: t('discover.titleOwned.addVersion'), icon: 'plus', run: () => void addVersion() },
-					{ label: t('discover.titleOwned.settings'), icon: 'tools', run: () => setTab('library') }
+					{ label: t('discover.titleOwned.settings'), icon: 'tools', run: () => setTab('library') },
+					{ label: t('library.wish.menu'), icon: 'sliders', run: () => openWish(o.name) }
 				] },
 				{ group: t('discover.titleOwned.groupKeep'), items: [
 					{ label: o.keep_up_to_date ? t('discover.titleOwned.stopKeeping') : t('discover.titleOwned.keepUpToDate'), icon: 'check', run: () => ownRun('keep'), busy: busyAction === 'keep' },
@@ -170,6 +171,11 @@ export function createOwnedTitle() {
 		const moreMenu = $derived<MenuItem[]>([...(manage ? ownMenu : []), ...(mayReport ? [...(manage ? [{ kind: 'separator' as const }] : []), { label: t('discover.titleOwned.reportProblem'), icon: 'alert' as const, onselect: () => (reportOpen = true) }] : [])]);
 		let renameOpen = $state(false);
 		let deleteOpen = $state(false);
+		// The language and quality assistant: the whole title, a season or one episode.
+		let wish = $state<{ open: boolean; label: string; season?: number; itemId?: number }>({ open: false, label: '' });
+		function openWish(label: string, season?: number, itemId?: number) {
+			wish = { open: true, label, season, itemId };
+		}
 		let pickOpen = $state(typeof location !== 'undefined' && new URLSearchParams(location.search).has('pick'));
 
 	return {
@@ -209,6 +215,10 @@ export function createOwnedTitle() {
 		set renameOpen(v) {
 			renameOpen = v;
 		},
+		get wish() {
+			return wish;
+		},
+		openWish,
 		get deleteOpen() {
 			return deleteOpen;
 		},
