@@ -13,7 +13,7 @@ import (
 type Wish struct {
 	// Languages replaces the wanted languages (nil: keep). An empty, non-nil
 	// list with OriginalOK means the original language only.
-	Languages  []string `json:"languages,omitempty"`
+	Languages  []string `json:"languages"`
 	OriginalOK *bool    `json:"original_ok,omitempty"`
 	// Quality is the resolution aimed for: 720p, 1080p or 2160p ("": keep).
 	Quality string `json:"quality,omitempty"`

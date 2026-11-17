@@ -92,6 +92,9 @@ func (s *Service) SaveTitleWish(ctx context.Context, t mediafiles.Title, pw medi
 	pw.TitleID = t.ID
 	err := s.Store.Write(ctx, func(tx *sql.Tx) error {
 		out = WishOutcome{}
+		if err := mediafiles.SeasonOfWishTx(tx, &pw); err != nil {
+			return err
+		}
 		before, err := measureWish(ctx, tx, t, pw)
 		if err != nil {
 			return err

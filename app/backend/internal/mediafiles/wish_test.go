@@ -1,6 +1,7 @@
 package mediafiles
 
 import (
+	"encoding/json"
 	"slices"
 	"testing"
 )
@@ -46,5 +47,19 @@ func TestApplyWish(t *testing.T) {
 	}
 	if (Wish{Quality: "8k"}).Check() == nil || (Wish{Languages: []string{"DE"}}).Check() == nil || (Wish{Languages: []string{"de", "pt"}}).Check() != nil {
 		t.Fatal("check")
+	}
+}
+
+func TestWishKeepsOriginalOnly(t *testing.T) {
+	yes := true
+	b, _ := json.Marshal(Wish{Languages: []string{}, OriginalOK: &yes})
+	var w Wish
+	if err := json.Unmarshal(b, &w); err != nil || w.Languages == nil {
+		t.Fatalf("original only lost: %s", b)
+	}
+	b, _ = json.Marshal(Wish{Quality: "720p"})
+	w = Wish{}
+	if err := json.Unmarshal(b, &w); err != nil || w.Languages != nil {
+		t.Fatalf("no languages became some: %s", b)
 	}
 }

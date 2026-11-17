@@ -16,15 +16,19 @@ type PickWish struct {
 	TitleID int64 `json:"title_id"`
 	PartID  int64 `json:"part_id,omitempty"`
 	ItemID  int64 `json:"item_id,omitempty"`
-	Wish    Wish  `json:"wish"`
+	// Season is the season's number: read back with a season's wish, and
+	// may stand for part_id when one is saved.
+	Season *int `json:"season,omitempty"`
+	Wish   Wish `json:"wish"`
 }
 
 // WishesOfTitle lists every wish saved for a title, the title's own first.
 func WishesOfTitle(ctx context.Context, q database.Lister, titleID int64) ([]PickWish, error) {
-	rows, err := q.QueryContext(ctx, `SELECT title_id, part_id, item_id, wish FROM pick_wishes
+	rows, err := q.QueryContext(ctx, `SELECT title_id, part_id, item_id, wish,
+		(SELECT number FROM parts WHERE id = pick_wishes.part_id) FROM pick_wishes
 		WHERE title_id = ? AND (part_id = 0 OR part_id IN (SELECT id FROM parts WHERE title_id = pick_wishes.title_id))
 		AND (item_id = 0 OR item_id IN (SELECT id FROM items WHERE title_id = pick_wishes.title_id))
-		ORDER BY part_id, item_id`, titleID)
+		ORDER BY item_id != 0, part_id, item_id`, titleID)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +37,7 @@ func WishesOfTitle(ctx context.Context, q database.Lister, titleID int64) ([]Pic
 	for rows.Next() {
 		var w PickWish
 		var body string
-		if err := rows.Scan(&w.TitleID, &w.PartID, &w.ItemID, &body); err != nil {
+		if err := rows.Scan(&w.TitleID, &w.PartID, &w.ItemID, &body, &w.Season); err != nil {
 			return nil, err
 		}
 		if json.Unmarshal([]byte(body), &w.Wish) != nil {
@@ -122,9 +126,25 @@ func RulesFor(ctx context.Context, q interface {
 // ErrWishPlace says a wish names a season or episode of another title.
 var ErrWishPlace = errors.New("that season or episode is not part of the title")
 
+// SeasonOfWishTx sets PartID from Season when the wish names a season by
+// its number.
+func SeasonOfWishTx(tx *sql.Tx, w *PickWish) error {
+	if w.Season == nil || w.PartID != 0 || w.ItemID != 0 {
+		return nil
+	}
+	err := tx.QueryRow("SELECT id FROM parts WHERE title_id = ? AND kind = 'season' AND number = ?", w.TitleID, *w.Season).Scan(&w.PartID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return ErrWishPlace
+	}
+	return err
+}
+
 // SaveWishTx saves (or, when empty, removes) the wish for a title, season or
 // episode.
 func SaveWishTx(tx *sql.Tx, w PickWish, by database.Actor) error {
+	if err := SeasonOfWishTx(tx, &w); err != nil {
+		return err
+	}
 	if w.PartID != 0 || w.ItemID != 0 {
 		var n int
 		q := "SELECT count(*) FROM parts WHERE id = ? AND title_id = ?"
