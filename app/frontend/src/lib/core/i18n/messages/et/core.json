@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "Ühel allalaadijal pole salvestuskausta, seega ei saa HolyArrs selle valmis allalaadimisi importida.",
 	"core.api.sourceOff": "Mõned read on selles paigalduses välja lülitatud.",
 	"core.plain.noDownloader": "Sinu allikad leiavad allalaadimisi, mida ükski sinu allalaadija vastu võtta ei saa, seega ei saa ühtegi saata.",
-	"core.plain.sameDownloader": "Kaks allalaadijat jõuavad samasse rakendusse, seega võivad allalaadimised näha kaks korda."
+	"core.plain.sameDownloader": "Kaks allalaadijat jõuavad samasse rakendusse, seega võivad allalaadimised näha kaks korda.",
+	"core.plain.pickRules": "Valikureeglid komplekt ei eelista sinu keelt nii, nagu selle tunnused nõuavad."
 }

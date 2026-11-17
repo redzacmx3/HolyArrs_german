@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Vaše zdroje nacházejí torrenty, ale není nastavený žádný stahovač torrentů, takže nic nelze odeslat. Přidejte ho v Nastavení › Stahovače.",
 	"health.check.sameDownloader": "Přidáno dvakrát:",
 	"health.check.sameDownloaderWhy": "{app} vede na stejnou stahovací aplikaci jako jiný stahovač, takže se jeho stahování může zobrazit dvakrát. Jeden odeberte v Nastavení › Stahovače.",
-	"health.kind.sameDownloader": "Stahovač přidán dvakrát"
+	"health.kind.sameDownloader": "Stahovač přidán dvakrát",
+	"health.pick.order": "Zde má kvalita přednost před body, takže vydání ve vašem jazyce prohraje s lepší kvalitou bez něj. Nastavte nejdřív body.",
+	"health.pick.goodEnough": "„Dost dobré“ je 0 bodů, takže kopie bez vašeho jazyka zůstane a nikdy se nenahradí. Nastavte body na body jazykové vlastnosti."
 }

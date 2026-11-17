@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Jūsų šaltiniai randa torrentų, bet nenustatytas joks torrentų atsisiuntėjas, todėl nieko negalima išsiųsti. Pridėkite jį skiltyje Nustatymai › Atsisiuntėjai.",
 	"health.check.sameDownloader": "Pridėta du kartus:",
 	"health.check.sameDownloaderWhy": "{app} pasiekia tą pačią atsisiuntimo programą kaip kitas atsisiuntėjas, todėl jo atsisiuntimai gali būti rodomi du kartus. Pašalinkite vieną: Nustatymai › Atsisiuntėjai.",
-	"health.kind.sameDownloader": "Atsisiuntėjas pridėtas du kartus"
+	"health.kind.sameDownloader": "Atsisiuntėjas pridėtas du kartus",
+	"health.pick.order": "Čia kokybė eina prieš taškus, todėl leidimas jūsų kalba pralaimi geresnei kokybei be jos. Nustatykite taškus pirmiausia.",
+	"health.pick.goodEnough": "„Pakankamai gera“ yra 0 taškų, todėl kopija be jūsų kalbos lieka ir niekada nepakeičiama. Nustatykite taškus kaip kalbos savybės taškus."
 }

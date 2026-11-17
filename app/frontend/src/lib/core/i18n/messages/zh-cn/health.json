@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "你的来源找到了种子下载，但尚未设置种子下载器，所以无法发送任何下载。请在 设置 › 下载器 中添加一个。",
 	"health.check.sameDownloader": "重复添加：",
 	"health.check.sameDownloaderWhy": "{app} 与另一个下载器连接到同一个下载应用，因此它的下载可能显示两次。请在 设置 › 下载器 中删除其中一个。",
-	"health.kind.sameDownloader": "下载器重复添加"
+	"health.kind.sameDownloader": "下载器重复添加",
+	"health.pick.order": "这里质量优先于分数，所以你语言的发布会输给没有该语言的更高质量版本。请将顺序设为分数优先。",
+	"health.pick.goodEnough": "“足够好”为 0 分，所以没有你语言的副本会被保留且永不替换。请将其设为语言特征的分数。"
 }

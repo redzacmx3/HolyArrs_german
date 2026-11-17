@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Tvoji izvori pronalaze torrent preuzimanja, ali nijedan torrent preuzimatelj nije postavljen, pa se ništa ne može poslati. Dodajte ga u Postavke › Preuzimatelji.",
 	"health.check.sameDownloader": "Dodano dvaput:",
 	"health.check.sameDownloaderWhy": "{app} vodi do iste aplikacije za preuzimanje kao drugi preuzimatelj, pa se njegova preuzimanja mogu prikazati dvaput. Uklonite jedan u Postavke › Preuzimatelji.",
-	"health.kind.sameDownloader": "Preuzimatelj dodan dvaput"
+	"health.kind.sameDownloader": "Preuzimatelj dodan dvaput",
+	"health.pick.order": "Ovdje kvaliteta ide prije bodova, pa izdanje na vašem jeziku gubi od bolje kvalitete bez njega. Stavite bodove na prvo mjesto.",
+	"health.pick.goodEnough": "„Dovoljno dobro” je 0 bodova, pa kopija bez vašeg jezika ostaje i nikad se ne zamjenjuje. Postavite bodove na bodove jezične osobine."
 }

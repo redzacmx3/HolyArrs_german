@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Your Sources find torrent downloads, but no torrent Downloader is set up, so none can be sent. Add one in Settings › Downloaders.",
 	"health.check.sameDownloader": "Added twice:",
 	"health.check.sameDownloaderWhy": "{app} reaches the same download app as another Downloader, so its downloads can show twice. Remove one in Settings › Downloaders.",
-	"health.kind.sameDownloader": "Downloader added twice"
+	"health.kind.sameDownloader": "Downloader added twice",
+	"health.pick.order": "Quality ranks before points here, so a release in your language loses to a better quality without it. Set the order to points first.",
+	"health.pick.goodEnough": "Good enough is 0 points, so a copy without your language is kept and never replaced. Set good enough points to the language trait's points."
 }

@@ -82,7 +82,8 @@ const checkFix: Record<string, string> = {
 	clear_waiting: '/downloads',
 	save_folder: '/settings/downloaders',
 	no_downloader: '/settings/downloaders',
-	same_downloader: '/settings/downloaders'
+	same_downloader: '/settings/downloaders',
+	pick_rules: '/settings/pick-rules'
 };
 const checkName: Record<string, string> = {
 	get library_folder() { return t('health.check.folder'); },
@@ -94,7 +95,8 @@ const checkName: Record<string, string> = {
 	get waiting_downloads() { return t('health.check.waiting'); },
 	get clear_waiting() { return t('health.check.clearWaiting'); },
 	get save_folder() { return t('health.check.saveFolder'); },
-	get same_downloader() { return t('health.check.sameDownloader'); }
+	get same_downloader() { return t('health.check.sameDownloader'); },
+	get pick_rules() { return t('mediafiles.copy.pickRules'); }
 };
 
 // The server's own steps need a shell, so say what a container screen can do.
@@ -198,9 +200,9 @@ export function buildRows(i: StatusInput): StatusRow[] {
 			name: checkTitle(c),
 			tone,
 			word: tone === 'ok' ? t('health.word.working') : tone === 'wait' ? t('health.state.warning') : t('health.word.broken'),
-			reason: c.kind === 'config_folder' && c.state !== 'ok' ? t('health.check.configSteps') : c.kind === 'save_folder' && c.state !== 'ok' ? t('health.check.saveFolderWhy', { app: c.subject }) : c.kind === 'no_downloader' && c.state !== 'ok' ? t(c.subject === 'usenet' ? 'health.check.noUsenetDl' : 'health.check.noTorrentDl') : c.kind === 'same_downloader' && c.state !== 'ok' ? t('health.check.sameDownloaderWhy', { app: c.subject }) : c.message,
+			reason: c.kind === 'config_folder' && c.state !== 'ok' ? t('health.check.configSteps') : c.kind === 'save_folder' && c.state !== 'ok' ? t('health.check.saveFolderWhy', { app: c.subject }) : c.kind === 'no_downloader' && c.state !== 'ok' ? t(c.subject === 'usenet' ? 'health.check.noUsenetDl' : 'health.check.noTorrentDl') : c.kind === 'same_downloader' && c.state !== 'ok' ? t('health.check.sameDownloaderWhy', { app: c.subject }) : c.kind === 'pick_rules' ? pickRulesWhy(c.message) : c.message,
 			at: c.checked_at || c.since,
-			fix: checkFix[c.kind] || undefined,
+			fix: c.kind === 'pick_rules' ? `/settings/pick-rules/${c.key.split(':')[1]}` : checkFix[c.kind] || undefined,
 			check: { kind: 'checks' }
 		});
 	}
@@ -284,6 +286,17 @@ export function pastResult(r: Pick<StatusRow, 'tone' | 'word' | 'lastResult'>): 
 
 export function stopped(r: Pick<StatusRow, 'word'>): boolean {
 	return r.word === t('health.job.turnedOff') || r.word === t('health.job.partOff') || r.word === t('health.job.safeMode');
+}
+
+// The server's Pick rules advice (mediafiles.Advice*) in the reader's language.
+const pickAdvice: [string, () => string][] = [
+	['It ranks quality before points', () => t('health.pick.order')],
+	['Good enough is 0 points', () => t('health.pick.goodEnough')]
+];
+export function pickRulesWhy(message: string): string {
+	if (!message) return '';
+	const known = pickAdvice.filter(([start]) => message.includes(start)).map(([, word]) => word());
+	return known.length ? known.join(' ') : message;
 }
 
 // Avoids saying the same word twice, like "Backups Backups".

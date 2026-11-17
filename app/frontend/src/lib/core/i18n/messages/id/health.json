@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Sumbermu menemukan unduhan torrent, tapi belum ada pengunduh torrent yang disiapkan, jadi tidak ada yang bisa dikirim. Tambahkan di Pengaturan › Pengunduh.",
 	"health.check.sameDownloader": "Ditambahkan dua kali:",
 	"health.check.sameDownloaderWhy": "{app} terhubung ke aplikasi unduhan yang sama dengan pengunduh lain, jadi unduhannya bisa muncul dua kali. Hapus salah satunya di Pengaturan › Pengunduh.",
-	"health.kind.sameDownloader": "Pengunduh ditambahkan dua kali"
+	"health.kind.sameDownloader": "Pengunduh ditambahkan dua kali",
+	"health.pick.order": "Di sini kualitas didahulukan dari poin, jadi rilis dalam bahasa Anda kalah dari kualitas lebih baik tanpa bahasa itu. Atur urutan poin lebih dulu.",
+	"health.pick.goodEnough": "Cukup baik ada di 0 poin, jadi salinan tanpa bahasa Anda disimpan dan tidak pernah diganti. Atur poin ke poin sifat bahasa."
 }

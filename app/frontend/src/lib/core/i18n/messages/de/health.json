@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Deine Quellen finden Torrent-Downloads, aber kein Torrent-Downloader ist eingerichtet, daher kann keiner gesendet werden. Füge unter Einstellungen › Downloader einen hinzu.",
 	"health.check.sameDownloader": "Doppelt hinzugefügt:",
 	"health.check.sameDownloaderWhy": "{app} erreicht dieselbe Download-App wie ein anderer Downloader, daher können seine Downloads doppelt erscheinen. Entferne einen unter Einstellungen › Downloader.",
-	"health.kind.sameDownloader": "Downloader doppelt hinzugefügt"
+	"health.kind.sameDownloader": "Downloader doppelt hinzugefügt",
+	"health.pick.order": "Hier zählt die Stufe vor den Punkten, daher verliert ein Release in deiner Sprache gegen eine bessere Stufe ohne sie. Stell die Reihenfolge auf „Erst die meisten Punkte, dann die Stufe“.",
+	"health.pick.goodEnough": "Gut genug liegt bei 0 Punkten, daher wird eine Kopie ohne deine Sprache behalten und nie ersetzt. Setz die Punkte für Gut genug auf die Punkte des Sprachmerkmals."
 }

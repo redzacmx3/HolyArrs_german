@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Sumber anda menemui muat turun torrent, tetapi tiada pemuat turun torrent disediakan, jadi tiada yang boleh dihantar. Tambah satu dalam Tetapan › Pemuat turun.",
 	"health.check.sameDownloader": "Ditambah dua kali:",
 	"health.check.sameDownloaderWhy": "{app} sampai ke aplikasi muat turun yang sama dengan pemuat turun lain, jadi muat turunnya boleh muncul dua kali. Buang satu dalam Tetapan › Pemuat turun.",
-	"health.kind.sameDownloader": "Pemuat turun ditambah dua kali"
+	"health.kind.sameDownloader": "Pemuat turun ditambah dua kali",
+	"health.pick.order": "Di sini kualiti didahulukan daripada mata, jadi keluaran dalam bahasa anda kalah kepada kualiti lebih baik tanpanya. Tetapkan mata dahulu.",
+	"health.pick.goodEnough": "Cukup baik ialah 0 mata, jadi salinan tanpa bahasa anda disimpan dan tidak pernah diganti. Tetapkan mata kepada mata sifat bahasa."
 }

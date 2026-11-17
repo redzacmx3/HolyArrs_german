@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { realTime, buildRows, groupRows, headline, jobTone, linkId, everyKind, needsAttention } from './rows.ts';
+import { realTime, buildRows, groupRows, headline, jobTone, linkId, everyKind, needsAttention, pickRulesWhy } from './rows.ts';
 import { nextRun, type ScheduleRow } from './schedules.ts';
 import type { StageState } from './types.ts';
 
@@ -147,5 +147,22 @@ describe('status rows', () => {
 		expect(ks.map((k) => k.label)).toEqual(['Sources', 'Downloaders', 'Media servers', 'Subtitle sites', 'Outside lists', 'Alerts', 'Metadata server']);
 		expect(ks.map((k) => k.id)).toEqual(['sources', 'downloaders', 'media', 'subtitles', 'lists', 'alerts', 'metadata']);
 		expect(ks.every((k) => Array.isArray(k.rows))).toBe(true);
+	});
+});
+
+describe('pick rules check', () => {
+	it('links to the set and words the advice in the reader language', () => {
+		const rows = buildRows({
+			checks: [
+				{ key: 'pick_rules:8', kind: 'pick_rules', subject: 'HD German', state: 'warning', since: '', checked_at: '',
+					message: 'It ranks quality before points, so a Release in the wanted language loses to a better quality without it. Set the order to points first.' } as never
+			]
+		});
+		const r = rows.find((x) => x.key === 'pick_rules:8');
+		expect(r?.fix).toBe('/settings/pick-rules/8');
+		expect(r?.tone).toBe('wait');
+		expect(r?.reason).toMatch(/^Quality ranks before points here/);
+		expect(pickRulesWhy('Good enough is 0 points, so …')).toMatch(/never replaced/);
+		expect(pickRulesWhy('Something new')).toBe('Something new');
 	});
 });

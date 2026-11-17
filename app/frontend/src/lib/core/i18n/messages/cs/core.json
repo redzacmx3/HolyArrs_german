@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "Jeden Stahovač nemá nastavenou složku pro ukládání, takže HolyArrs nemůže importovat jeho dokončená stahování.",
 	"core.api.sourceOff": "Některé řádky jsou v této instalaci vypnuté.",
 	"core.plain.noDownloader": "Vaše zdroje nacházejí stahování, která žádný z vašich stahovačů nemůže převzít, takže nic nelze odeslat.",
-	"core.plain.sameDownloader": "Dva stahovače vedou na stejnou stahovací aplikaci, takže se stahování může zobrazit dvakrát."
+	"core.plain.sameDownloader": "Dva stahovače vedou na stejnou stahovací aplikaci, takže se stahování může zobrazit dvakrát.",
+	"core.plain.pickRules": "Sada Pravidla výběru neupřednostňuje váš jazyk, jak žádají její vlastnosti."
 }

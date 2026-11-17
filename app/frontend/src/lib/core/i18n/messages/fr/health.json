@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Vos sources trouvent des téléchargements torrent, mais aucun client de téléchargement torrent n'est configuré, donc aucun ne peut être envoyé. Ajoutez-en un dans Paramètres › Clients de téléchargement.",
 	"health.check.sameDownloader": "Ajouté deux fois :",
 	"health.check.sameDownloaderWhy": "{app} atteint la même application de téléchargement qu’un autre client, ses téléchargements peuvent donc apparaître deux fois. Retirez-en un dans Réglages › Clients de téléchargement.",
-	"health.kind.sameDownloader": "Client de téléchargement ajouté deux fois"
+	"health.kind.sameDownloader": "Client de téléchargement ajouté deux fois",
+	"health.pick.order": "Ici la qualité passe avant les points : une release dans votre langue perd face à une meilleure qualité sans elle. Placez les points en premier.",
+	"health.pick.goodEnough": "« Suffisant » est à 0 point : une copie sans votre langue est gardée et jamais remplacée. Mettez les points « suffisant » au niveau du trait de langue."
 }

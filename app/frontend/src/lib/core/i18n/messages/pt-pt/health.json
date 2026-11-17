@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "As suas fontes encontram torrents, mas nenhum gestor de downloads de torrents está configurado, por isso nenhuma pode ser enviada. Adicione um em Definições › Gestores de downloads.",
 	"health.check.sameDownloader": "Adicionado duas vezes:",
 	"health.check.sameDownloaderWhy": "{app} chega à mesma aplicação de downloads que outro gestor, por isso os seus downloads podem aparecer duas vezes. Remova um em Definições › Gestores de downloads.",
-	"health.kind.sameDownloader": "Gestor de downloads adicionado duas vezes"
+	"health.kind.sameDownloader": "Gestor de downloads adicionado duas vezes",
+	"health.pick.order": "Aqui a qualidade vem antes dos pontos, por isso uma release no seu idioma perde para uma qualidade melhor sem ele. Coloque os pontos primeiro.",
+	"health.pick.goodEnough": "«Suficientemente bom» está em 0 pontos, por isso uma cópia sem o seu idioma é mantida e nunca substituída. Defina esses pontos como os do traço de idioma."
 }

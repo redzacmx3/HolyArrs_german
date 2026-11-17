@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "Vienam lejupielādētājam nav saglabāšanas mapes, tāpēc HolyArrs nevar importēt tā pabeigtās lejupielādes.",
 	"core.api.sourceOff": "Dažas rindas šajā instalācijā ir izslēgtas.",
 	"core.plain.noDownloader": "Tavi avoti atrod lejupielādes, kuras nevar pieņemt neviens tavs lejupielādētājs, tāpēc neko nevar nosūtīt.",
-	"core.plain.sameDownloader": "Divi lejupielādētāji sasniedz to pašu lejupielādes lietotni, tāpēc lejupielādes var parādīties divreiz."
+	"core.plain.sameDownloader": "Divi lejupielādētāji sasniedz to pašu lejupielādes lietotni, tāpēc lejupielādes var parādīties divreiz.",
+	"core.plain.pickRules": "Izvēles noteikumi kopa nedod priekšroku tavai valodai, kā prasa tās pazīmes."
 }
