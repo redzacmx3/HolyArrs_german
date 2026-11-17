@@ -2,6 +2,7 @@
 	import PageLoader from '#lib/ui/PageLoader.svelte';
 	import Poster from '#lib/ui/Poster.svelte';
 	import Button from '#lib/ui/Button.svelte';
+	import SaveBar from '#lib/ui/SaveBar.svelte';
 	import EmptyState from '#lib/ui/EmptyState.svelte';
 	import LoadError from '#lib/ui/LoadError.svelte';
 	import { titleArt, LibraryToolPage } from '#lib/mediafiles/index.ts';
@@ -30,6 +31,9 @@
 	let picked = $state<Set<number>>(new Set());
 	let busy = $state(false);
 	let saving = $state(false);
+	// The rules as last loaded or saved; the save bar shows while they differ.
+	let saved = $state('');
+	const dirty = $derived(loaded && !!saved && JSON.stringify(settings) !== saved);
 	const all = $derived(items.length > 0 && picked.size === items.length);
 	const modes: Mode[] = ['auto', 'suggest', 'off'];
 
@@ -37,6 +41,7 @@
 		try {
 			const r = await api.get<{ settings: Settings; watch_history: boolean; items: Item[] }>('/upkeep');
 			settings = r.settings;
+			saved = JSON.stringify(r.settings);
 			history = r.watch_history;
 			items = r.items;
 			picked = new Set([...picked].filter((id) => items.some((i) => i.title_id === id)));
@@ -64,6 +69,7 @@
 		saving = true;
 		try {
 			settings = await api.put<Settings>('/settings/upkeep', { ...settings, never_watched_days: Number(settings.never_watched_days) });
+			saved = JSON.stringify(settings);
 			toasts.push(t('library.upkeep.saved'), 'ok');
 			await load();
 		} catch (e) {
@@ -110,13 +116,13 @@
 	<LoadError hasData={false} message={plainReason(error).text} onretry={load} />
 {:else}
 <PageLoader loading={!loaded} label={t('library.upkeep.loading')}>
-	<form class="tp-sheet rules" onsubmit={(e) => { e.preventDefault(); void save(); }} data-testid="upkeep-rules">
+	<form id="upkeep-form" class="tp-sheet rules" onsubmit={(e) => { e.preventDefault(); void save(); }} data-testid="upkeep-rules">
 		<div class="rule">
 			<label for="never-watched">{t('library.upkeep.neverWatched')}</label>
 			<select id="never-watched" class="input" bind:value={settings.never_watched}>
 				{#each modes as m (m)}<option value={m}>{t('library.upkeep.mode.' + m)}</option>{/each}
 			</select>
-			<label class="days">{t('library.upkeep.days')} <input class="input narrow" type="number" min="30" max="3650" bind:value={settings.never_watched_days} /></label>
+			<label class="days">{t('library.upkeep.days')} <input class="input narrow" type="number" min="30" max="3650" bind:value={settings.never_watched_days} onchange={() => (settings.never_watched_days = Number(settings.never_watched_days))} /></label>
 			<span class="tp-sub">{t('library.upkeep.neverWatchedHint')}</span>
 			{#if !history}<span class="tp-sub warn" data-testid="upkeep-no-history">{t('library.upkeep.noHistory')}</span>{/if}
 		</div>
@@ -129,8 +135,8 @@
 		</div>
 		<label class="paused"><input type="checkbox" bind:checked={settings.paused} /> {t('library.upkeep.paused')}</label>
 		<span class="tp-sub">{t('library.upkeep.holdingNote')}</span>
-		<div><Button type="submit" busy={saving}>{t('library.upkeep.save')}</Button></div>
 	</form>
+	<SaveBar {dirty} form="upkeep-form" {saving} ondiscard={() => (settings = JSON.parse(saved))} />
 
 	{#if items.length === 0}
 		<EmptyState icon="tools" title={t('library.upkeep.nothing')} />
