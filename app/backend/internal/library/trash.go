@@ -230,7 +230,12 @@ func trashShape(b *mediafiles.PickRulesBody, p TrashProfile) {
 	switch lang := strings.ToLower(strings.TrimSpace(p.Language)); lang {
 	case "":
 	case "any":
-		b.Language = mediafiles.LanguageRule{Wanted: mediafiles.PickLanguages(), OriginalOK: true}
+		// Any leaves the language to the points (as TRaSH's language
+		// profiles do). Languages the rules already name are kept: a sync
+		// never widens a choice the owner made.
+		if len(b.Language.Wanted) == 0 {
+			b.Language = mediafiles.LanguageRule{Wanted: mediafiles.PickLanguages(), OriginalOK: true}
+		}
 	case "original":
 		b.Language = mediafiles.LanguageRule{Wanted: []string{}, OriginalOK: true}
 	default:
