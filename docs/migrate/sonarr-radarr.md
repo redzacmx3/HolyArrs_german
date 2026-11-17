@@ -30,7 +30,7 @@ Old apps often run in other containers and see folders under other names. A rule
 | --- | --- |
 | Library folders | Library folders for movies and shows. |
 | Movies and shows | Titles, matched by TMDB or TVDB id. Folders and files stay where they are. A watched title gets **Keep up to date**; seasons that were not watched stay off. Nothing is searched for during the move. |
-| Quality profiles | Each one matched to the closest **Pick rules** preset (Standard, 4K). The **Import** step shows why. Titles use the preset of their profile. |
+| Quality profiles | Each one matched to the closest **Pick rules** preset (Standard, 4K). The **Import** step shows why. Titles use the preset of their profile. A profile whose allowed quality group spans several steps (such as TRaSH's German "Merged QPs") ranks on points before quality, as the app did, so a German release with more points wins. |
 | Exclusions | The **Never-add** list. |
 | Radarr's release stage per movie, and its availability delay | Each movie's **Release gate** and gate delay, up to 365 days. Your default for new movies stays. |
 | The untagged default wait rule | The preferred protocol and Usenet and torrent waits on the matched Pick rules, up to 7 days. See [Waits](#waits). |
