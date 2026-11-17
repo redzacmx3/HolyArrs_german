@@ -51,6 +51,7 @@ func (h *OrganiseHandlers) Routes(m *http.ServeMux) {
 	m.HandleFunc("POST /api/v1/titles/{id}/leftovers/unmatch", h.unmatchLeftovers)
 	m.HandleFunc("PUT /api/v1/titles/{id}/leftovers/{fid}", h.dismissLeftover)
 	m.HandleFunc("POST /api/v1/titles/{id}/rescan", h.rescanTitle)
+	h.upkeepRoutes(m)
 }
 
 // scanFolder queues the dry-run scan of a Library folder; GET

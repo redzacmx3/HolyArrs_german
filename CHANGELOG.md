@@ -12,6 +12,7 @@ All notable changes to HolyArrs are listed here. The format follows [Keep a Chan
 - Applying a TRaSH profile also takes its qualities, cutoff and language, and a merged quality group ranks on points first, so German profiles put German releases on top.
 - Importing a Radarr or Sonarr profile, or one sent through the arr API, ranks on points first when an allowed quality group spans several steps (such as TRaSH's "Merged QPs"), as the app ranked it.
 - Status checks every Pick rules set in use: a language trait worth thousands of points that still loses on quality, or good enough at 0 points, gets a warning with a link to the set.
+- Library › Upkeep lists movies nobody watched for a set number of days (from the media servers' watch history) and movies with no file that nothing keeps up to date. Each rule is automatic, a suggestion or off; what goes waits in Recently deleted for the holding days.
 
 ### Changed
 

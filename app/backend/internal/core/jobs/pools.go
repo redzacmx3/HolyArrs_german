@@ -58,6 +58,7 @@ var kindPools = map[string]Pool{
 	"move_title":          PoolHeavy,
 	"rename_files":        PoolHeavy,
 	"clean_holding":       PoolHeavy,
+	"library_upkeep":      PoolHeavy,
 	"scan_library_folder": PoolHeavy,
 	"adopt_library":       PoolHeavy,
 	"migrate_move":        PoolMigrate,
