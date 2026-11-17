@@ -19,13 +19,14 @@ type MovieUpkeep struct {
 	KeepUpToDate bool   `json:"keep_up_to_date"`
 }
 
-// MoviesForUpkeep lists every movie with a Version, by sort name.
+// MoviesForUpkeep lists every movie in the Library (not deleted) with a
+// Version, by sort name.
 func MoviesForUpkeep(ctx context.Context, q database.Lister) ([]MovieUpkeep, error) {
 	rows, err := q.QueryContext(ctx, `SELECT t.id, t.name, COALESCE(t.year, 0), t.created_at,
 		COALESCE(SUM(f.size), 0), COUNT(f.id), MAX(v.keep_up_to_date)
 		FROM titles t JOIN versions v ON v.title_id = t.id
 		LEFT JOIN files f ON f.version_id = v.id AND f.role = 'main' AND f.state = 'present'
-		WHERE t.kind = 'movie' GROUP BY t.id ORDER BY t.sort_name, t.id`)
+		WHERE t.kind = 'movie' AND t.state != 'removed' GROUP BY t.id ORDER BY t.sort_name, t.id`)
 	if err != nil {
 		return nil, err
 	}
