@@ -25,6 +25,21 @@ type OldProfile struct {
 	LanguageCode string
 	// FourK starts from the 4K preset instead of Standard.
 	FourK bool
+	// MergedGroups is set when an allowed quality group holds qualities
+	// of more than one step: the app ranked those by score alone.
+	MergedGroups bool
+}
+
+// MergesSteps tells whether the qualities of one group fall on more than
+// one Pick rules step, as "Merged QPs" (WEB and Bluray, 720p and 1080p) do.
+func MergesSteps(names []string) bool {
+	steps := map[string]bool{}
+	for _, n := range names {
+		if s := QualityStep(n); s != "" {
+			steps[s] = true
+		}
+	}
+	return len(steps) > 1
 }
 
 // ClampPoints keeps points inside the Pick rules bound.
@@ -76,6 +91,10 @@ func OldProfileRules(p OldProfile) (mediafiles.PickRulesBody, []string) {
 	// Older apps have no minimum upgrade step: any gain counts, as 1 does.
 	body.UpgradeMinPoints = ClampPoints(max(p.MinUpgradeScore, 1))
 	body.Order = "quality_then_points"
+	if p.MergedGroups {
+		// A group ranked its qualities by score alone, so points lead.
+		body.Order = "points_then_quality"
+	}
 	notes = append(notes, qualityNotes(p.Qualities)...)
 	// Sonarr profiles and Radarr's "Any" take every language; "Original"
 	// is what the ready-made rules already ask.

@@ -4,6 +4,8 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/HolyArrs/holyarrs/app/backend/internal/library"
 )
 
 func (r arrReader) build(in *arrRows) *Snapshot {
@@ -310,7 +312,7 @@ func profile(m map[string]any, quality, formatName map[int64]string) Profile {
 		p.Language = str(lower(l)["name"])
 	}
 	cutoff := num(m["cutoff"])
-	p.Qualities, p.CutoffQualities = openQualities(list(m["items"]), quality, cutoff)
+	p.Qualities, p.CutoffQualities, p.MergedGroups = openQualities(list(m["items"]), quality, cutoff)
 	var walk func(items []any)
 	walk = func(items []any) {
 		for _, it := range items {
@@ -499,8 +501,9 @@ func itemQuality(im map[string]any, quality map[int64]string) (string, int64) {
 
 // openQualities lists a profile's allowed qualities with groups opened up
 // (every quality in an allowed group counts), and the cutoff's: a group's
-// cutoff is matched by the group's id, never a quality's.
-func openQualities(items []any, quality map[int64]string, cutoff int64) (allowed, cut []string) {
+// cutoff is matched by the group's id, never a quality's. merged tells
+// whether an allowed group spans more than one Pick rules step.
+func openQualities(items []any, quality map[int64]string, cutoff int64) (allowed, cut []string, merged bool) {
 	for _, it := range items {
 		im := lower(obj(it))
 		name, id := itemQuality(im, quality)
@@ -516,12 +519,13 @@ func openQualities(items []any, quality map[int64]string, cutoff int64) (allowed
 		}
 		if boolean(im["allowed"]) {
 			allowed = append(allowed, names...)
+			merged = merged || library.MergesSteps(names)
 		}
 		if id == cutoff && cut == nil {
 			cut = names
 		}
 	}
-	return allowed, cut
+	return allowed, cut, merged
 }
 
 // itemValue reads a condition's field (value, min, max, exceptlanguage)

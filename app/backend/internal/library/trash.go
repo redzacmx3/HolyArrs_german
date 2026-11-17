@@ -216,13 +216,7 @@ func trashShape(b *mediafiles.PickRulesBody, p TrashProfile) {
 			continue
 		}
 		allowed = append(allowed, names...)
-		steps := map[string]bool{}
-		for _, n := range names {
-			if s := QualityStep(n); s != "" {
-				steps[s] = true
-			}
-		}
-		merged = merged || len(steps) > 1
+		merged = merged || MergesSteps(names)
 	}
 	if steps, good := profileSteps(allowed, cutoff); len(steps) > 0 && !mediafiles.IsMusicRules(*b) {
 		for i := range b.Steps {

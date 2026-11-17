@@ -939,6 +939,7 @@ mediaInfo
 media_type
 member
 members
+merged_groups
 message
 messages
 metadata

@@ -40,7 +40,7 @@ func (b *builder) importedRules(s *Snapshot, p Profile, preset string) (*RulesPl
 		return nil, false
 	}
 	app := string(s.Kind)
-	body, notes := library.OldProfileRules(library.OldProfile{Qualities: p.Qualities, CutoffQualities: p.CutoffQualities,
+	body, notes := library.OldProfileRules(library.OldProfile{Qualities: p.Qualities, CutoffQualities: p.CutoffQualities, MergedGroups: p.MergedGroups,
 		UpgradeAllowed: p.UpgradeAllowed, MinScore: p.MinScore, CutoffScore: p.CutoffScore, MinUpgradeScore: p.MinUpgradeScore,
 		Language: p.Language, LanguageCode: subtitles.NormLanguage(strings.ToLower(strings.TrimSpace(p.Language))), FourK: preset == "4K"})
 	name := clip(b.named(p.Name), maxName)
