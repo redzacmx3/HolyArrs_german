@@ -3954,7 +3954,7 @@
         "type": "object"
       },
       "OwnTrait": {
-        "description": "One of your own traits: a named test on the Release name, its release group or its size. Pick rules use it under key, like a built-in trait.",
+        "description": "One of your own traits: a named test on the Release name, its release group, its size or its audio languages. Pick rules use it under key, like a built-in trait.",
         "properties": {
           "id": {
             "format": "int64",
@@ -3965,11 +3965,12 @@
             "type": "string"
           },
           "match": {
-            "description": "name: any term anywhere in the Release name; group: the release group is one of the terms; size: one term \"over-upto\" in GB, either end open (\"60-\", \"-8\", \"2-8\"), over the low end and up to and including the high end; a Release with no size given never fits.",
+            "description": "name: any term anywhere in the Release name; group: the release group is one of the terms; size: one term \"over-upto\" in GB, either end open (\"60-\", \"-8\", \"2-8\"), over the low end and up to and including the high end; a Release with no size given never fits; language: 1 to 10 terms, each a language code (de, en) or original, ! before one for without it; every term must fit (de and original is German DL).",
             "enum": [
               "name",
               "group",
-              "size"
+              "size",
+              "language"
             ],
             "type": "string"
           },
@@ -3999,7 +4000,8 @@
             "enum": [
               "name",
               "group",
-              "size"
+              "size",
+              "language"
             ],
             "type": "string"
           },
@@ -26287,6 +26289,101 @@
         "x-holyarrs-scope": "write"
       }
     },
+    "/api/v1/settings/upkeep": {
+      "put": {
+        "description": "Sets each upkeep rule to auto (the daily run acts on its own), suggest (listed only) or off.",
+        "operationId": "putUpkeep",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "never_watched": {
+                    "description": "Movies nobody watched on a media server since they came.",
+                    "enum": [
+                      "auto",
+                      "suggest",
+                      "off"
+                    ],
+                    "type": "string"
+                  },
+                  "never_watched_days": {
+                    "description": "How long a movie must be in the Library before it counts as never watched.",
+                    "maximum": 3650,
+                    "minimum": 30,
+                    "type": "integer"
+                  },
+                  "no_file": {
+                    "description": "Movies with no file that no Version keeps up to date.",
+                    "enum": [
+                      "auto",
+                      "suggest",
+                      "off"
+                    ],
+                    "type": "string"
+                  },
+                  "paused": {
+                    "description": "Every auto rule only suggests until this is lifted.",
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "never_watched": {
+                      "description": "Movies nobody watched on a media server since they came.",
+                      "enum": [
+                        "auto",
+                        "suggest",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
+                    "never_watched_days": {
+                      "description": "How long a movie must be in the Library before it counts as never watched.",
+                      "maximum": 3650,
+                      "minimum": 30,
+                      "type": "integer"
+                    },
+                    "no_file": {
+                      "description": "Movies with no file that no Version keeps up to date.",
+                      "enum": [
+                        "auto",
+                        "suggest",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
+                    "paused": {
+                      "description": "Every auto rule only suggests until this is lifted.",
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "A mode or the days are out of range."
+          }
+        },
+        "summary": "Set the upkeep rules",
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "settings",
+        "x-holyarrs-scope": "write"
+      }
+    },
     "/api/v1/settings/url-base": {
       "get": {
         "description": "The path HolyArrs lives under behind a reverse proxy.",
@@ -31167,6 +31264,187 @@
         "tags": [
           "Search"
         ],
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "manage_library",
+        "x-holyarrs-scope": "write"
+      }
+    },
+    "/api/v1/upkeep": {
+      "get": {
+        "description": "Lists the movies each upkeep rule that is not off names now, with the rules' modes and whether the media servers' watch history holds anything.",
+        "operationId": "getUpkeep",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "added_at": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "files": {
+                            "type": "integer"
+                          },
+                          "keep_up_to_date": {
+                            "type": "boolean"
+                          },
+                          "mode": {
+                            "enum": [
+                              "auto",
+                              "suggest"
+                            ],
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "rule": {
+                            "enum": [
+                              "never_watched",
+                              "no_file"
+                            ],
+                            "type": "string"
+                          },
+                          "size": {
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "title_id": {
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "year": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "settings": {
+                      "properties": {
+                        "never_watched": {
+                          "description": "Movies nobody watched on a media server since they came.",
+                          "enum": [
+                            "auto",
+                            "suggest",
+                            "off"
+                          ],
+                          "type": "string"
+                        },
+                        "never_watched_days": {
+                          "description": "How long a movie must be in the Library before it counts as never watched.",
+                          "maximum": 3650,
+                          "minimum": 30,
+                          "type": "integer"
+                        },
+                        "no_file": {
+                          "description": "Movies with no file that no Version keeps up to date.",
+                          "enum": [
+                            "auto",
+                            "suggest",
+                            "off"
+                          ],
+                          "type": "string"
+                        },
+                        "paused": {
+                          "description": "Every auto rule only suggests until this is lifted.",
+                          "type": "boolean"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "watch_history": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "What the upkeep rules find",
+        "x-holyarrs-part": "media",
+        "x-holyarrs-permission": "manage_library",
+        "x-holyarrs-scope": "read"
+      }
+    },
+    "/api/v1/upkeep/apply": {
+      "post": {
+        "description": "Takes the named movies out of the Library, their files to the holding folder for holding_days. Only movies the upkeep list names now are touched; others and protected copies are skipped.",
+        "operationId": "applyUpkeep",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "title_ids": {
+                    "items": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "maxItems": 1000,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "title_ids"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "held_bytes": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "problems": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "removed": {
+                      "items": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "type": "array"
+                    },
+                    "skipped": {
+                      "items": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Send 1 to 1000 title_ids."
+          }
+        },
+        "summary": "Take listed movies out",
         "x-holyarrs-part": "media",
         "x-holyarrs-permission": "manage_library",
         "x-holyarrs-scope": "write"

@@ -22,9 +22,12 @@ HolyArrs then:
 
 - makes one trait for each scored TRaSH entry it can test, listed under **Your traits > From TRaSH Guides**,
 - puts those traits in **Traits and points** with the TRaSH score as points,
-- sets **Fewest points a Release needs**, the good enough points and **Points a better copy must add** to the profile's numbers.
+- sets **Fewest points a Release needs**, the good enough points and **Points a better copy must add** to the profile's numbers,
+- takes the profile's allowed qualities as the allowed quality steps and its cutoff as **Good enough at**,
+- ranks on points before quality step when the profile puts several qualities into one group (the German profiles' "Merged QPs": a German WEB-DL with more points beats an English Blu-ray, as in Radarr),
+- sets **Languages to take** from the profile's language (Any takes every language, Original only the original).
 
-Points you gave built-in traits or your own traits stay as they are. Your quality steps and **Good enough at** stay too; set them to match the profile yourself.
+Points you gave built-in traits or your own traits stay as they are. A profile that names no qualities or language leaves those settings as they are.
 
 ## Sync again
 
@@ -45,7 +48,7 @@ After applying, **left out** lists every TRaSH entry HolyArrs didn't take, and w
 | Source (TV, WEB-DL, WEBRip, DVD, Blu-ray, remux) | Yes, read from the name |
 | Resolution | Yes, read from the name |
 | Remux or full disc (movies) | Yes, as a source |
-| Language | Not yet |
+| Language (including Original and except) | Yes, read from the name: German DL also holds the original language, German ML the original and English, and German Subbed or OmU are subtitles, as Radarr and Sonarr read them |
 | Indexer flags | Not yet |
 | Release type (single episode or season pack) | Not yet |
 | Size (min and max in GB) | Yes, on the whole Release's size from the search result; a Release with no size given doesn't fit |
@@ -54,6 +57,23 @@ After applying, **left out** lists every TRaSH entry HolyArrs didn't take, and w
 TRaSH entries with no score in the profile are skipped quietly, since they change nothing. Optional TRaSH groups (the ones a profile doesn't include by default) aren't added; give those traits points yourself after a sync if you want them.
 
 Pick rules hold at most 64 traits. If a sync would go over, the strongest scores are kept and the rest are listed.
+
+## German releases
+
+The German TRaSH profiles (for example **[German] HD Bluray + WEB** for movies) score mostly on language. HolyArrs reads German Usenet names the way Radarr and Sonarr do, so those entries now come across and fit:
+
+| Release name | Fits |
+|---|---|
+| `Film.2020.German.DL.1080p.BluRay.x264-GRP` | German DL, German 1080p Booster |
+| `Film.2020.German.ML.1080p.BluRay.x264-GRP` | German DL, German 1080p Booster |
+| `Film.2020.German.DL.AC3.Dubbed.720p.WEB.H264-GRP` | German DL (not the built-in **Dubbed only**: the original audio is there too) |
+| `Film.2020.German.1080p.WEB.H264-GRP` | German |
+| `Film.2020.German.Subbed.1080p.WEB.H264-GRP` | German Subbed |
+| `Film.2020.1080p.BluRay.x264-GRP` (English film) | none of the German entries |
+
+To keep only German releases, also tick German in the set's **Languages to take**. A Release with no language word is then read as the title's original language, as the old apps do, so an untagged English Release no longer passes rules that want German only. Tick **The original language is fine** if you also take the original alone.
+
+You can make the same tests yourself: in **Your traits**, make a trait that looks at **Languages** and list one per line a code such as `de` or `en`, or `original`; `!` in front means without it. Every line must fit, so `de` and `original` is German DL, and `de` and `!original` is a German dub only.
 
 ## Problems
 

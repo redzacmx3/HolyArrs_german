@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Sursele tale găsesc torrente, dar niciun program de descărcare torrent nu e configurat, așa că nu se poate trimite nimic. Adaugă unul în Setări › Programe de descărcare.",
 	"health.check.sameDownloader": "Adăugat de două ori:",
 	"health.check.sameDownloaderWhy": "{app} ajunge la aceeași aplicație de descărcare ca alt program, așa că descărcările lui pot apărea de două ori. Elimină unul din Setări › Programe de descărcare.",
-	"health.kind.sameDownloader": "Program de descărcare adăugat de două ori"
+	"health.kind.sameDownloader": "Program de descărcare adăugat de două ori",
+	"health.pick.order": "Aici calitatea contează înaintea punctelor, așa că o lansare în limba ta pierde în fața unei calități mai bune fără ea. Pune punctele primele.",
+	"health.pick.goodEnough": "„Destul de bun” este 0 puncte, așa că o copie fără limba ta rămâne și nu e înlocuită niciodată. Setează punctele la cele ale trăsăturii de limbă."
 }

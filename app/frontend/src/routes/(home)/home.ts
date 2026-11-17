@@ -113,6 +113,8 @@ export function healthFix(kind: HealthCheck['kind']): string {
 			return '/downloads?show=waiting.paused';
 		case 'clear_waiting':
 			return '/downloads';
+		case 'pick_rules':
+			return '/settings/pick-rules';
 		case 'config_folder':
 			// No setting fixes it: Status shows the steps.
 			return '/health';
@@ -139,6 +141,7 @@ const healthWords = (): Record<HealthKind, { one: string; many: string; error: [
 	save_folder: { one: t('home.downloader'), many: t('home.downloaders'), error: [t('home.noSaveFolder'), t('home.noSaveFolderMany')], warning: [t('home.noSaveFolder'), t('home.noSaveFolderMany')] },
 	no_downloader: { one: t('home.downloader'), many: t('home.downloaders'), error: [t('home.noneForSources'), t('home.noneForSources')], warning: [t('home.noneForSources'), t('home.noneForSources')] },
 	same_downloader: { one: t('home.downloader'), many: t('home.downloaders'), error: [t('home.addedTwice'), t('home.addedTwiceMany')], warning: [t('home.addedTwice'), t('home.addedTwiceMany')] },
+	pick_rules: { one: t('mediafiles.copy.pickRules'), many: t('mediafiles.copy.pickRules'), error: [t('home.needsALook'), t('home.needALook')], warning: [t('home.needsALook'), t('home.needALook')] },
 	// The backups:key check: no key kit saved for the current master key.
 	key_kit: { one: t('home.masterKey'), many: t('home.masterKey'), error: [t('home.noKeyKitSaved'), t('home.noKeyKitSaved')], warning: [t('home.noKeyKitSaved'), t('home.noKeyKitSaved')] },
 	trailers: { one: t('home.trailers'), many: t('home.trailers'), error: [t('home.notLoading'), t('home.notLoading')], warning: [t('home.lookupsFailing'), t('home.lookupsFailing')] }

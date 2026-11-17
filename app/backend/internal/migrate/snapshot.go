@@ -156,6 +156,9 @@ type Profile struct {
 	// CutoffQualities the cutoff's (several when it is a group).
 	Qualities       []string `json:"qualities,omitempty"`
 	CutoffQualities []string `json:"cutoff_qualities,omitempty"`
+	// MergedGroups is set when an allowed group spans several Pick rules
+	// steps (scores alone ranked them in the app).
+	MergedGroups bool `json:"merged_groups,omitempty"`
 	// Language is the profile's wanted language by name (Radarr).
 	Language string `json:"language,omitempty"`
 	// Scores maps custom format names to their score in this profile.

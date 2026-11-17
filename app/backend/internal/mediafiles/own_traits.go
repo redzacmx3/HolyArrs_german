@@ -4,21 +4,23 @@ import (
 	"errors"
 	"regexp"
 	"regexp/syntax"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
 
 	"github.com/HolyArrs/holyarrs/app/backend/internal/core/database"
+	"github.com/HolyArrs/holyarrs/app/backend/internal/core/releasename"
 )
 
-// OwnTrait is a trait a person makes: a test on a Release's name or
-// on its release group, used in Pick rules like the built-in traits under
+// OwnTrait is a trait a person makes: a test on a Release's name, its
+// release group, its size or its audio languages, used in Pick rules like the built-in traits under
 // the key OwnTraitKey(id). Each term is plain words, matched anywhere in
 // the name (or as the whole group) ignoring case, or a /pattern/.
 type OwnTrait struct {
 	database.Meta
 	Name  string   `db:"name"`
-	Match string   `db:"match"` // name, group, size
+	Match string   `db:"match"` // name, group, size, language
 	Terms []string `db:"terms,json"`
 	// Source and SourceID say where a synced trait came from ("trash",
 	// "sonarr:<trash id>"; "import", "<app>:<address>:<format id>" for one
@@ -104,8 +106,15 @@ func CheckOwnTrait(t *OwnTrait) error {
 		}
 		t.Terms = []string{SizeRangeValue(over, upTo)}
 		return nil
+	case "language":
+		terms, err := CheckLanguageTerms(t.Terms)
+		if err != nil {
+			return err
+		}
+		t.Terms = terms
+		return nil
 	default:
-		return fieldErr("match", "Match the Release name, its release group or its size.")
+		return fieldErr("match", "Match the Release name, its release group, its size or its languages.")
 	}
 	var terms []string
 	for _, raw := range t.Terms {
@@ -134,4 +143,43 @@ func CheckOwnTrait(t *OwnTrait) error {
 	}
 	t.Terms = terms
 	return nil
+}
+
+// CheckLanguageTerms cleans a language trait's terms: each is a language
+// code the release-name reader knows, or "original" (the title's original
+// language); "!" before one means the Release must not have it. A Release
+// fits when every term fits, so "de" and "original" together are German DL.
+func CheckLanguageTerms(raw []string) ([]string, error) {
+	var terms []string
+	for _, r := range raw {
+		term := strings.ToLower(strings.TrimSpace(r))
+		if term == "" {
+			continue
+		}
+		code, _ := strings.CutPrefix(term, "!")
+		code = strings.TrimSpace(code)
+		if code != "original" && !releasename.ReadsLanguage(code) {
+			return nil, fieldErr("terms", "%s is not a language code HolyArrs reads in names (such as de, en or original).", r)
+		}
+		if strings.HasPrefix(term, "!") {
+			code = "!" + code
+		}
+		if !slices.Contains(terms, code) {
+			terms = append(terms, code)
+		}
+	}
+	if len(terms) == 0 || len(terms) > 10 {
+		return nil, fieldErr("terms", "List 1 to 10 languages.")
+	}
+	return terms, nil
+}
+
+// languageSpecs are a language trait's terms as language tests that must all pass.
+func languageSpecs(terms []string) []OwnSpec {
+	out := make([]OwnSpec, 0, len(terms))
+	for _, term := range terms {
+		code, not := strings.CutPrefix(term, "!")
+		out = append(out, OwnSpec{Name: term, Kind: "language", Value: code, Negate: not, Required: true})
+	}
+	return out
 }

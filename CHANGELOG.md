@@ -2,6 +2,23 @@
 
 All notable changes to HolyArrs are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- German Usenet releases are read as Radarr and Sonarr read them: German DL also holds the original language, German ML the original and English, and German Subbed or OmU are subtitles, not audio.
+- TRaSH Guides sync takes language tests, so the German profiles' German DL, German, German Subbed and booster entries score.
+- Your own traits can look at a Release's languages (`de`, `original`, `!en`).
+- Applying a TRaSH profile also takes its qualities, cutoff and language, and a merged quality group ranks on points first, so German profiles put German releases on top. A profile whose language is Any keeps the languages the rules already name.
+- Importing a Radarr or Sonarr profile, or one sent through the arr API, ranks on points first when an allowed quality group spans several steps (such as TRaSH's "Merged QPs"), as the app ranked it.
+- Status checks every Pick rules set in use: a language trait worth thousands of points that still loses on quality, or good enough at 0 points, gets a warning with a link to the set.
+- Library › Upkeep lists movies nobody watched for a set number of days (from the media servers' watch history) and movies with no file that nothing keeps up to date. Each rule is automatic, a suggestion or off; what goes waits in Recently deleted for the holding days.
+
+### Changed
+
+- Pick rules that name the languages they take read a Release with no language word as the title's original language, as imported rules already did.
+- **Dubbed only** no longer fits German DL releases marked Dubbed, which keep the original audio.
+
 ## 1.1.4
 
 ### Added

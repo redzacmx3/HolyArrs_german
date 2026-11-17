@@ -39,13 +39,13 @@ export interface PickRulesBody {
 	synced?: SyncedProfile;
 }
 
-/** One of your own traits: a test on the Release name or release group, named by key in Pick rules (own:<id>). */
+/** One of your own traits: a test on the Release name, release group, size or audio languages, named by key in Pick rules (own:<id>). */
 export interface OwnTrait {
 	id: number;
 	key: string;
 	name: string;
-	match: 'name' | 'group' | 'size';
-	/** Plain words (any case) or /pattern/. */
+	match: 'name' | 'group' | 'size' | 'language';
+	/** Plain words (any case) or /pattern/; for a language trait, language codes or "original", "!" before one for "not". */
 	terms: string[];
 	/** "trash" for a trait synced from TRaSH Guides, "import" for one brought from an old app, "arrapi" for one an app sent through the arr API: it tests specs, which only a sync or an import changes. */
 	source?: string;

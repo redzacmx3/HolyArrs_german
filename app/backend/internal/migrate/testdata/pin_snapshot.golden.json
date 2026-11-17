@@ -79,6 +79,7 @@
       "cutoff_qualities": [
         "s"
       ],
+      "merged_groups": true,
       "language": "s",
       "scores": {
         "s": 7

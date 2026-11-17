@@ -9,7 +9,7 @@
 	import Sheet from '#lib/ui/Sheet.svelte';
 	import Field from '#lib/ui/Field.svelte';
 	import SegmentedControl from '#lib/ui/SegmentedControl.svelte';
-	import { checkOwnTrait, checkSizeTrait, ownTerms, sizeParts, sizeTerm } from './pick-rules.ts';
+	import { checkLanguageTrait, checkOwnTrait, checkSizeTrait, ownTerms, sizeParts, sizeTerm } from './pick-rules.ts';
 	import type { OwnTrait } from './types.ts';
 	import { onMount } from 'svelte';
 	import { api, ApiError } from '#lib/core/api.ts';
@@ -38,7 +38,8 @@
 	const matchChoices = $derived<{ value: OwnTrait['match']; label: string }[]>([
 		{ value: 'name', label: t('downloads.ot.words') },
 		{ value: 'group', label: t('downloads.ot.group') },
-		{ value: 'size', label: t('downloads.ot.size') }
+		{ value: 'size', label: t('downloads.ot.size') },
+		{ value: 'language', label: t('downloads.ot.languages') }
 	]);
 	// Traits synced from TRaSH Guides sit apart: there can be dozens, and only a sync changes them.
 	const handMade = $derived((list ?? []).filter((o) => !o.source));
@@ -52,7 +53,8 @@
 		const { over, upTo } = sizeParts(term);
 		return [over && t('downloads.ot.sizeOver', { n: over }), upTo && t('downloads.ot.sizeUpTo', { n: upTo })].filter(Boolean).join(', ');
 	};
-	const summary = (o: OwnTrait) => (o.match === 'size' ? t('downloads.ot.sumSize', { range: sizeWords(o.terms[0] ?? '') }) : t(o.match === 'group' ? 'downloads.ot.sumGroup' : 'downloads.ot.sumName', { terms: o.terms.join(', ') }));
+	const summary = (o: OwnTrait) =>
+		o.match === 'size' ? t('downloads.ot.sumSize', { range: sizeWords(o.terms[0] ?? '') }) : t(o.match === 'group' ? 'downloads.ot.sumGroup' : o.match === 'language' ? 'downloads.ot.sumLanguage' : 'downloads.ot.sumName', { terms: o.terms.join(', ') });
 
 	// The sheet that makes or changes one trait.
 	let editing = $state<OwnTrait | null>(null);
@@ -66,7 +68,7 @@
 	let busy = $state(false);
 	let serverErrors = $state<Record<string, string>>({});
 	let formError = $state('');
-	const checked = $derived(match === 'size' ? checkSizeTrait(name, over, upTo) : checkOwnTrait(name, ownTerms(termsText)));
+	const checked = $derived(match === 'size' ? checkSizeTrait(name, over, upTo) : match === 'language' ? checkLanguageTrait(name, ownTerms(termsText)) : checkOwnTrait(name, ownTerms(termsText)));
 	const errors = $derived<Record<string, string>>({ ...(tried ? checked : {}), ...serverErrors });
 
 	function openSheet(o: OwnTrait | null) {
@@ -206,7 +208,7 @@
 		<div class="field">
 			<span class="label" id="ot-match-label">{t('downloads.ot.lookAt')}</span>
 			<SegmentedControl options={matchChoices} bind:value={match} label={t('downloads.ot.lookAt')} testid="ot-match" />
-			<span class="hint">{match === 'size' ? t('downloads.ot.hintSize') : match === 'group' ? t('downloads.ot.hintGroup') : t('downloads.ot.hintName')}</span>
+			<span class="hint">{match === 'size' ? t('downloads.ot.hintSize') : match === 'group' ? t('downloads.ot.hintGroup') : match === 'language' ? t('downloads.ot.hintLanguage') : t('downloads.ot.hintName')}</span>
 		</div>
 		{#if match === 'size'}
 			<div class="pair">
@@ -218,8 +220,8 @@
 				</Field>
 			</div>
 		{:else}
-		<Field id="ot-terms" label={match === 'group' ? t('downloads.ot.groups') : t('downloads.ot.wordsLabel')} hint={t('downloads.ot.termsHint')} error={errors.terms}>
-			<textarea id="ot-terms" class="input mono" rows="4" spellcheck="false" autocomplete="off" bind:value={termsText} placeholder={match === 'group' ? 'HOLYARRS' : 'NLSubs'} aria-invalid={errors.terms ? 'true' : undefined} aria-describedby={errors.terms ? 'ot-terms-error' : 'ot-terms-hint'}></textarea>
+		<Field id="ot-terms" label={match === 'group' ? t('downloads.ot.groups') : match === 'language' ? t('downloads.ot.languages') : t('downloads.ot.wordsLabel')} hint={match === 'language' ? t('downloads.ot.langTermsHint') : t('downloads.ot.termsHint')} error={errors.terms}>
+			<textarea id="ot-terms" class="input mono" rows="4" spellcheck="false" autocomplete="off" bind:value={termsText} placeholder={match === 'group' ? 'HOLYARRS' : match === 'language' ? 'de\noriginal' : 'NLSubs'} aria-invalid={errors.terms ? 'true' : undefined} aria-describedby={errors.terms ? 'ot-terms-error' : 'ot-terms-hint'}></textarea>
 		</Field>
 		{/if}
 		{#if formError}<p class="form-error" role="alert">{formError}</p>{/if}

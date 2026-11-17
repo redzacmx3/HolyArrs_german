@@ -88,3 +88,42 @@ func TestDualLanguage_NotWebDL(t *testing.T) {
 		}
 	}
 }
+
+// German DL holds German and the original audio, German ML also English,
+// as the old apps read them; a language before Subbed names subtitles, and
+// OmU is the original audio with German subtitles.
+func TestGermanReleaseLanguages(t *testing.T) {
+	for _, c := range []struct {
+		name     string
+		langs    []string
+		subs     []string
+		original bool
+		flags    []string
+	}{
+		{"Quiet.Harbour.2019.German.DL.1080p.BluRay.x264-GROUP", []string{"de"}, nil, true, []string{"dual"}},
+		{"Quiet.Harbour.2019.GERMAN.DL.1080p.WEB.DL.H264-GROUP", []string{"de"}, nil, true, []string{"dual"}},
+		{"Quiet.Harbour.2019.German.ML.1080p.BluRay.x264-GROUP", []string{"de", "en"}, nil, true, []string{"multi"}},
+		{"Quiet.Harbour.2019.German.DL.AC3.Dubbed.1080p.WEB.H264-GROUP", []string{"de"}, nil, true, []string{"dual", "dubbed"}},
+		{"Quiet.Harbour.2019.German.1080p.WEB.H264-GROUP", []string{"de"}, nil, false, nil},
+		{"Quiet.Harbour.2019.German.Subbed.1080p.WEB.H264-GROUP", nil, []string{"de"}, false, nil},
+		{"Quiet.Harbour.2019.GERMAN.SUBS.720p.HDTV.x264-GROUP", nil, []string{"de"}, false, nil},
+		{"Quiet.Harbour.2019.OmU.1080p.WEB.H264-GROUP", nil, []string{"de"}, false, []string{"omu"}},
+		{"Quiet.Harbour.2019.French.DL.1080p.WEB.H264-GROUP", []string{"fr"}, nil, false, []string{"dual"}},
+		{"Quiet.Harbour.2019.1080p.WEB.DL.H264-GROUP", nil, nil, false, nil},
+		{"Quiet.Harbour.S01E02.German.DL.1080p.WEB.H264-GROUP", []string{"de"}, nil, true, []string{"dual"}},
+		{"Quiet.Harbour.S01.German.ML.1080p.BluRay.x264-GROUP", []string{"de", "en"}, nil, true, []string{"multi"}},
+	} {
+		r := Parse(c.name, Hints{})
+		if !slices.Equal(r.Languages, c.langs) || !slices.Equal(r.SubLanguages, c.subs) || r.OriginalAudio != c.original {
+			t.Errorf("%s: langs %v subs %v original %v", c.name, r.Languages, r.SubLanguages, r.OriginalAudio)
+		}
+		for _, f := range c.flags {
+			if !r.Has(f) {
+				t.Errorf("%s: no flag %s in %v", c.name, f, r.Flags)
+			}
+		}
+		if r.Title.Value != "Quiet Harbour" {
+			t.Errorf("%s: title %q", c.name, r.Title.Value)
+		}
+	}
+}

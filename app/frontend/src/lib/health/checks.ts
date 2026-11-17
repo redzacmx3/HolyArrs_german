@@ -18,7 +18,8 @@ const kinds: Record<string, string> = {
 	get clear_waiting() { return t('health.kind.clearWaiting'); },
 	get save_folder() { return t('health.kind.saveFolder'); },
 	get same_downloader() { return t('health.kind.sameDownloader'); },
-	get trailers() { return t('health.kind.trailers'); }
+	get trailers() { return t('health.kind.trailers'); },
+	get pick_rules() { return t('mediafiles.copy.pickRules'); }
 };
 
 // Stage or linked app kind to its label.

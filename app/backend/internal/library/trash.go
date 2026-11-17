@@ -135,6 +135,7 @@ func ApplyTrash(ctx context.Context, st *database.Store, c *TrashGuides, id int6
 	g := clamp(prof.CutoffScore)
 	b.GoodEnoughPoints = &g
 	b.UpgradeMinPoints = clamp(prof.MinUpgradeScore)
+	trashShape(&b, prof)
 	b.Synced = &mediafiles.SyncedProfile{From: "trash", App: app, ProfileID: prof.ID, Name: prof.Name, At: time.Now().UTC().Format(time.RFC3339)}
 	res.PickRules, err = UpdatePickRules(ctx, st, id, PickRulesInput{Name: p.Name, Kinds: p.Kinds, Body: b}, by)
 	return res, err
@@ -193,3 +194,61 @@ func freeTraitName(tx *sql.Tx, name, app string, self int64) (string, error) {
 	}
 	return "", ErrOwnTraitName
 }
+
+// trashShape takes a profile's qualities, language and ranking into the
+// rules, as far as the profile gives them: its allowed qualities become the
+// allowed steps and its cutoff Good enough at; a group that holds qualities
+// of different steps (the German profiles' "Merged QPs") ranks them as one,
+// so points decide before the step; its language becomes the languages to
+// take. A profile that gives none of these leaves the rules as they are.
+func trashShape(b *mediafiles.PickRulesBody, p TrashProfile) {
+	var allowed, cutoff []string
+	merged := false
+	for _, it := range p.Items {
+		names := it.Items
+		if len(names) == 0 {
+			names = []string{it.Name}
+		}
+		if it.Name == p.Cutoff {
+			cutoff = names
+		}
+		if !it.Allowed {
+			continue
+		}
+		allowed = append(allowed, names...)
+		merged = merged || MergesSteps(names)
+	}
+	if steps, good := profileSteps(allowed, cutoff); len(steps) > 0 && !mediafiles.IsMusicRules(*b) {
+		for i := range b.Steps {
+			b.Steps[i].Allowed = slices.Contains(steps, b.Steps[i].Quality)
+		}
+		b.GoodEnoughAt = good
+	}
+	if merged {
+		b.Order = "points_then_quality"
+	}
+	switch lang := strings.ToLower(strings.TrimSpace(p.Language)); lang {
+	case "":
+	case "any":
+		// Any leaves the language to the points (as TRaSH's language
+		// profiles do). Languages the rules already name are kept: a sync
+		// never widens a choice the owner made.
+		if len(b.Language.Wanted) == 0 {
+			b.Language = mediafiles.LanguageRule{Wanted: mediafiles.PickLanguages(), OriginalOK: true}
+		}
+	case "original":
+		b.Language = mediafiles.LanguageRule{Wanted: []string{}, OriginalOK: true}
+	default:
+		for id, code := range trashSharedLanguages {
+			if strings.EqualFold(trashLanguageNames[id], lang) {
+				b.Language = mediafiles.LanguageRule{Wanted: []string{code}}
+			}
+		}
+	}
+}
+
+// trashLanguageNames name the languages a TRaSH profile can give by name.
+var trashLanguageNames = map[int]string{1: "English", 2: "French", 3: "Spanish", 4: "German", 5: "Italian", 6: "Danish",
+	7: "Dutch", 8: "Japanese", 9: "Icelandic", 10: "Chinese", 11: "Russian", 12: "Polish", 13: "Vietnamese", 14: "Swedish",
+	15: "Norwegian", 16: "Finnish", 17: "Turkish", 18: "Portuguese", 19: "Flemish", 20: "Greek", 21: "Korean",
+	22: "Hungarian", 23: "Hebrew", 24: "Lithuanian", 25: "Czech"}

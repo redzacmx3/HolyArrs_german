@@ -17,7 +17,8 @@ const sentences = (): Record<HealthCheck['kind'], [error: string, warning: strin
 	clear_waiting: [t('core.plain.clearWaiting'), t('core.plain.clearWaiting')],
 	save_folder: [t('core.plain.saveFolder'), t('core.plain.saveFolder')],
 	no_downloader: [t('core.plain.noDownloader'), t('core.plain.noDownloader')],
-	same_downloader: [t('core.plain.sameDownloader'), t('core.plain.sameDownloader')]
+	same_downloader: [t('core.plain.sameDownloader'), t('core.plain.sameDownloader')],
+	pick_rules: [t('core.plain.pickRules'), t('core.plain.pickRules')]
 });
 
 // Signs of raw system text that people should not see as the main message.

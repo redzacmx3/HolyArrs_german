@@ -104,3 +104,59 @@ func TestOwnTraitKeysHaveOneForm(t *testing.T) {
 		t.Fatal("own:07 accepted in Pick rules")
 	}
 }
+
+// A language trait fits when every term fits: "de" and "original" is
+// German DL, "!en" any Release without English audio.
+func TestOwnLanguageTraits(t *testing.T) {
+	withOwnTraits(t,
+		OwnTrait{Meta: database.Meta{ID: 1}, Name: "German DL", Match: "language", Terms: []string{"de", "original"}},
+		OwnTrait{Meta: database.Meta{ID: 2}, Name: "German only", Match: "language", Terms: []string{"de", "!original"}},
+		OwnTrait{Meta: database.Meta{ID: 3}, Name: "No English", Match: "language", Terms: []string{"!en"}},
+	)
+	for _, c := range []struct {
+		name, trait string
+		want        bool
+	}{
+		{"Film.2020.German.DL.1080p.BluRay.x264-GRP", "own:1", true},
+		{"Film.2020.German.ML.1080p.BluRay.x264-GRP", "own:1", true},
+		{"Film.2020.German.1080p.WEB.H264-GRP", "own:1", false},
+		{"Film.2020.1080p.WEB.H264-GRP", "own:1", false},
+		{"Film.2020.German.1080p.WEB.H264-GRP", "own:2", true},
+		{"Film.2020.German.DL.1080p.BluRay.x264-GRP", "own:2", false},
+		{"Film.2020.German.1080p.WEB.H264-GRP", "own:3", true},
+		{"Film.2020.German.DL.1080p.BluRay.x264-GRP", "own:3", false}, // the original is English
+		{"Film.2020.1080p.WEB.H264-GRP", "own:3", false},
+	} {
+		p := releasename.Parse(c.name, releasename.Hints{})
+		p.OriginalLanguage = "en"
+		if ok, why := traitMatches(c.trait, p); ok != c.want {
+			t.Errorf("%s %s: %v (%s), want %v", c.trait, c.name, ok, why, c.want)
+		}
+	}
+}
+
+func TestCheckLanguageTrait(t *testing.T) {
+	tr := OwnTrait{Name: "G", Match: "language", Terms: []string{" DE ", "Original", "! en", "de", ""}}
+	if err := CheckOwnTrait(&tr); err != nil || !slices.Equal(tr.Terms, []string{"de", "original", "!en"}) {
+		t.Fatalf("terms %v err %v", tr.Terms, err)
+	}
+	for _, terms := range [][]string{{"klingon"}, {}, {" "}} {
+		bad := OwnTrait{Name: "G", Match: "language", Terms: terms}
+		if CheckOwnTrait(&bad) == nil {
+			t.Errorf("%v accepted", terms)
+		}
+	}
+}
+
+// German.DL.Dubbed keeps the original audio, so it is not "dubbed only".
+func TestDubbedOnlyKeepsGermanDL(t *testing.T) {
+	for name, want := range map[string]bool{
+		"Film.2020.German.DL.AC3.Dubbed.1080p.WEB.H264-GRP": false,
+		"Film.2020.German.AC3.Dubbed.1080p.WEB.H264-GRP":    true,
+		"Film.2020.iTALiAN.DUBBED.1080p.WEB.H264-GRP":       true,
+	} {
+		if ok, _ := traitMatches("dubbed_only", releasename.Parse(name, releasename.Hints{})); ok != want {
+			t.Errorf("%s: dubbed_only %v, want %v", name, ok, want)
+		}
+	}
+}

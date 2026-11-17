@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Nakakahanap ang mga Source mo ng torrent download, pero walang naka-set up na torrent Downloader, kaya walang maipapadala. Magdagdag sa Mga Setting › Mga Downloader.",
 	"health.check.sameDownloader": "Dalawang beses idinagdag:",
 	"health.check.sameDownloaderWhy": "Naaabot ng {app} ang parehong download app ng isa pang Downloader, kaya puwedeng dalawang beses lumabas ang mga download nito. Alisin ang isa sa Settings › Downloaders.",
-	"health.kind.sameDownloader": "Downloader na dalawang beses idinagdag"
+	"health.kind.sameDownloader": "Downloader na dalawang beses idinagdag",
+	"health.pick.order": "Dito, nauuna ang kalidad bago ang puntos, kaya natatalo ang release sa wika mo sa mas magandang kalidad na wala nito. Gawing puntos muna ang ayos.",
+	"health.pick.goodEnough": "Ang sapat na ay 0 puntos, kaya ang kopyang walang wika mo ay itinatago at hindi kailanman pinapalitan. Itakda ito sa puntos ng katangian ng wika."
 }

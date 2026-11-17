@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "A forrásaid torrenteket találnak, de nincs beállítva torrentletöltő, így egyik sem küldhető el. Adj hozzá egyet itt: Beállítások › Letöltők.",
 	"health.check.sameDownloader": "Kétszer hozzáadva:",
 	"health.check.sameDownloaderWhy": "A(z) {app} ugyanahhoz a letöltő alkalmazáshoz kapcsolódik, mint egy másik letöltő, így a letöltései kétszer is megjelenhetnek. Távolítsd el az egyiket: Beállítások › Letöltők.",
-	"health.kind.sameDownloader": "Kétszer hozzáadott letöltő"
+	"health.kind.sameDownloader": "Kétszer hozzáadott letöltő",
+	"health.pick.order": "Itt a minőség a pontok előtt áll, így a nyelvedet tartalmazó kiadás veszít egy jobb minőségű, nyelv nélküli ellen. Állítsd a pontokat előre.",
+	"health.pick.goodEnough": "Az „elég jó” 0 pont, így a nyelved nélküli másolat megmarad, és sosem cserélődik. Állítsd a pontot a nyelvi tulajdonság pontjára."
 }

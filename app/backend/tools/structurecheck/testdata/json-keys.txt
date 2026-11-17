@@ -551,6 +551,7 @@ event_kind
 every_minutes
 every_s
 everyone
+exceptLanguage
 exception
 exclusions
 exists
@@ -713,6 +714,7 @@ height
 held
 held_aside
 held_aside_more
+held_bytes
 held_path
 held_roots
 hero
@@ -938,6 +940,7 @@ mediaInfo
 media_type
 member
 members
+merged_groups
 message
 messages
 metadata
@@ -1051,6 +1054,8 @@ network
 networks
 never
 never_add
+never_watched
+never_watched_days
 new
 new_albums
 new_episodes
@@ -1073,6 +1078,7 @@ next_search
 next_try
 next_try_at
 no_downloader
+no_file
 no_formats
 no_limit
 no_release
@@ -1125,6 +1131,7 @@ origin_country
 original
 originalLanguage
 originalNetwork
+original_audio
 original_language
 original_name
 original_ok
@@ -1277,6 +1284,7 @@ primary_type
 priority
 private
 problem
+problems
 production_companies
 profile
 profile_id
@@ -1651,6 +1659,7 @@ stuck
 studio
 studios
 sub
+sub_languages
 subdl
 subject
 subtitle
@@ -1901,6 +1910,7 @@ warnings
 was_admin
 was_owner
 wasted
+watch_history
 watched_edition
 watching
 watchlist

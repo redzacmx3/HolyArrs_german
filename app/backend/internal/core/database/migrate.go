@@ -201,6 +201,10 @@ func plan(w *writer, src fs.FS, label string) ([]migration, int, error) {
 	if err != nil {
 		return nil, 0, err
 	}
+	applied, err := renumberApplied(w, ms)
+	if err != nil {
+		return nil, 0, err
+	}
 	cur, err := version(w.db)
 	if err != nil {
 		return nil, 0, err
@@ -212,13 +216,86 @@ func plan(w *writer, src fs.FS, label string) ([]migration, int, error) {
 	if cur > know {
 		return nil, 0, &NewerDataError{Label: label, Have: cur, Know: know}
 	}
+	// Every migration not applied yet is pending, also one numbered below
+	// the newest applied: a fork that carries its own migrations renumbers
+	// them after the upstream ones it takes in, so an upstream migration
+	// can arrive with a number that is already behind the data.
 	var out []migration
 	for _, m := range ms {
-		if m.version > cur {
+		if !applied[m.version] {
 			out = append(out, m)
 		}
 	}
 	return out, cur, nil
+}
+
+// migrationStem is a migration's name without its number
+// ("0123_own_trait_language.sql" gives "own_trait_language.sql").
+func migrationStem(name string) string {
+	_, stem, _ := strings.Cut(name, "_")
+	return stem
+}
+
+// renumberApplied moves an applied migration's record to the number its
+// file has now, found by the name after the number, so a renumbered
+// migration is neither run twice nor hides the upstream one that took its
+// old number. It returns the applied numbers.
+func renumberApplied(w *writer, ms []migration) (map[int]bool, error) {
+	// Only a record whose file is gone, and whose name after the number
+	// fits exactly one file, counts as renumbered (upstream reuses some
+	// names, such as 0015_downloaders and 0042_downloaders).
+	byStem := map[string]migration{}
+	stems := map[string]int{}
+	files := map[string]bool{}
+	for _, m := range ms {
+		byStem[migrationStem(m.name)] = m
+		stems[migrationStem(m.name)]++
+		files[m.name] = true
+	}
+	applied := map[int]bool{}
+	err := w.doUncapped(context.Background(), func(tx *sql.Tx) error {
+		rows, err := tx.Query("SELECT version, name FROM schema_migrations ORDER BY version")
+		if err != nil {
+			return err
+		}
+		type row struct {
+			v    int
+			name string
+		}
+		var all []row
+		for rows.Next() {
+			var r row
+			if err := rows.Scan(&r.v, &r.name); err != nil {
+				_ = rows.Close()
+				return err
+			}
+			all = append(all, r)
+		}
+		if err := rows.Close(); err != nil {
+			return err
+		}
+		taken := map[int]bool{}
+		for _, r := range all {
+			taken[r.v] = true
+		}
+		for _, r := range all {
+			m, ok := byStem[migrationStem(r.name)]
+			to := m.version
+			if ok && !files[r.name] && stems[migrationStem(r.name)] == 1 && to != r.v && !taken[to] {
+				if _, err := tx.Exec("UPDATE schema_migrations SET version = ?, name = ? WHERE version = ?", to, m.name, r.v); err != nil {
+					return err
+				}
+				log.Printf("store: migration %s is now number %d", r.name, to)
+				delete(taken, r.v)
+				taken[to] = true
+			}
+		}
+		for v := range taken {
+			applied[v] = true
+		}
+		return nil
+	})
+	return applied, err
 }
 
 // migrate applies pending migrations in order. When the database already

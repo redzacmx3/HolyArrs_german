@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Veiturnar þínar finna torrent-niðurhöl en enginn torrent-niðurhalari er uppsettur, svo ekkert er hægt að senda. Bættu einum við í Stillingar › Niðurhalarar.",
 	"health.check.sameDownloader": "Bætt við tvisvar:",
 	"health.check.sameDownloaderWhy": "{app} nær í sama niðurhalsforrit og annar niðurhalari, svo niðurhöl hans geta birst tvisvar. Fjarlægðu annan í Stillingar › Niðurhalarar.",
-	"health.kind.sameDownloader": "Niðurhalara bætt við tvisvar"
+	"health.kind.sameDownloader": "Niðurhalara bætt við tvisvar",
+	"health.pick.order": "Hér gengur gæði fyrir stig, svo útgáfa á þínu máli tapar fyrir betri gæðum án þess. Settu stig fyrst.",
+	"health.pick.goodEnough": "Nógu gott er 0 stig, svo afrit án þíns máls er geymt og aldrei skipt út. Settu stigin á stig tungumálseiginleikans."
 }

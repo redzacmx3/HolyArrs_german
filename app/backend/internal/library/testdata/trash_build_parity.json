@@ -79,6 +79,33 @@
     "UpdatedBy": {
      "kind": ""
     },
+    "Name": "Lang only",
+    "Match": "name",
+    "Terms": [],
+    "Source": "trash",
+    "SourceID": "sonarr:f3",
+    "Specs": [
+     {
+      "name": "Not English",
+      "kind": "language",
+      "value": "en",
+      "negate": true
+     }
+    ]
+   },
+   "Points": -10000
+  },
+  {
+   "Trait": {
+    "ID": 0,
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "CreatedBy": {
+     "kind": ""
+    },
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedBy": {
+     "kind": ""
+    },
     "Name": "LQ",
     "Match": "name",
     "Terms": [],
@@ -97,9 +124,9 @@
  ],
  "Skipped": [
   {
-   "name": "Lang only",
+   "name": "Flag only",
    "kinds": [
-    "language"
+    "indexer flag"
    ],
    "reason": "it tests something HolyArrs cannot test yet"
   }

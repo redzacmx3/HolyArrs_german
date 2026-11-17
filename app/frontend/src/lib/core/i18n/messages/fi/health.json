@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Lähteesi löytävät torrent-latauksia, mutta torrent-lataajaa ei ole määritetty, joten mitään ei voi lähettää. Lisää sellainen kohdassa Asetukset › Lataajat.",
 	"health.check.sameDownloader": "Lisätty kahdesti:",
 	"health.check.sameDownloaderWhy": "{app} yltää samaan lataussovellukseen kuin toinen lataaja, joten sen lataukset voivat näkyä kahdesti. Poista toinen kohdassa Asetukset › Lataajat.",
-	"health.kind.sameDownloader": "Lataaja lisätty kahdesti"
+	"health.kind.sameDownloader": "Lataaja lisätty kahdesti",
+	"health.pick.order": "Tässä laatu menee pisteiden edelle, joten omankielinen julkaisu häviää paremmalle laadulle ilman kieltä. Aseta pisteet ensin.",
+	"health.pick.goodEnough": "Riittävä on 0 pistettä, joten kopio ilman kieltäsi jää eikä sitä koskaan korvata. Aseta pisteet kieliominaisuuden pisteisiin."
 }

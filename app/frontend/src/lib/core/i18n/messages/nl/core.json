@@ -147,5 +147,6 @@
 	"core.settings.account.about": "Wachtwoord, tweestapsverificatie, apparaten",
 	"core.api.sourceOff": "Sommige rijen staan uit op deze installatie.",
 	"core.plain.noDownloader": "Je bronnen vinden downloads die geen van je downloaders kan aannemen, dus er kan niets worden verstuurd.",
-	"core.plain.sameDownloader": "Twee Downloaders bereiken dezelfde download-app, dus downloads kunnen dubbel verschijnen."
+	"core.plain.sameDownloader": "Twee Downloaders bereiken dezelfde download-app, dus downloads kunnen dubbel verschijnen.",
+	"core.plain.pickRules": "Een Keuzeregels-set geeft niet de voorkeur aan jouw taal zoals de eigenschappen vragen."
 }

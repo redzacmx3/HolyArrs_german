@@ -99,6 +99,7 @@ func (h *handler) oldProfile(p wireProfile) library.OldProfile {
 		}
 		if it.Allowed {
 			out.Qualities = append(out.Qualities, names...)
+			out.MergedGroups = out.MergedGroups || library.MergesSteps(names)
 		}
 		if id == p.Cutoff && !cutFound {
 			out.CutoffQualities, cutFound = names, true

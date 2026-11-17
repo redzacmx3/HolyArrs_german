@@ -32,6 +32,7 @@ var screenOwners = map[string]Owner{
 	"/library/[id]/albums/[album]":   music,
 	"/library/held":                  Media,
 	"/library/deleted":               Media,
+	"/library/upkeep":                Media,
 	"/library/stats":                 Media,
 	"/library/turned-down":           Media,
 	"/library/import":                Media,
@@ -126,6 +127,7 @@ var jobOwners = map[string]Owner{
 	"sync_outside_lists": Media,
 	"rename_files":       Media,
 	"clean_holding":      Media,
+	"library_upkeep":     Media,
 	"rescan_library":     Media,
 	"recheck_pick_rules": Media,
 	// The title (or Library folder) the Job is about decides.

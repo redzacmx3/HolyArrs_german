@@ -1,0 +1,120 @@
+name: HolyArrs German - Upstream sync
+run-name: Upstream sync
+
+# Once a week (and by hand) takes the newest HolyArrs/HolyArrs main into this
+# fork: merges it into a branch off this fork's main, gives the fork's own
+# migrations new numbers after any upstream ones that took them, checks the
+# build and the fork's tests, and opens a pull request to review and merge.
+# A merge conflict stops the run; the run's summary names the files.
+#
+# GITHUB_TOKEN may not push changes to .github/workflows, which upstream
+# updates often. Add a repository secret SYNC_TOKEN (a fine-grained token for
+# this repository with Contents, Pull requests and Workflows: read and
+# write) so those pushes work; it also lets the checks run on the PR.
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync
+  cancel-in-progress: false
+
+env:
+  UPSTREAM: https://github.com/HolyArrs/HolyArrs.git
+  BRANCH: upstream-sync
+
+jobs:
+  sync:
+    name: Merge upstream and open a pull request
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+
+      - name: Fetch upstream
+        id: fetch
+        run: |
+          git remote add upstream "$UPSTREAM"
+          git fetch --no-tags upstream main
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Nothing new upstream." >> "$GITHUB_STEP_SUMMARY"
+            echo "new=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Merge
+        if: steps.fetch.outputs.new == '1'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          if ! git merge --no-edit upstream/main; then
+            {
+              echo "### Merge conflict"
+              echo "These files need a hand merge:"
+              git diff --name-only --diff-filter=U | sed 's/^/- /'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Renumber the fork's migrations
+        if: steps.fetch.outputs.new == '1'
+        run: |
+          out="$(sh .github/scripts/renumber-fork-migrations.sh upstream/main)"
+          echo "$out"
+          if echo "$out" | grep -q 'changed=1'; then
+            echo "$out" | grep renumbered >> "$GITHUB_STEP_SUMMARY"
+            echo "RENUMBERED=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set up Go
+        if: steps.fetch.outputs.new == '1'
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Build and test the fork's parts
+        if: steps.fetch.outputs.new == '1'
+        run: |
+          go test ./app/backend/tools/structurecheck -update >/dev/null || true
+          go build ./...
+          go vet ./app/backend/internal/core/releasename ./app/backend/internal/mediafiles ./app/backend/internal/library ./app/backend/internal/core/database
+          go test ./app/backend/internal/core/releasename ./app/backend/internal/mediafiles/... ./app/backend/internal/library ./app/backend/internal/core/database ./app/backend/tools/structurecheck
+
+      - name: Commit and push
+        if: steps.fetch.outputs.new == '1'
+        run: |
+          git add -A
+          git diff --cached --quiet || git commit -m "Renumber the fork's migrations after upstream and update snapshots"
+          git push --force origin "$BRANCH"
+
+      - name: Open or update the pull request
+        if: steps.fetch.outputs.new == '1'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN || github.token }}
+        run: |
+          up="$(git rev-parse --short upstream/main)"
+          body="Takes HolyArrs/HolyArrs main at \`$up\` into this fork. Merge it to update; the test image is built from main after the merge."
+          if [ "${RENUMBERED:-}" = 1 ]; then
+            body="$body
+
+          The fork's own migrations got new numbers after the upstream ones; HolyArrs moves their records on the next start, so nothing runs twice."
+          fi
+          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number -q '.[].number')" ]; then
+            gh pr create --base main --head "$BRANCH" --title "Upstream-Update: HolyArrs main $up" --body "$body"
+          else
+            gh pr edit "$BRANCH" --title "Upstream-Update: HolyArrs main $up" --body "$body"
+          fi

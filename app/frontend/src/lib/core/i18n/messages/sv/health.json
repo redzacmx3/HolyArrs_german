@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Dina källor hittar torrent-nedladdningar, men ingen torrent-nedladdare är inställd, så ingen kan skickas. Lägg till en under Inställningar › Nedladdare.",
 	"health.check.sameDownloader": "Tillagd två gånger:",
 	"health.check.sameDownloaderWhy": "{app} når samma nedladdningsapp som en annan nedladdare, så dess nedladdningar kan visas två gånger. Ta bort en under Inställningar › Nedladdare.",
-	"health.kind.sameDownloader": "Nedladdare tillagd två gånger"
+	"health.kind.sameDownloader": "Nedladdare tillagd två gånger",
+	"health.pick.order": "Här går kvalitet före poäng, så en release på ditt språk förlorar mot bättre kvalitet utan. Sätt ordningen till poäng först.",
+	"health.pick.goodEnough": "Tillräckligt bra är 0 poäng, så en kopia utan ditt språk behålls och ersätts aldrig. Sätt poängen till språkegenskapens poäng."
 }

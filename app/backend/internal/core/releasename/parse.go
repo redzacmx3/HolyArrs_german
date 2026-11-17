@@ -68,6 +68,9 @@ var tagWords = setOf(
 	"multi", "dl", "dual",
 )
 
+// subWords after a language word say the language is the subtitles'.
+var subWords = setOf("sub", "subs", "subbed", "subtitled")
+
 var langWords = map[string]string{
 	"english": "en", "eng": "en", "french": "fr", "truefrench": "fr", "vff": "fr", "vfq": "fr",
 	"german": "de", "ger": "de", "italian": "it", "ita": "it", "spanish": "es", "spa": "es",
@@ -170,6 +173,14 @@ type Result struct {
 	Fix        int             `json:"fix,omitempty"`
 	Flags      []string        `json:"flags,omitempty"` // sorted
 	Notes      []string        `json:"notes,omitempty"`
+	// OriginalAudio says the name claims the title's original-language
+	// audio besides the languages it names: German DL (German and the
+	// original) and German ML (German, the original and English), as the
+	// old apps read them.
+	OriginalAudio bool `json:"original_audio,omitempty"`
+	// SubLanguages are the subtitle languages the name names ("German
+	// Subbed", "OmU"); those languages are not audio.
+	SubLanguages []string `json:"sub_languages,omitempty"`
 	// Show holds the episode numbers of a show Release; nil for a movie.
 	Show *ShowNumbers `json:"show,omitempty"`
 	// Music holds what an album Release name says; nil for movies and shows.
@@ -627,14 +638,33 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 
 	// Languages. A newer language word before an ordinary word belongs to
 	// an episode title or a subtitle note ("The Chinese Restaurant", "Thai Sub").
+	// A language word before a subtitle word names subtitles, not audio
+	// ("German.Subbed", "GERMAN.SUBS").
 	for i, t := range low {
 		code, ok := langWords[t]
 		if !ok {
 			code, ok = moreLangWords[t]
 			ok = ok && (i+1 == len(low) || !plainWord(low[i+1]))
 		}
-		if ok && !slices.Contains(r.Languages, code) {
+		if !ok {
+			continue
+		}
+		if i+1 < len(low) && subWords[low[i+1]] {
+			if !slices.Contains(r.SubLanguages, code) {
+				r.SubLanguages = append(r.SubLanguages, code)
+			}
+			continue
+		}
+		if !slices.Contains(r.Languages, code) {
 			r.Languages = append(r.Languages, code)
+		}
+	}
+	// OmU (Original mit Untertiteln): the original audio with German subtitles.
+	if has("omu") {
+		flags["omu"] = true
+		r.Languages = slices.DeleteFunc(r.Languages, func(l string) bool { return l == "de" })
+		if !slices.Contains(r.SubLanguages, "de") {
+			r.SubLanguages = append(r.SubLanguages, "de")
 		}
 	}
 	if has("multi") {
@@ -644,6 +674,18 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 	for i, t := range low {
 		if t == "dual" || t == "dl" && (i == 0 || low[i-1] != "web") {
 			flags["dual"] = true
+		}
+	}
+	// German DL holds German and the original audio; German ML holds German,
+	// the original and English (the old apps' LanguageParser reads them so).
+	if slices.Equal(r.Languages, []string{"de"}) {
+		switch {
+		case flags["dual"]:
+			r.OriginalAudio = true
+		case has("ml"):
+			r.OriginalAudio = true
+			r.Languages = append(r.Languages, "en")
+			flags["multi"] = true
 		}
 	}
 

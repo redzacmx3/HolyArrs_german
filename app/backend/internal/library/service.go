@@ -63,6 +63,10 @@ type Service struct {
 	EpisodeGroups metadata.EpisodeGroupSource
 	// Now is the clock (time.Now when nil).
 	Now func() time.Time
+	// WatchedTitles reads which Titles anyone watched on a media server and
+	// whether the watch history holds anything (mediaservers.WatchedTitles);
+	// nil: nothing is known, so no movie counts as never watched.
+	WatchedTitles func(ctx context.Context) (map[int64]bool, bool, error)
 	// DownloadRunning says whether a download is still in its Downloader's
 	// hands; a rescan links a found copy to a movie whose download is not.
 	// Nil: any download holds the movie back.
@@ -110,6 +114,7 @@ func (s *Service) Register(q *jobs.Queue) {
 	q.Handle(KindRescan, s.handleRescan)
 	q.Handle(KindRescanTitle, s.handleRescanTitle)
 	q.Handle(KindRecheckPickRules, s.handleRecheckPickRules)
+	q.Handle(KindUpkeep, s.handleUpkeep)
 }
 
 func (s *Service) Publish(topic string, v any) {

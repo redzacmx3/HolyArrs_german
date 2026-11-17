@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Kildene dine finner torrent-nedlastinger, men ingen torrent-nedlaster er satt opp, så ingen kan sendes. Legg til en under Innstillinger › Nedlastere.",
 	"health.check.sameDownloader": "Lagt til to ganger:",
 	"health.check.sameDownloaderWhy": "{app} når samme nedlastingsapp som en annen nedlaster, så nedlastingene kan vises to ganger. Fjern den ene under Innstillinger › Nedlastere.",
-	"health.kind.sameDownloader": "Nedlaster lagt til to ganger"
+	"health.kind.sameDownloader": "Nedlaster lagt til to ganger",
+	"health.pick.order": "Her teller kvalitet før poeng, så en utgivelse på ditt språk taper mot bedre kvalitet uten. Sett rekkefølgen til poeng først.",
+	"health.pick.goodEnough": "Godt nok er 0 poeng, så en kopi uten ditt språk beholdes og erstattes aldri. Sett godt-nok-poeng til språktrekkets poeng."
 }

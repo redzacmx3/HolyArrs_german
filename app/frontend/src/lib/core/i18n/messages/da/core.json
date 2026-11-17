@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "En downloader har ingen gemmemappe, så HolyArrs kan ikke importere dens færdige downloads.",
 	"core.api.sourceOff": "Nogle rækker er slået fra på denne installation.",
 	"core.plain.noDownloader": "Dine kilder finder downloads, som ingen af dine downloadere kan tage imod, så ingen kan sendes.",
-	"core.plain.sameDownloader": "To Downloadere når den samme download-app, så downloads kan blive vist to gange."
+	"core.plain.sameDownloader": "To Downloadere når den samme download-app, så downloads kan blive vist to gange.",
+	"core.plain.pickRules": "Et sæt Valgregler foretrækker ikke dit sprog, som dets træk beder om."
 }

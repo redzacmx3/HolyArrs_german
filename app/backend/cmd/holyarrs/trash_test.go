@@ -50,14 +50,14 @@ func TestTrashProfileApplied(t *testing.T) {
 		} `json:"skipped"`
 	}
 	_ = json.Unmarshal(lbDo(t, "POST", path, `{"app":"sonarr","profile_id":"p1"}`, 200), &res)
-	if res.Added != 3 || len(res.Scored) != 3 || len(res.Skipped) != 1 || res.Skipped[0].Kinds[0] != "language" {
+	if res.Added != 4 || len(res.Scored) != 4 || len(res.Skipped) != 1 || res.Skipped[0].Kinds[0] != "indexer flag" {
 		t.Fatalf("first sync: %+v", res)
 	}
 	if n := recheckJobs(t, st, p.ID); n != 1 {
 		t.Fatalf("re-check jobs after applying a profile: %d, want 1", n)
 	}
 	_ = json.Unmarshal(lbDo(t, "POST", path, `{"app":"sonarr","profile_id":"p1"}`, 200), &res)
-	if res.Added != 0 || res.Updated != 3 {
+	if res.Added != 0 || res.Updated != 4 {
 		t.Fatalf("second sync: %+v", res)
 	}
 	lbDo(t, "POST", path, `{"app":"sonarr","profile_id":"nope"}`, 404)
@@ -74,7 +74,7 @@ func TestTrashProfileApplied(t *testing.T) {
 			lbDo(t, "PUT", fmt.Sprintf("%s/api/v1/own-traits/%d", srv.URL, tr.ID), `{"name":"x","match":"name","terms":["x"]}`, 400)
 		}
 	}
-	if synced != 3 {
+	if synced != 4 {
 		t.Fatalf("synced traits: %d", synced)
 	}
 }
