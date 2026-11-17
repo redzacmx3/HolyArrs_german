@@ -209,7 +209,7 @@ export function buildRows(i: StatusInput): StatusRow[] {
 			word: tone === 'ok' ? t('health.word.working') : tone === 'wait' ? t('health.state.warning') : t('health.word.broken'),
 			reason: c.kind === 'config_folder' && c.state !== 'ok' ? t('health.check.configSteps') : c.kind === 'save_folder' && c.state !== 'ok' ? t('health.check.saveFolderWhy', { app: c.subject }) : c.kind === 'no_downloader' && c.state !== 'ok' ? t(c.subject === 'usenet' ? 'health.check.noUsenetDl' : 'health.check.noTorrentDl') : c.kind === 'same_downloader' && c.state !== 'ok' ? t('health.check.sameDownloaderWhy', { app: c.subject }) : c.kind === 'pick_rules' ? pickRulesWhy(c.message) : c.key === 'backups:key' && c.state === 'ok' && c.message ? keyKitNote(c.message) : c.message,
 			at: c.checked_at || c.since,
-			fix: c.kind === 'pick_rules' ? `/settings/pick-rules/${c.key.split(':')[1]}` : checkFix[c.kind] || undefined,
+			fix: c.kind === 'pick_rules' ? `/settings/pick-rules/${c.key.split(':')[1]}?fix=advice` : checkFix[c.kind] || undefined,
 			check: { kind: 'checks' }
 		});
 	}

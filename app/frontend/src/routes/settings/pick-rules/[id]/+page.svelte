@@ -13,7 +13,7 @@
 	import TagInput from '#lib/ui/TagInput.svelte';
 	import EmptyState from '#lib/ui/EmptyState.svelte';
 	import LoadError from '#lib/ui/LoadError.svelte';
-	import { applySize, blankBody, checkBody, copyName, fieldKey, isMusic, isOwnTrait, kindChoices, languages, maxPoints, neverChoices, orderChoices, preferChoices, properChoices, sizeFields, stepLabel, tidyBody, toggleKind, traitLabel, traitsFor, usedWords, type RulesKind, type SizeFields } from '#lib/downloads/index.ts';
+	import { adviceFix, applySize, blankBody, checkBody, copyName, fieldKey, isMusic, isOwnTrait, kindChoices, languages, maxPoints, neverChoices, orderChoices, preferChoices, properChoices, sizeFields, stepLabel, tidyBody, toggleKind, traitLabel, traitsFor, usedWords, type RulesKind, type SizeFields } from '#lib/downloads/index.ts';
 	import type { OwnTrait, PickRulesBody, PickRulesDetail, PickRulesUse, TrashProfile, TrashResult } from '#lib/downloads/index.ts';
 	import { tick, untrack } from 'svelte';
 	import { page } from '$app/state';
@@ -105,6 +105,7 @@
 			} else {
 				const d = await api.get<PickRulesDetail>(`/pick-rules/${encodeURIComponent(param)}`);
 				show(d);
+				if (page.url.searchParams.get('fix') === 'advice') void fillAdvice();
 			}
 		} catch (e) {
 			if (e instanceof ApiError && e.status === 404) gone = true;
@@ -112,6 +113,17 @@
 		} finally {
 			loaded = true;
 		}
+	}
+
+	// Beheben on the Status page opens here with ?fix=advice: the profile
+	// check's fix is filled in and left unsaved, so the save bar asks.
+	async function fillAdvice() {
+		if (!mayEdit) return;
+		form.body = adviceFix(form.body);
+		await tick();
+		const el = document.getElementById('pr-good-enough-points');
+		el?.scrollIntoView({ block: 'center' });
+		el?.focus({ preventScroll: true });
 	}
 
 	function show(d: PickRulesDetail) {

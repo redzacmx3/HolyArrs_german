@@ -1,4 +1,5 @@
 import {
+	adviceFix,
 	applySize,
 	blankBody,
 	bytesPerMinute,
@@ -348,5 +349,30 @@ describe('your own traits', () => {
 		expect(checkSizeTrait('Back', '8', '2').terms).toBeTruthy();
 		expect(checkSizeTrait('Word', 'x', '').terms).toBeTruthy();
 		expect(checkSizeTrait('', '1', '').name).toBeTruthy();
+	});
+});
+
+describe('adviceFix', () => {
+	const german = (good?: number) => {
+		const b = blankBody('movie');
+		b.traits = [{ trait: 'own:1', points: 11000 }, { trait: 'own:2', points: 10000 }, { trait: 'x265', points: 50 }];
+		b.order = 'quality_then_points';
+		b.good_enough_points = good;
+		return b;
+	};
+	it('sets points first and good enough to the least language trait', () => {
+		const b = german(0);
+		const f = adviceFix(b);
+		expect(f.order).toBe('points_then_quality');
+		expect(f.good_enough_points).toBe(10000);
+		expect(b.good_enough_points).toBe(0);
+	});
+	it('fills an empty good enough and keeps a set one', () => {
+		expect(adviceFix(german(undefined)).good_enough_points).toBe(10000);
+		expect(adviceFix(german(35000)).good_enough_points).toBe(35000);
+	});
+	it('leaves rules without a language trait alone', () => {
+		const b = blankBody('movie');
+		expect(adviceFix(b)).toBe(b);
 	});
 });

@@ -16,7 +16,7 @@ const languagePoints = 1000
 // AdviseRules lists what keeps rules from picking as their traits ask: a
 // language trait worth thousands of points still loses on quality when the
 // rules rank quality first, and good enough at 0 points stops upgrades
-// before the language is reached. Rules without such a trait get none.
+// (or none at all) before the language is reached. Rules without such a trait get none.
 func AdviseRules(b PickRulesBody) []string {
 	top := 0
 	for _, t := range b.Traits {
@@ -35,7 +35,8 @@ func AdviseRules(b PickRulesBody) []string {
 	if b.Order != "points_then_quality" && allowed > 1 {
 		out = append(out, AdviceOrder)
 	}
-	if b.GoodEnoughPoints != nil && *b.GoodEnoughPoints <= 0 {
+	// An empty field counts by the step alone, which stops upgrades as 0 does.
+	if b.GoodEnoughPoints == nil || *b.GoodEnoughPoints <= 0 {
 		out = append(out, AdviceGoodEnough)
 	}
 	return out
