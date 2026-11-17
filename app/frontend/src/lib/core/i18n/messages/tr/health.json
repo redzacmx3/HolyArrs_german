@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Kaynakların torrent indirmeleri buluyor ama kurulu bir torrent indiricisi yok, bu yüzden hiçbiri gönderilemiyor. Ayarlar › İndiriciler bölümünden bir tane ekleyin.",
 	"health.check.sameDownloader": "İki kez eklendi:",
 	"health.check.sameDownloaderWhy": "{app}, başka bir indiriciyle aynı indirme uygulamasına ulaşıyor; bu yüzden indirmeleri iki kez görünebilir. Birini Ayarlar › İndiriciler bölümünden kaldırın.",
-	"health.kind.sameDownloader": "İki kez eklenmiş indirici"
+	"health.kind.sameDownloader": "İki kez eklenmiş indirici",
+	"health.pick.order": "Burada kalite puanlardan önce gelir, bu yüzden dilinizdeki bir sürüm, dil içermeyen daha iyi kaliteye kaybeder. Sıralamayı önce puan yapın.",
+	"health.pick.goodEnough": "Yeterince iyi 0 puan, bu yüzden dilinizi içermeyen bir kopya tutulur ve asla değiştirilmez. Bu puanı dil özelliğinin puanına ayarlayın."
 }

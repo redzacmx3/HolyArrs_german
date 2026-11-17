@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Twoje źródła znajdują torrenty, ale nie skonfigurowano downloadera torrentów, więc nic nie może zostać wysłane. Dodaj go w Ustawienia › Downloadery.",
 	"health.check.sameDownloader": "Dodany dwa razy:",
 	"health.check.sameDownloaderWhy": "{app} łączy się z tą samą aplikacją do pobierania co inny Downloader, więc jego pobrania mogą pojawiać się podwójnie. Usuń jeden w Ustawienia › Downloadery.",
-	"health.kind.sameDownloader": "Downloader dodany dwa razy"
+	"health.kind.sameDownloader": "Downloader dodany dwa razy",
+	"health.pick.order": "Tu jakość liczy się przed punktami, więc wydanie w twoim języku przegrywa z lepszą jakością bez niego. Ustaw najpierw punkty.",
+	"health.pick.goodEnough": "„Wystarczająco dobre” to 0 punktów, więc kopia bez twojego języka zostaje i nigdy nie jest zastępowana. Ustaw te punkty na punkty cechy języka."
 }

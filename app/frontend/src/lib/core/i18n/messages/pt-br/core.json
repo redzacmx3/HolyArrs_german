@@ -147,5 +147,6 @@
 	"core.settings.account.about": "Senha, duas etapas, dispositivos",
 	"core.api.sourceOff": "Algumas linhas estão desligadas nesta instalação.",
 	"core.plain.noDownloader": "Suas fontes encontram downloads que nenhum dos seus gerenciadores de downloads aceita, então nenhum pode ser enviado.",
-	"core.plain.sameDownloader": "Dois gerenciadores de downloads chegam ao mesmo app, então os downloads podem aparecer duas vezes."
+	"core.plain.sameDownloader": "Dois gerenciadores de downloads chegam ao mesmo app, então os downloads podem aparecer duas vezes.",
+	"core.plain.pickRules": "Um conjunto de Regras de escolha não prefere o seu idioma como os traços pedem."
 }

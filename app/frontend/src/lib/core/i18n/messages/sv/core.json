@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "En nedladdare har ingen sparmapp, så HolyArrs kan inte importera dess färdiga nedladdningar.",
 	"core.api.sourceOff": "Vissa rader är avstängda i den här installationen.",
 	"core.plain.noDownloader": "Dina källor hittar nedladdningar som ingen av dina nedladdare kan ta emot, så ingen kan skickas.",
-	"core.plain.sameDownloader": "Två nedladdare når samma nedladdningsapp, så nedladdningar kan visas två gånger."
+	"core.plain.sameDownloader": "Två nedladdare når samma nedladdningsapp, så nedladdningar kan visas två gånger.",
+	"core.plain.pickRules": "En uppsättning Valregler föredrar inte ditt språk som dess egenskaper ber om."
 }

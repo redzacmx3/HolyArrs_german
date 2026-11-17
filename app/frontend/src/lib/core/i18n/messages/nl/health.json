@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Je bronnen vinden torrent-downloads, maar er is geen torrent-downloader ingesteld, dus er kan niets worden verstuurd. Voeg er een toe in Instellingen › Downloaders.",
 	"health.check.sameDownloader": "Twee keer toegevoegd:",
 	"health.check.sameDownloaderWhy": "{app} bereikt dezelfde download-app als een andere Downloader, dus de downloads kunnen dubbel verschijnen. Verwijder er een in Instellingen › Downloaders.",
-	"health.kind.sameDownloader": "Downloader twee keer toegevoegd"
+	"health.kind.sameDownloader": "Downloader twee keer toegevoegd",
+	"health.pick.order": "Hier telt kwaliteit vóór punten, dus een release in jouw taal verliest van een betere kwaliteit zonder. Zet punten eerst.",
+	"health.pick.goodEnough": "Goed genoeg staat op 0 punten, dus een kopie zonder jouw taal blijft en wordt nooit vervangen. Zet de goed-genoeg-punten op die van de taaleigenschap."
 }

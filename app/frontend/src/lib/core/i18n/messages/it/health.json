@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Le tue fonti trovano download torrent, ma nessun downloader torrent è configurato, quindi non se ne può inviare nessuno. Aggiungine uno in Impostazioni › Downloader.",
 	"health.check.sameDownloader": "Aggiunto due volte:",
 	"health.check.sameDownloaderWhy": "{app} raggiunge la stessa app di download di un altro Downloader, quindi i suoi download possono comparire due volte. Rimuovine uno in Impostazioni › Downloader.",
-	"health.kind.sameDownloader": "Downloader aggiunto due volte"
+	"health.kind.sameDownloader": "Downloader aggiunto due volte",
+	"health.pick.order": "Qui la qualità conta prima dei punti, quindi una release nella tua lingua perde contro una qualità migliore senza. Metti prima i punti.",
+	"health.pick.goodEnough": "«Abbastanza buono» è a 0 punti, quindi una copia senza la tua lingua resta e non viene mai sostituita. Porta i punti al valore del tratto della lingua."
 }

@@ -147,5 +147,6 @@
 	"core.settings.account.about": "Password, due fattori, dispositivi",
 	"core.api.sourceOff": "Alcune righe sono disattivate in questa installazione.",
 	"core.plain.noDownloader": "Le tue fonti trovano download che nessuno dei tuoi downloader può accettare, quindi non se ne può inviare nessuno.",
-	"core.plain.sameDownloader": "Due Downloader raggiungono la stessa app di download, quindi i download possono comparire due volte."
+	"core.plain.sameDownloader": "Due Downloader raggiungono la stessa app di download, quindi i download possono comparire due volte.",
+	"core.plain.pickRules": "Un set di Regole di scelta non preferisce la tua lingua come chiedono i suoi tratti."
 }

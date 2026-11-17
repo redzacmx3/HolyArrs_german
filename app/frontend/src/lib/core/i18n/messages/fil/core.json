@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "May Downloader na walang save folder, kaya hindi ma-import ng HolyArrs ang mga tapos na download nito.",
 	"core.api.sourceOff": "Naka-off ang ilang row sa installation na ito.",
 	"core.plain.noDownloader": "Nakakahanap ang mga Source mo ng mga download na hindi kayang tanggapin ng alinman sa mga Downloader mo, kaya walang maipapadala.",
-	"core.plain.sameDownloader": "Dalawang Downloader ang umaabot sa iisang download app, kaya puwedeng dalawang beses lumabas ang mga download."
+	"core.plain.sameDownloader": "Dalawang Downloader ang umaabot sa iisang download app, kaya puwedeng dalawang beses lumabas ang mga download.",
+	"core.plain.pickRules": "Ang isang Mga panuntunan sa pagpili set ay hindi pumapabor sa wika mo gaya ng hinihingi ng mga katangian nito."
 }

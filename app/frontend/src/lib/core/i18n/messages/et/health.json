@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Sinu allikad leiavad torrenteid, aga ühtegi torrentite allalaadijat pole seadistatud, seega ei saa ühtegi saata. Lisa see jaotises Seaded › Allalaadijad.",
 	"health.check.sameDownloader": "Lisatud kaks korda:",
 	"health.check.sameDownloaderWhy": "{app} jõuab samasse allalaadimisrakendusse nagu teine allalaadija, seega võivad selle allalaadimised näha kaks korda. Eemalda üks: Seaded › Allalaadijad.",
-	"health.kind.sameDownloader": "Allalaadija lisatud kaks korda"
+	"health.kind.sameDownloader": "Allalaadija lisatud kaks korda",
+	"health.pick.order": "Siin on kvaliteet enne punkte, seega sinu keeles väljalase kaotab paremale kvaliteedile ilma selleta. Sea punktid esimeseks.",
+	"health.pick.goodEnough": "Piisavalt hea on 0 punkti, seega koopia ilma sinu keeleta jääb alles ega asendu kunagi. Sea punktid keeletunnuse punktideks."
 }

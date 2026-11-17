@@ -147,5 +147,6 @@
 	"core.plain.saveFolder": "Satu Pemuat turun tiada folder simpan, jadi HolyArrs tidak dapat mengimport muat turunnya yang sudah siap.",
 	"core.api.sourceOff": "Sesetengah baris dimatikan pada pemasangan ini.",
 	"core.plain.noDownloader": "Sumber anda menemui muat turun yang tidak boleh diterima oleh mana-mana pemuat turun anda, jadi tiada yang boleh dihantar.",
-	"core.plain.sameDownloader": "Dua pemuat turun sampai ke aplikasi muat turun yang sama, jadi muat turun boleh muncul dua kali."
+	"core.plain.sameDownloader": "Dua pemuat turun sampai ke aplikasi muat turun yang sama, jadi muat turun boleh muncul dua kali.",
+	"core.plain.pickRules": "Satu set Peraturan pilihan tidak mengutamakan bahasa anda seperti yang diminta sifatnya."
 }

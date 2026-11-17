@@ -271,5 +271,7 @@
 	"health.check.noTorrentDl": "Dine kilder finder torrent-downloads, men ingen torrent-downloader er sat op, så ingen kan sendes. Tilføj en under Indstillinger › Downloadere.",
 	"health.check.sameDownloader": "Tilføjet to gange:",
 	"health.check.sameDownloaderWhy": "{app} når den samme download-app som en anden Downloader, så dens downloads kan blive vist to gange. Fjern den ene under Indstillinger › Downloadere.",
-	"health.kind.sameDownloader": "Downloader tilføjet to gange"
+	"health.kind.sameDownloader": "Downloader tilføjet to gange",
+	"health.pick.order": "Her vægter kvalitet før point, så en udgivelse på dit sprog taber til en bedre kvalitet uden. Sæt rækkefølgen til point først.",
+	"health.pick.goodEnough": "Godt nok er 0 point, så en kopi uden dit sprog beholdes og erstattes aldrig. Sæt godt-nok-point til sprogtrækkets point."
 }
