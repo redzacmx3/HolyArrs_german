@@ -129,6 +129,8 @@
 	"core.settings.ai.about": "Benarkan pembantu AI menggunakan HolyArrs",
 	"core.settings.api.label": "API",
 	"core.settings.api.about": "Kunci dan laluan untuk apl lain",
+	"core.settings.remoteAccess.label": "Akses jauh",
+	"core.settings.remoteAccess.about": "Capai HolyArrs dari luar rumah",
 	"core.settings.tmdb.label": "Metadata",
 	"core.settings.tmdb.about": "Tempat poster dan nama datang",
 	"core.settings.health.label": "Semakan kesihatan",
@@ -148,5 +150,8 @@
 	"core.api.sourceOff": "Sesetengah baris dimatikan pada pemasangan ini.",
 	"core.plain.noDownloader": "Sumber anda menemui muat turun yang tidak boleh diterima oleh mana-mana pemuat turun anda, jadi tiada yang boleh dihantar.",
 	"core.plain.sameDownloader": "Dua pemuat turun sampai ke aplikasi muat turun yang sama, jadi muat turun boleh muncul dua kali.",
+	"core.plain.peopleCheck": "Senarai pengguna pelayan media tidak dapat dibaca, jadi orang yang dibuang di sana tidak dimatikan di sini.",
+	"core.plain.deleted": "dipadam",
+	"core.plain.deletedName": "{name} (dipadam)",
 	"core.plain.pickRules": "Satu set Peraturan pilihan tidak mengutamakan bahasa anda seperti yang diminta sifatnya."
 }

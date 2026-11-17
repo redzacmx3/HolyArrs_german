@@ -22,3 +22,6 @@ releases/out/
 
 # Local Go build output.
 /app/backend/holyarrs
+# built plugin binaries
+app/plugins/*/*.exe
+app/plugins/*/tailscale
