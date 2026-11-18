@@ -55,7 +55,7 @@ var exeExt = setOf("exe", "scr", "bat", "cmd", "msi", "msp", "lnk", "js", "jse",
 // Tag words: a token that is one of these (or matches a tag pattern) ends the title.
 var tagWords = setOf(
 	"bluray", "blu-ray", "bdrip", "brrip", "bd", "remux", "uhd", "4k",
-	"web", "web-dl", "webdl", "webrip", "web-rip", "hdtv", "pdtv", "dvdrip", "dvd", "hdcam", "cam", "camrip",
+	"web", "web-dl", "webdl", "webrip", "web-rip", "webhd", "web-hd", "hdtv", "pdtv", "dvdrip", "dvd", "hdcam", "cam", "camrip",
 	"hdts", "ts", "telesync", "complete", "iso", "bdmv",
 	"x264", "x265", "h264", "h265", "hevc", "avc", "av1", "xvid", "vc1", "vc-1", "mpeg2", "10bit", "8bit",
 	"dv", "dovi", "hdr", "hdr10", "hdr10plus", "hdr10+", "hlg",
@@ -655,7 +655,7 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 		r.Source = sure("web_dl")
 	case has("webrip", "web-rip"):
 		r.Source = sure("web_rip")
-	case has("web"):
+	case has("web", "webhd", "web-hd"): // WebHD: German groups' word for a web download
 		r.Source = likely("web_dl")
 	case has("hdtv", "pdtv"):
 		r.Source = sure("tv")

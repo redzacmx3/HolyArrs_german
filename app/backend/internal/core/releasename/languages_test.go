@@ -127,3 +127,13 @@ func TestGermanReleaseLanguages(t *testing.T) {
 		}
 	}
 }
+
+// German groups (FuN) write WebHD for a web download.
+func TestWebHDIsWebDownload(t *testing.T) {
+	for _, n := range []string{"PAW.Patrol.S02E31.German.AC3.DL.1080p.WebHD.x265-FuN", "PAW.Patrol.S02E31.German.DL.1080p.Web-HD.x265-FuN"} {
+		r := Parse(n, Hints{Show: true})
+		if r.Source.Value != "web_dl" || r.Source.Conf == Unknown || r.Resolution.Value != 1080 || r.Group.Value != "FuN" {
+			t.Fatalf("%s: source %+v resolution %+v group %+v", n, r.Source, r.Resolution, r.Group)
+		}
+	}
+}
