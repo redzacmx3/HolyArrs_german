@@ -94,6 +94,9 @@ func (s *Service) refreshShow(ctx context.Context, titleID int64, switchTo strin
 	s.fixCopiedTMDB(ctx, &sh)
 	s.applyEpisodeGroup(metadata.NoCache(ctx), t, &sh)
 	s.addMazeNumbers(metadata.NoCache(ctx), t, &sh)
+	if t.ReleaseNumbers == mediafiles.ReleaseNumbersTVmaze {
+		s.mazeEvent(ctx, t, sh, by, jobID)
+	}
 	out.AltStale = sh.AltStale
 	was := t.MetadataSource
 	err = s.Store.Write(ctx, func(tx *sql.Tx) error {
@@ -198,4 +201,22 @@ func (s *Service) Regroup(ctx context.Context, titleID int64, prev *string, by d
 		}
 	}
 	return out, err
+}
+
+// mazeEvent records how the refresh read TVmaze's numbers for a show whose
+// release names count by them: how many episodes it numbered, or that
+// TVmaze could not be read (the stored numbers stay).
+func (s *Service) mazeEvent(ctx context.Context, t mediafiles.Title, sh metadata.Show, by domain.Actor, jobID *int64) {
+	regular := 0
+	for _, e := range sh.Episodes {
+		if e.Season > 0 {
+			regular++
+		}
+	}
+	summary := fmt.Sprintf("%s: TVmaze numbers for %d of %d episodes", t.Name, sh.MazeNumbered, regular)
+	if !sh.MazeNamed {
+		summary = t.Name + ": TVmaze could not be read or does not know the show; release names keep the stored TVmaze numbers"
+	}
+	s.Emit(ctx, &domain.Event{Actor: by, Kind: domain.EventTitleRefreshed, TitleID: &t.ID, JobID: jobID, Summary: summary, GroupKey: library.GroupKey(t.ID),
+		Data: map[string]any{"tvmaze_read": sh.MazeNamed, "tvmaze_numbered": sh.MazeNumbered, "episodes": regular}})
 }

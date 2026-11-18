@@ -159,7 +159,7 @@ func (s *Service) addMazeNumbers(ctx context.Context, t mediafiles.Title, sh *me
 		}
 	}
 	sh.Episodes = slices.Clone(sh.Episodes) // a cached answer stays as it was
-	metadata.SetMazeNumbers(sh.Episodes, maze)
+	sh.MazeNumbered = metadata.SetMazeNumbers(sh.Episodes, maze)
 	sh.MazeNamed = true
 }
 
