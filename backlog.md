@@ -23,7 +23,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Note:** Many of the blocked rows are PAW Patrol (S06/S07, 0 %, from HolyArrs). Check whether item 4 below fixes them once "Release-Namen zählen: Nach TMDB" is set.
 
 ### 6. Read release names by TVDB numbering
-- **Status:** open (noted 2026-11-18), waiting on Thomas: is a TVDB key set, and which TMDB episode orders does PAW Patrol offer?
+- **Status:** in progress. There is no TVDB key (TVDB no longer gives out free keys) and no TMDB order follows TVDB. For now, pick by hand ("Trotzdem nehmen"). [PR #8](https://github.com/redzacmx3/HolyArrs_german/pull/8) imports a hand-picked double episode into the chosen episode. Automatic numbering without a key (e.g. via SkyHook) is still open.
 - **Problem:** German groups (FuN) name PAW Patrol by TVDB. The library follows TMDB "Production". Neither TMDB order matches the release names.
 - **Ideas:** "Release-Namen zählen: Nach TVDB", using TVDB episode numbers (needs the person's TVDB key) or a TMDB episode group that follows TVDB. As a fallback, match by episode title or air date when the numbers do not fit.
 - **Related:** "every episode must gain" blocks double episodes where one half is already there (S02E40-E41).
