@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "ஸ்ட்ரீமிங்கில் டிரெண்டிங் தொடர்கள்",
 	"server.suggest.trending-on-streaming": "ஸ்ட்ரீமிங்கில் டிரெண்டிங்",
 	"server.discover.popular": "பிரபலமானவை",
-	"server.metadata.creator": "படைப்பாளர்"
+	"server.metadata.creator": "படைப்பாளர்",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

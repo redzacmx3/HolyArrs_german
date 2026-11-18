@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "По овом редоследу",
 	"discover.titleLibrary.releaseNumbersTmdb": "По TMDB-у",
 	"discover.titleLibrary.releaseNumbersHint": "Како називи издања нумеришу епизоде. Датотеке задржавају бројеве овог редоследа.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "По TVmaze (TVDB)-у"
+	"discover.titleLibrary.releaseNumbersTvmaze": "По TVmaze (TVDB)-у",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

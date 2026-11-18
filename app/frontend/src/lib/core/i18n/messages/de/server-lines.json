@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Serien im Trend beim Streaming",
 	"server.suggest.trending-on-streaming": "Im Trend beim Streaming",
 	"server.discover.popular": "Beliebt",
-	"server.metadata.creator": "Schöpfer"
+	"server.metadata.creator": "Schöpfer",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze-Nummern für {mazenumbered} von {regular} Folgen",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze-Nummern nicht gelesen ({mazeerror}); Release-Namen behalten die gespeicherten"
 }

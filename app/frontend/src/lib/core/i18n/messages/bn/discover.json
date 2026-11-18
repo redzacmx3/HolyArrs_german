@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "এই ক্রম অনুযায়ী",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB অনুযায়ী",
 	"discover.titleLibrary.releaseNumbersHint": "রিলিজ নাম পর্বগুলোকে কীভাবে নম্বর দেয়। ফাইলগুলো এই ক্রমের নম্বর রাখে।",
-	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) অনুযায়ী"
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) অনুযায়ী",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

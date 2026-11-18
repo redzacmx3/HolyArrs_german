@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "Selon cet ordre",
 	"discover.titleLibrary.releaseNumbersTmdb": "Selon TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Comment les noms de release numérotent les épisodes. Les fichiers gardent les numéros de cet ordre.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "Selon TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "Selon TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

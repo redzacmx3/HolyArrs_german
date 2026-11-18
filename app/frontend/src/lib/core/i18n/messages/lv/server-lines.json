@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Tendencēs seriāli straumēšanā",
 	"server.suggest.trending-on-streaming": "Tendences straumēšanā",
 	"server.discover.popular": "Populārs",
-	"server.metadata.creator": "Veidotājs"
+	"server.metadata.creator": "Veidotājs",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

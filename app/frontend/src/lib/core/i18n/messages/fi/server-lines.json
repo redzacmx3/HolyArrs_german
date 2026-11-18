@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Nousussa olevat sarjat suoratoistossa",
 	"server.suggest.trending-on-streaming": "Nousussa suoratoistossa",
 	"server.discover.popular": "Suosittua",
-	"server.metadata.creator": "Tekijä"
+	"server.metadata.creator": "Tekijä",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

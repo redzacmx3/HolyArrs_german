@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Seriale în trend pe streaming",
 	"server.suggest.trending-on-streaming": "În trend pe streaming",
 	"server.discover.popular": "Populare",
-	"server.metadata.creator": "Creator"
+	"server.metadata.creator": "Creator",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

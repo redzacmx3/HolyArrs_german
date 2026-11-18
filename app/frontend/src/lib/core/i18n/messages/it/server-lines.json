@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Serie di tendenza in streaming",
 	"server.suggest.trending-on-streaming": "Di tendenza in streaming",
 	"server.discover.popular": "Popolari",
-	"server.metadata.creator": "Ideatore"
+	"server.metadata.creator": "Ideatore",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

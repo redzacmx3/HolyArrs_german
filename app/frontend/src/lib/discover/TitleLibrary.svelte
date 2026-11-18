@@ -166,9 +166,10 @@
 		if (!o) return;
 		own.busyAction = busy;
 		try {
-			const r = await api.put<{ title: TitleView; rename_suggested?: boolean }>(`/titles/${o.id}`, body);
+			const r = await api.put<{ title: TitleView; rename_suggested?: boolean; tvmaze_error?: string }>(`/titles/${o.id}`, body);
 			own.owned = r.title;
 			if (done) toasts.push(done, 'ok');
+			if (r.tvmaze_error) toasts.push(t('discover.titleLibrary.releaseNumbersTvmazeFailed'), 'fail', { body: r.tvmaze_error });
 			if ('episode_group_id' in body) afterGroupChange(o.id, r.rename_suggested === true);
 		} catch (e) {
 			toasts.push(t('discover.titleLibrary.couldntSave'), 'fail', { body: message(e) });

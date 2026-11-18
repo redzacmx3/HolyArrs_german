@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "Menurut urutan ini",
 	"discover.titleLibrary.releaseNumbersTmdb": "Menurut TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Cara nama rilis menomori episode. File tetap memakai nomor urutan ini.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "Menurut TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "Menurut TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

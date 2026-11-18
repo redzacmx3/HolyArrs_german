@@ -21,6 +21,10 @@ type ShowRefresh struct {
 	Source  string `json:"details_source"`
 	// AltStale says the release-name numbers could not be read.
 	AltStale bool `json:"-"`
+	// TVmazeNumbered and TVmazeError tell how release names by TVmaze were
+	// read: how many episodes took TVmaze's numbers, or why none could.
+	TVmazeNumbered int    `json:"tvmaze_numbered,omitempty"`
+	TVmazeError    string `json:"tvmaze_error,omitempty"`
 	ShowSync
 }
 
@@ -95,6 +99,7 @@ func (s *Service) refreshShow(ctx context.Context, titleID int64, switchTo strin
 	s.applyEpisodeGroup(metadata.NoCache(ctx), t, &sh)
 	s.addMazeNumbers(metadata.NoCache(ctx), t, &sh)
 	if t.ReleaseNumbers == mediafiles.ReleaseNumbersTVmaze {
+		out.TVmazeNumbered, out.TVmazeError = sh.MazeNumbered, sh.MazeError
 		s.mazeEvent(ctx, t, sh, by, jobID)
 	}
 	out.AltStale = sh.AltStale
@@ -215,8 +220,8 @@ func (s *Service) mazeEvent(ctx context.Context, t mediafiles.Title, sh metadata
 	}
 	summary := fmt.Sprintf("%s: TVmaze numbers for %d of %d episodes", t.Name, sh.MazeNumbered, regular)
 	if !sh.MazeNamed {
-		summary = t.Name + ": TVmaze could not be read or does not know the show; release names keep the stored TVmaze numbers"
+		summary = t.Name + ": TVmaze numbers not read (" + sh.MazeError + "); release names keep the stored ones"
 	}
 	s.Emit(ctx, &domain.Event{Actor: by, Kind: domain.EventTitleRefreshed, TitleID: &t.ID, JobID: jobID, Summary: summary, GroupKey: library.GroupKey(t.ID),
-		Data: map[string]any{"tvmaze_read": sh.MazeNamed, "tvmaze_numbered": sh.MazeNumbered, "episodes": regular}})
+		Data: map[string]any{"tvmaze_read": sh.MazeNamed, "tvmaze_error": sh.MazeError, "tvmaze_numbered": sh.MazeNumbered, "episodes": regular}})
 }

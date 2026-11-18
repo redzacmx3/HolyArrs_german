@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "この順序で",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDBで",
 	"discover.titleLibrary.releaseNumbersHint": "リリース名がエピソードに付ける番号です。ファイルはこの順序の番号のままです。",
-	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)で"
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)で",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

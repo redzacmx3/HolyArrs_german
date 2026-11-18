@@ -1898,6 +1898,8 @@ tvdb_season
 tvdbid
 tvmaze
 tvmaze_episode
+tvmaze_error
+tvmaze_numbered
 tvmaze_season
 two_factor
 ty

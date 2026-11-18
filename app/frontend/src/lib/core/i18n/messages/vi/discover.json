@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "Theo thứ tự này",
 	"discover.titleLibrary.releaseNumbersTmdb": "Theo TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Cách tên bản phát hành đánh số các tập. Tệp vẫn giữ số theo thứ tự này.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "Theo TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "Theo TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

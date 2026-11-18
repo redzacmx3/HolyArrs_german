@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"slices"
 	"sort"
 	"strconv"
@@ -99,21 +100,23 @@ func (s *Service) addAirTimes(ctx context.Context, sh *metadata.Show) {
 	if !untimed {
 		return
 	}
-	if maze, ok := s.mazeShow(ctx, *sh); ok {
+	if maze, err := s.mazeShow(ctx, *sh); err == nil {
 		metadata.AddAirTimes(sh, maze)
 	}
 }
 
 // mazeShow finds sh on TVMaze: by its TVMaze id, or by a TVDB or IMDb id
 // that TVMaze knows for the same show, or by name with a TVDB or IMDb id
-// that must match. False when TVMaze is unreachable or does not know it.
-func (s *Service) mazeShow(ctx context.Context, sh metadata.Show) (metadata.Show, bool) {
+// that must match (a search hit without ids is read in full to check).
+// The error says why it found none: TVMaze unreachable or turned off, or
+// no TVMaze show with the same ids.
+func (s *Service) mazeShow(ctx context.Context, sh metadata.Show) (metadata.Show, error) {
 	if s.Shows == nil {
-		return metadata.Show{}, false
+		return metadata.Show{}, errors.New("no TVmaze source is set up")
 	}
 	p, err := s.Shows.Get("tvmaze")
 	if err != nil || p == nil {
-		return metadata.Show{}, false
+		return metadata.Show{}, fmt.Errorf("TVmaze is not available: %v", err)
 	}
 	for _, k := range []string{"tvmaze", "tvdb", "imdb"} {
 		v := sh.IDs[k]
@@ -122,26 +125,42 @@ func (s *Service) mazeShow(ctx context.Context, sh metadata.Show) (metadata.Show
 		}
 		m, err := p.Show(ctx, k+":"+v)
 		if err == nil && (k == "tvmaze" || metadata.SameShow(sh, m)) {
-			return m, true
+			return m, nil
 		}
 		if err != nil && !errors.Is(err, metadata.ErrShowNotFound) {
-			return metadata.Show{}, false // TVMaze is unreachable: try again on the next refresh
+			return metadata.Show{}, fmt.Errorf("TVmaze could not be read: %w", err) // try again on the next refresh
 		}
 	}
 	if sh.Name == "" {
-		return metadata.Show{}, false
+		return metadata.Show{}, metadata.ErrShowNotFound
 	}
 	hits, err := p.SearchShows(ctx, sh.Name)
 	if err != nil {
-		return metadata.Show{}, false
+		return metadata.Show{}, fmt.Errorf("TVmaze search failed: %w", err)
 	}
+	read := 0
 	for _, h := range hits {
-		if metadata.SameShow(sh, h) && h.IDs["tvmaze"] != "" {
-			m, err := p.Show(ctx, "tvmaze:"+h.IDs["tvmaze"])
-			return m, err == nil
+		id := h.IDs["tvmaze"]
+		if id == "" {
+			continue
+		}
+		same := metadata.SameShow(sh, h)
+		if !same && (h.IDs["tvdb"] != "" || h.IDs["imdb"] != "" || read >= 5) {
+			continue
+		}
+		read++
+		m, err := p.Show(ctx, "tvmaze:"+id)
+		if err != nil {
+			if same {
+				return metadata.Show{}, fmt.Errorf("TVmaze could not be read: %w", err)
+			}
+			continue
+		}
+		if same || metadata.SameShow(sh, m) {
+			return m, nil
 		}
 	}
-	return metadata.Show{}, false
+	return metadata.Show{}, fmt.Errorf("TVmaze lists no show with TVDB id %q or IMDb id %q (searched for %q): %w", sh.IDs["tvdb"], sh.IDs["imdb"], sh.Name, metadata.ErrShowNotFound)
 }
 
 // addMazeNumbers gives the episodes TVMaze's numbers when the title reads
@@ -153,8 +172,9 @@ func (s *Service) addMazeNumbers(ctx context.Context, t mediafiles.Title, sh *me
 	}
 	maze := *sh
 	if sh.Source != "tvmaze" {
-		var ok bool
-		if maze, ok = s.mazeShow(ctx, *sh); !ok {
+		var err error
+		if maze, err = s.mazeShow(ctx, *sh); err != nil {
+			sh.MazeError = err.Error()
 			return
 		}
 	}
