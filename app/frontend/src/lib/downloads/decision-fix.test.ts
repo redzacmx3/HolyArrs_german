@@ -1,4 +1,4 @@
-import { canImportAgain, decisionFix, noMatchKind, packImportAgain, reasonKind, reasonWords, refusedLine } from './decision-fix.ts';
+import { canImportAgain, decisionFix, noMatchKind, packImportAgain, reasonKind, reasonWords, refusedLine, shortWhy } from './decision-fix.ts';
 import { lang } from '#lib/core/i18n/i18n.svelte.ts';
 import en from '../core/i18n/messages/en/server-lines.json';
 import { plainReason } from '../core/plain.ts';
@@ -219,5 +219,12 @@ describe('album or season card', () => {
 		expect(packImportAgain(tracks(() => 'no file in the download matched a track'))).toBe(false);
 		expect(packImportAgain(tracks(() => write, (i) => (i === 0 ? 7 : 8)))).toBe(false);
 		expect(packImportAgain([])).toBe(false);
+	});
+	it('names what is wrong in a few words for the Downloads list', () => {
+		expect(shortWhy(dec({ why: 'ran_out', download_id: undefined }))).toBe('No fitting Releases left');
+		expect(shortWhy(dec({ kind: 'show', why: 'unmatched', reason: 'no file in the download matched an episode' }))).toBe('No file matches');
+		expect(shortWhy(dec({ why: 'taken' }))).toBe('Another app took the files');
+		expect(shortWhy(dec({ why: 'not_sent', download_id: undefined }))).toBe('No Downloader took it');
+		expect(shortWhy(dec({ why: 'conflict' }))).toBe('Import could not finish');
 	});
 });
