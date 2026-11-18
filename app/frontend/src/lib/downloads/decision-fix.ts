@@ -93,3 +93,24 @@ export function reasonWords(text: string): string {
 	const stop = /\.\s*$/.test(text) && !/[.。।!?！？:：]$/.test(said) ? (t('server.metadata.the-metadata-server-is-slow-right').match(/[.。।]$/)?.[0] ?? '') : '';
 	return cap(said) + stop;
 }
+
+/** The few words the Downloads list shows for a row waiting on a decision, in place of the bare "Import blocked": what is wrong, so a person knows which fix fits before opening the row. */
+export function shortWhy(d: D): string {
+	const k = reasonKind(d);
+	if (k === 'edition') return t('downloads.short.edition');
+	if (k === 'copy') return t('downloads.short.copy');
+	if (k === 'taken') return t('downloads.short.taken');
+	if (k === 'nomatch') return t('downloads.short.noMatch');
+	const fix = decisionFix(d);
+	if (fix === 'folder' || fix === 'again') return t('downloads.short.folder');
+	switch (d.why) {
+		case 'ran_out':
+			return t('downloads.short.ranOut');
+		case 'not_sent':
+		case 'link_refused':
+			return t('downloads.short.notSent');
+		case 'not_replaced':
+			return t('downloads.short.notReplaced');
+	}
+	return t('downloads.short.import');
+}

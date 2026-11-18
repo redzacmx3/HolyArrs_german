@@ -558,6 +558,8 @@ export interface DownloadView {
 
 export interface DownloadRow extends DownloadView {
 	phase: string;
+	/** A row waiting on a decision: the few words saying what is wrong (decision-fix.ts shortWhy). */
+	decide_why?: string;
 	name: string;
 	title_id?: number;
 	title: string;

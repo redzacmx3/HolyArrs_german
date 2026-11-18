@@ -98,7 +98,7 @@
 			<!-- The line shows the problem, else the queue place, else the current step. -->
 			{@const line = why ? '' : stageOf(r) === 'queued' && r.queue_pos ? (r.queue_pos === 1 ? t('downloads.row.nextInLine') : t('downloads.row.inLine', { ordinal: cols.ordinal(r.queue_pos) })) : stepLine(r, detail)}
 			{@const under = why?.text || line}
-			<span class="st {tn}" class:ph class:two={!!under} data-col="status" title={[statusWord(r), under, more.toLowerCase() === under.toLowerCase() ? '' : more].filter(Boolean).join(' · ')}><span class="dot" aria-hidden="true"></span><span class="tx"><span class="sw">{statusWord(r)}</span>{#if why}<span class="why" data-testid="dl-why">{PROBLEM_KEY[why.text] ? t(PROBLEM_KEY[why.text]) : why.text.charAt(0).toUpperCase() + why.text.slice(1)}</span>{:else if line}<span class="why" data-testid={stageOf(r) === 'queued' ? 'dl-in-line' : 'dl-step'}>{line}</span>{/if}</span></span>
+			<span class="st {tn}" class:ph class:two={!!under} data-col="status" title={[statusWord(r), under, more.toLowerCase() === under.toLowerCase() ? '' : more].filter(Boolean).join(' · ')}><span class="dot" aria-hidden="true"></span><span class="tx"><span class="sw">{statusWord(r)}</span>{#if why && r.decide_why && stageOf(r) === 'decide'}<span class="why" data-testid="dl-why">{r.decide_why}</span>{:else if why}<span class="why" data-testid="dl-why">{PROBLEM_KEY[why.text] ? t(PROBLEM_KEY[why.text]) : why.text.charAt(0).toUpperCase() + why.text.slice(1)}</span>{:else if line}<span class="why" data-testid={stageOf(r) === 'queued' ? 'dl-in-line' : 'dl-step'}>{line}</span>{/if}</span></span>
 		{/if}
 	{:else if id === 'size'}
 		<span class="num" class:ph data-col="size">{r.size ? bytes(r.size) : dash}</span>

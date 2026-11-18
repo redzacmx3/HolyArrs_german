@@ -2,7 +2,7 @@
 	import { ask } from '#lib/ui/ask.svelte.ts';
 	import { t } from '#lib/core/i18n/i18n.svelte.ts';
 	import { libraryBrief } from '#lib/mediafiles/index.ts';
-	import { decisionName, manyWords, removeBody, removeFilesWords, removeDeletesFiles, doneLine, doneInLibrary, finishedOwn, removeStart, rowName, rowPath, type DownloaderSettings, type DownloaderView, type RemoveChoice, applyPatch, fromAnswer, isDl, mergeClient, wentStale, type Sync, dlPush, decisions, refreshDecisions, DlSections, ConfirmMatch, byDownload, AddTorrents, SteerSheet, BULK_DONE, byClient, type BulkAction } from '#lib/downloads/index.ts';
+	import { decisionName, manyWords, removeBody, removeFilesWords, removeDeletesFiles, doneLine, doneInLibrary, finishedOwn, removeStart, rowName, rowPath, type DownloaderSettings, type DownloaderView, type RemoveChoice, applyPatch, fromAnswer, isDl, mergeClient, wentStale, type Sync, dlPush, decisions, refreshDecisions, DlSections, ConfirmMatch, byDownload, AddTorrents, SteerSheet, BULK_DONE, byClient, type BulkAction, shortWhy } from '#lib/downloads/index.ts';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { to } from '#lib/core/paths.ts';
@@ -87,6 +87,7 @@
 		return {
 			id: -d.slot_id,
 			phase: 'needs_a_decision',
+			decide_why: shortWhy(d),
 			state: '',
 			label: t('downloads.status.review'),
 			text: '',
@@ -109,7 +110,11 @@
 		};
 	}
 	const allRows = $derived([
-		...rows.map((r) => (decisionsByDownload.has(r.id) && !r.active && r.phase !== 'needs_a_decision' ? { ...r, phase: 'needs_a_decision', label: t('downloads.status.review') } : r)),
+		...rows.map((r) => {
+			const ds = decisionsByDownload.get(r.id);
+			if (!ds || r.active) return r;
+			return { ...r, decide_why: shortWhy(ds[0]), ...(r.phase !== 'needs_a_decision' ? { phase: 'needs_a_decision', label: t('downloads.status.review') } : {}) };
+		}),
 		...decisions.items.filter((d) => !(d.download_id && rowIds.has(d.download_id))).map(decisionRow)
 	]);
 	function decisionsOf(r: DownloadRow): Decision[] {

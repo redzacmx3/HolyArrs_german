@@ -8,7 +8,7 @@
 	import { decisionName, groupDecisions, manyWords, whyWords, type DecisionGroup } from './downloaders.ts';
 	import { canImportAgain, decisionFix, packImportAgain, noMatchKind, reasonKind, reasonWords, refusedLine, type Fix } from './decision-fix.ts';
 	import { refreshDecisions } from './decisions.svelte.ts';
-	import { editionDecisionBody } from '../mediafiles/index.ts';
+	import { editionDecisionBody, ReleaseSheet } from '../mediafiles/index.ts';
 	import { to } from '../core/paths.ts';
 	import { api, message } from '../core/api.ts';
 	import { toasts } from '../core/toasts.svelte.ts';
@@ -89,6 +89,31 @@
 	}
 
 	const primary = (d: Decision): Fix => decisionFix(d);
+	// Release auswählen right here, for just this movie or episode: the list of Releases found for its Slot, to pick another one or search again.
+	let pickFor = $state<Decision | null>(null);
+	let pickOpen = $state(false);
+	function openPick(d: Decision) {
+		pickFor = d;
+		pickOpen = true;
+	}
+	async function picked() {
+		await refreshDecisions();
+		ondone?.();
+	}
+	// Keep the copy in the library: stops looking for this one, the file already there stays.
+	async function keepCopy(d: Decision, key: string) {
+		busy = key;
+		try {
+			await api.post(`/needs-decision/${d.slot_id}/decide`, { action: 'stop' });
+			toasts.push(t('downloads.bulkFix.done', { n: 1 }), 'ok', { body: t('downloads.bulkFix.keepHint') });
+			await refreshDecisions();
+			ondone?.();
+		} catch (e) {
+			toasts.push(t('downloads.dp.saveFailed'), 'fail', { body: message(e) });
+		} finally {
+			busy = '';
+		}
+	}
 	// Set edition only for an edition refusal; a file refused in place of the copy points to another Version.
 	function reasonLine(d: Decision): string {
 		if (d.reading) return t('downloads.dp.readingFolder');
@@ -116,9 +141,8 @@
 		if (d.import_file && fix !== 'import') out.push({ label: t('downloads.dp.importFile'), onselect: () => importFile(d, key) });
 		if (d.import_folder && fix !== 'match') out.push({ label: t('downloads.dp.importByHand'), href: byHandHref(d) });
 		if (fix !== 'search') out.push({ label: t('downloads.dp.searchAgain'), onselect: () => act(d, 'search', false, key) });
-		if (fix !== 'hand') out.push({ label: t('downloads.dp.byHand'), href: to(`/library/${d.title_id}?tab=library&pick=1#h-rel`) });
+		out.push({ label: t('downloads.dp.byHandPage'), href: to(`/library/${d.title_id}?tab=library&pick=1#h-rel`) });
 		if (!manyWords(d.kind) && fix !== 'version') out.push({ label: versionLabel(d), href: to(`/library/${d.title_id}?tab=library#h-versions`) });
-		if (d.release_id) out.push({ label: t('downloads.dp.addTurnedDown'), onselect: () => act(d, 'turn_down', false, key) });
 		out.push({ label: t('downloads.dp.stopLooking'), destructive: true, onselect: () => act(d, 'stop', false, key) });
 		out.push({ kind: 'separator' }, { label: t('downloads.dp.openTitle'), href: to(`/library/${d.title_id}`) });
 		return out;
@@ -206,10 +230,14 @@
 				{:else if fix === 'match'}
 					<Button size="sm" variant="primary" href={byHandHref(d)} data-testid="decision-fix">{t('downloads.dp.importByHand')}</Button>
 				{:else if fix === 'hand'}
-					<Button size="sm" variant="primary" href={to(`/library/${d.title_id}?tab=library&pick=1#h-rel`)} data-testid="decision-fix">{t('downloads.dp.byHand')}</Button>
+					<Button size="sm" variant="primary" onclick={() => openPick(d)} data-testid="decision-fix">{t('downloads.dp.byHand')}</Button>
 				{:else}
 					<Button size="sm" variant="primary" onclick={() => act(d, 'search', false, key)} disabled={busy === key} busy={busy === key} data-testid="decision-fix">{t('downloads.dp.searchAgain')}</Button>
 				{/if}
+				<!-- The usual ways out stay in sight: another Release from the list, this one turned down, or the copy already in the library. -->
+				{#if fix !== 'hand'}<Button size="sm" onclick={() => openPick(d)} data-testid="decision-pick">{t('downloads.dp.byHand')}</Button>{/if}
+				{#if d.release_id}<Button size="sm" onclick={() => act(d, 'turn_down', false, key)} disabled={busy === key} data-testid="decision-turn-down">{t('downloads.bulkFix.turnDown')}</Button>{/if}
+				{#if d.has_copy}<Button size="sm" onclick={() => keepCopy(d, key)} disabled={busy === key} title={t('downloads.bulkFix.keepHint')} data-testid="decision-keep">{t('downloads.dp.keepCopy')}</Button>{/if}
 				<Menu label={t('downloads.dp.moreChoices')} variant="button" text={t('downloads.dp.more')} icon="chevronDown" items={more(d, key, fix)} width={240} align="start" />
 				{@render whyBtn(key)}
 			</div>
@@ -225,6 +253,8 @@
 		{@render why(d, key)}
 	</div>
 {/snippet}
+
+{#if pickFor}<ReleaseSheet bind:open={pickOpen} titleId={pickFor.title_id} name={pickFor.title} scope={{ label: pickFor.episode?.label ?? pickFor.version, query: `slot_id=${pickFor.slot_id}`, body: { slot_id: pickFor.slot_id } }} onchosen={picked} />{/if}
 
 <section class="decide" class:compact aria-label={t('downloads.status.review')} data-testid="decision-panel">
 	{#each groups as g (g.key)}
