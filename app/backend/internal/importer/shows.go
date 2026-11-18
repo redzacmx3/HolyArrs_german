@@ -136,7 +136,10 @@ func (t ShowTarget) grabbed(p releasename.Result) []Episode {
 			want = append(want, e)
 		}
 	}
-	if len(want) == 0 || len(want) != max(len(p.Show.Episodes), len(p.Show.Absolute), 1) {
+	// A double episode picked by hand for one of the episodes it holds (its
+	// numbers count another way, as German releases of some kids' shows do)
+	// fills that episode; more episodes than the name holds never match.
+	if len(want) == 0 || len(want) > max(len(p.Show.Episodes), len(p.Show.Absolute), 1) {
 		return nil
 	}
 	return want

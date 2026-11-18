@@ -11,6 +11,7 @@ All notable changes to HolyArrs are listed here. The format follows [Keep a Chan
 - Your own traits can look at a Release's languages (`de`, `original`, `!en`).
 - Language and quality assistant: choose the language (this one or the original, only this one, original only) and the resolution (720p, 1080p, 4K) for every movie or show, one title, one season or one episode, with a preview of what changes. Lower levels lay over higher ones; the Pick rules stay as they are.
 - The Upkeep page shows the usual save and discard bar when its rules change.
+- A double episode picked by hand for one of its episodes (its numbers count another way, such as TVDB under a TMDB order) imports into that episode instead of staying blocked.
 - A show that follows another TMDB episode order (such as Production) can read release names by TMDB's own numbering (**Release names count: By TMDB** on its Library tab), so German releases that count that way are found and imported, while files keep the chosen order's numbers.
 - A show can read release names by TVmaze's numbering, which follows TVDB and needs no key (**Release names count: By TVmaze (TVDB)** on its Library tab). HolyArrs finds each episode on TVmaze by name or air day, so German releases of shows such as PAW Patrol (S02E40-E41) are found and imported for the right episodes.
 - Applying a TRaSH profile also takes its qualities, cutoff and language, and a merged quality group ranks on points first, so German profiles put German releases on top. A profile whose language is Any keeps the languages the rules already name.
