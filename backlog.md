@@ -6,26 +6,6 @@ Status: **open** (noted, not started), **in progress**, **done**.
 
 ## Open
 
-### 1. Filter list in "Release auswählen"
-- **Status:** in progress (2026-11-18), [PR #18](https://github.com/redzacmx3/HolyArrs_german/pull/18)
-- **Done in the branch:** drop-downs above the list for Sprache, Auflösung, Quelle, HDR, Codec and Ton, each with how many Releases fit. They combine with each other and with Gute Treffer / Alle, and the browser keeps the picks for the next title. The server now sends what each name says (language, German DL, subtitles, picture, sound) as read by the parser, and the rows show DE / DL chips. The sheet loads up to 300 Releases instead of 60.
-- **Problem:** The dialog lists many releases (for example "Alle 92"). Only "Gute Treffer / Alle" narrows them, so finding the right one takes long.
-- **Wish:** Drop-down filters above the list for language (German, German DL, English …), picture (720p/1080p/2160p, HDR/DV, x264/x265, WEB/BluRay) and sound (DDP5.1, Atmos, TrueHD …). The filters could combine and use the facts the parser already reads, which the dialog shows as chips.
-
-### 2. Bulk actions for problem downloads
-- **Status:** in progress (2026-11-18), [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17)
-- **Why greyed out:** the rows in "Prüfen" wait on a decision. Most have no download left in the Downloader (PAW Patrol at 0 %, or SABnzbd already cleaned up), so Starten, Pausieren and Entfernen have nothing to act on.
-- **Done in the branch:** with rows ticked, the selection bar shows "N zu prüfen:" with Verwerfen und neu suchen, Erneut suchen, Datei in der Bibliothek behalten (when a copy is there) and Nicht mehr suchen. Each runs for every ticked row at once.
-- **Problem:** On Downloads › Probleme you can select every row ("43 ausgewählt"), but the actions at the top left (Starten, Pausieren, Entfernen) stay greyed out. Nothing can be done with the selection.
-- **Wish:** Actions on the selection: remove (with or without files), remove and search again, and add the release to "abgewiesen" and search again. This would clear many blocked downloads at once and load them fresh.
-
-### 3. Make "Prüfen / Import blockiert" understandable
-- **Status:** in progress (2026-11-18), [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17)
-- **Done in the branch:** the list says the reason in a few words instead of "Import blockiert" (for example "Keine passenden Releases mehr", "Keine Datei passt", "Gehört in eine andere Variante"). The row details show the quick fixes next to the main button: Release von Hand wählen opens "Release auswählen" for just this episode or movie right there, Verwerfen und neu suchen, and Datei in der Bibliothek behalten.
-- **Problem:** Downloads in "Prüfen" with "Import blockiert" do not show clearly why they are blocked or what to do. There is no quick way to pick an existing file or a new file for the episode so the status clears.
-- **Wish:** One clear reason per row, plus quick actions such as "use the file already in the library", "pick another file / release", "import anyway" and "remove and search again".
-- **Note:** Many of the blocked rows are PAW Patrol (S06/S07, 0 %, from HolyArrs). Check whether item 4 below fixes them once "Release-Namen zählen: Nach TMDB" is set.
-
 ### 7. Quicker requests, modelled on Seerr
 - **Status:** open (noted 2026-11-18), after the running features are stable
 - **Problem:** Requesting a new title takes many steps. People who manage the Library always get "Zur Library hinzufügen" with up to ten fields (folder, Pick rules, seasons, order, search …), and a new show does not search by default.
@@ -52,6 +32,26 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Problem:** TRaSH's fixed size limit hits 12-minute kids' episodes (377 MB, 1080p x265) with −35000. Judge by MB per minute of runtime instead.
 
 ## Done
+
+### 1. Filter list in "Release auswählen"
+- **Status:** done, [PR #18](https://github.com/redzacmx3/HolyArrs_german/pull/18) (2026-11-18)
+- **Done:** drop-downs above the list for Sprache, Auflösung, Quelle, HDR, Codec and Ton, each with how many Releases fit. They combine with each other and with Gute Treffer / Alle, and the browser keeps the picks for the next title. The server now sends what each name says (language, German DL, subtitles, picture, sound) as read by the parser, and the rows show DE / DL chips. The sheet loads up to 300 Releases instead of 60.
+- **Problem:** The dialog lists many releases (for example "Alle 92"). Only "Gute Treffer / Alle" narrows them, so finding the right one takes long.
+- **Wish:** Drop-down filters above the list for language (German, German DL, English …), picture (720p/1080p/2160p, HDR/DV, x264/x265, WEB/BluRay) and sound (DDP5.1, Atmos, TrueHD …). The filters could combine and use the facts the parser already reads, which the dialog shows as chips.
+
+### 2. Bulk actions for problem downloads
+- **Status:** done, [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17) (2026-11-18)
+- **Why greyed out:** the rows in "Prüfen" wait on a decision. Most have no download left in the Downloader (PAW Patrol at 0 %, or SABnzbd already cleaned up), so Starten, Pausieren and Entfernen have nothing to act on.
+- **Done:** with rows ticked, the selection bar shows "N zu prüfen:" with Verwerfen und neu suchen, Erneut suchen, Datei in der Bibliothek behalten (when a copy is there) and Nicht mehr suchen. Each runs for every ticked row at once.
+- **Problem:** On Downloads › Probleme you can select every row ("43 ausgewählt"), but the actions at the top left (Starten, Pausieren, Entfernen) stay greyed out. Nothing can be done with the selection.
+- **Wish:** Actions on the selection: remove (with or without files), remove and search again, and add the release to "abgewiesen" and search again. This would clear many blocked downloads at once and load them fresh.
+
+### 3. Make "Prüfen / Import blockiert" understandable
+- **Status:** done, [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17) (2026-11-18)
+- **Done:** the list says the reason in a few words instead of "Import blockiert" (for example "Keine passenden Releases mehr", "Keine Datei passt", "Gehört in eine andere Variante"). The row details show the quick fixes next to the main button: Release von Hand wählen opens "Release auswählen" for just this episode or movie right there, Verwerfen und neu suchen, and Datei in der Bibliothek behalten.
+- **Problem:** Downloads in "Prüfen" with "Import blockiert" do not show clearly why they are blocked or what to do. There is no quick way to pick an existing file or a new file for the episode so the status clears.
+- **Wish:** One clear reason per row, plus quick actions such as "use the file already in the library", "pick another file / release", "import anyway" and "remove and search again".
+- **Note:** Many of the blocked rows are PAW Patrol (S06/S07, 0 %, from HolyArrs). Check whether item 4 below fixes them once "Release-Namen zählen: Nach TMDB" is set.
 
 ### 6. Read release names by TVDB numbering
 - **Status:** done, [PR #8](https://github.com/redzacmx3/HolyArrs_german/pull/8) and [PR #9](https://github.com/redzacmx3/HolyArrs_german/pull/9) (2026-11-18)
