@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{of} 話中 {seen} 話を視聴",
 	"mediafiles.watched.partly": "一部視聴済み",
 	"mediafiles.adopt.not_looked_up": "未検索",
-	"mediafiles.releaseSheet.showPickPart": "検索するには、シーズンまたはエピソードの「{choose}」を使ってください。"
+	"mediafiles.releaseSheet.showPickPart": "検索するには、シーズンまたはエピソードの「{choose}」を使ってください。",
+	"mediafiles.releaseFilter.label": "リリースを絞り込む",
+	"mediafiles.releaseFilter.any": "すべて",
+	"mediafiles.releaseFilter.clear": "絞り込みを解除",
+	"mediafiles.releaseFilter.lang": "言語",
+	"mediafiles.releaseFilter.res": "解像度",
+	"mediafiles.releaseFilter.source": "ソース",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "コーデック",
+	"mediafiles.releaseFilter.audio": "音声",
+	"mediafiles.releaseFilter.noLanguage": "記載なし（多くはオリジナル）",
+	"mediafiles.releaseFilter.unknown": "不明",
+	"mediafiles.releaseFilter.dual": "ドイツ語 + オリジナル (DL)",
+	"mediafiles.releaseFilter.subs": "{language}字幕"
 }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "נצפו {seen} מתוך {of}",
 	"mediafiles.watched.partly": "נצפה חלקית",
 	"mediafiles.adopt.not_looked_up": "לא נבדק",
-	"mediafiles.releaseSheet.showPickPart": "כדי לחפש, השתמש ב-{choose} בעונה או בפרק."
+	"mediafiles.releaseSheet.showPickPart": "כדי לחפש, השתמש ב-{choose} בעונה או בפרק.",
+	"mediafiles.releaseFilter.label": "סינון גרסאות",
+	"mediafiles.releaseFilter.any": "הכול",
+	"mediafiles.releaseFilter.clear": "ניקוי מסננים",
+	"mediafiles.releaseFilter.lang": "שפה",
+	"mediafiles.releaseFilter.res": "רזולוציה",
+	"mediafiles.releaseFilter.source": "מקור",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "קודק",
+	"mediafiles.releaseFilter.audio": "צליל",
+	"mediafiles.releaseFilter.noLanguage": "לא צוין (לרוב המקור)",
+	"mediafiles.releaseFilter.unknown": "לא ידוע",
+	"mediafiles.releaseFilter.dual": "גרמנית + מקור (DL)",
+	"mediafiles.releaseFilter.subs": "כתוביות: {language}"
 }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Vaadatud {seen} / {of}",
 	"mediafiles.watched.partly": "Osaliselt vaadatud",
 	"mediafiles.adopt.not_looked_up": "Otsimata",
-	"mediafiles.releaseSheet.showPickPart": "Otsimiseks kasuta hooaja või osa juures {choose}."
+	"mediafiles.releaseSheet.showPickPart": "Otsimiseks kasuta hooaja või osa juures {choose}.",
+	"mediafiles.releaseFilter.label": "Filtreeri väljalaskeid",
+	"mediafiles.releaseFilter.any": "Kõik",
+	"mediafiles.releaseFilter.clear": "Tühjenda filtrid",
+	"mediafiles.releaseFilter.lang": "Keel",
+	"mediafiles.releaseFilter.res": "Eraldusvõime",
+	"mediafiles.releaseFilter.source": "Allikas",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Koodek",
+	"mediafiles.releaseFilter.audio": "Heli",
+	"mediafiles.releaseFilter.noLanguage": "Märkimata (enamasti originaal)",
+	"mediafiles.releaseFilter.unknown": "Teadmata",
+	"mediafiles.releaseFilter.dual": "Saksa + originaal (DL)",
+	"mediafiles.releaseFilter.subs": "Subtiitrid: {language}"
 }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "已觀看 {seen} / {of}",
 	"mediafiles.watched.partly": "已觀看部分",
 	"mediafiles.adopt.not_looked_up": "未查詢",
-	"mediafiles.releaseSheet.showPickPart": "要搜尋，請在某一季或某一集上使用「{choose}」。"
+	"mediafiles.releaseSheet.showPickPart": "要搜尋，請在某一季或某一集上使用「{choose}」。",
+	"mediafiles.releaseFilter.label": "篩選發佈",
+	"mediafiles.releaseFilter.any": "全部",
+	"mediafiles.releaseFilter.clear": "清除篩選",
+	"mediafiles.releaseFilter.lang": "語言",
+	"mediafiles.releaseFilter.res": "解析度",
+	"mediafiles.releaseFilter.source": "來源",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "編碼",
+	"mediafiles.releaseFilter.audio": "聲音",
+	"mediafiles.releaseFilter.noLanguage": "未標明（多為原語言）",
+	"mediafiles.releaseFilter.unknown": "未知",
+	"mediafiles.releaseFilter.dual": "德語 + 原語言 (DL)",
+	"mediafiles.releaseFilter.subs": "{language}字幕"
 }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} / {of} izlendi",
 	"mediafiles.watched.partly": "Kısmen izlendi",
 	"mediafiles.adopt.not_looked_up": "Aranmadı",
-	"mediafiles.releaseSheet.showPickPart": "Aramak için bir sezon veya bölümde {choose} kullan."
+	"mediafiles.releaseSheet.showPickPart": "Aramak için bir sezon veya bölümde {choose} kullan.",
+	"mediafiles.releaseFilter.label": "Sürümleri filtrele",
+	"mediafiles.releaseFilter.any": "Tümü",
+	"mediafiles.releaseFilter.clear": "Filtreleri temizle",
+	"mediafiles.releaseFilter.lang": "Dil",
+	"mediafiles.releaseFilter.res": "Çözünürlük",
+	"mediafiles.releaseFilter.source": "Kaynak",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Ses",
+	"mediafiles.releaseFilter.noLanguage": "Belirtilmemiş (çoğunlukla orijinal)",
+	"mediafiles.releaseFilter.unknown": "Bilinmiyor",
+	"mediafiles.releaseFilter.dual": "Almanca + orijinal (DL)",
+	"mediafiles.releaseFilter.subs": "{language} altyazı"
 }

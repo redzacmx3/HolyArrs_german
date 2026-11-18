@@ -527,5 +527,18 @@
   "mediafiles.watched.part": "Horft á {seen} af {of}",
   "mediafiles.watched.partly": "Horft að hluta",
   "mediafiles.adopt.not_looked_up": "Ekki flett upp",
-  "mediafiles.releaseSheet.showPickPart": "Til að leita skaltu nota {choose} á þáttaröð eða þætti."
+  "mediafiles.releaseSheet.showPickPart": "Til að leita skaltu nota {choose} á þáttaröð eða þætti.",
+	"mediafiles.releaseFilter.label": "Sía útgáfur",
+	"mediafiles.releaseFilter.any": "Allar",
+	"mediafiles.releaseFilter.clear": "Hreinsa síur",
+	"mediafiles.releaseFilter.lang": "Tungumál",
+	"mediafiles.releaseFilter.res": "Upplausn",
+	"mediafiles.releaseFilter.source": "Uppruni",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kóði",
+	"mediafiles.releaseFilter.audio": "Hljóð",
+	"mediafiles.releaseFilter.noLanguage": "Ekki tilgreint (oftast frummál)",
+	"mediafiles.releaseFilter.unknown": "Óþekkt",
+	"mediafiles.releaseFilter.dual": "Þýska + frummál (DL)",
+	"mediafiles.releaseFilter.subs": "Texti á {language}"
 }

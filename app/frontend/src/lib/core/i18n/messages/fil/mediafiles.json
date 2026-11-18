@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Napanood ang {seen} sa {of}",
 	"mediafiles.watched.partly": "Bahagyang napanood",
 	"mediafiles.adopt.not_looked_up": "Hindi nahanap",
-	"mediafiles.releaseSheet.showPickPart": "Para maghanap, gamitin ang {choose} sa isang season o episode."
+	"mediafiles.releaseSheet.showPickPart": "Para maghanap, gamitin ang {choose} sa isang season o episode.",
+	"mediafiles.releaseFilter.label": "I-filter ang mga release",
+	"mediafiles.releaseFilter.any": "Lahat",
+	"mediafiles.releaseFilter.clear": "Alisin ang mga filter",
+	"mediafiles.releaseFilter.lang": "Wika",
+	"mediafiles.releaseFilter.res": "Resolusyon",
+	"mediafiles.releaseFilter.source": "Pinagmulan",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Tunog",
+	"mediafiles.releaseFilter.noLanguage": "Hindi binanggit (kadalasan orihinal)",
+	"mediafiles.releaseFilter.unknown": "Hindi alam",
+	"mediafiles.releaseFilter.dual": "German + orihinal (DL)",
+	"mediafiles.releaseFilter.subs": "Subtitle sa {language}"
 }

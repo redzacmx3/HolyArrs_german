@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} / {of} megnézve",
 	"mediafiles.watched.partly": "Részben megnézve",
 	"mediafiles.adopt.not_looked_up": "Nincs kikeresve",
-	"mediafiles.releaseSheet.showPickPart": "Kereséshez egy évadnál vagy epizódnál használd ezt: {choose}."
+	"mediafiles.releaseSheet.showPickPart": "Kereséshez egy évadnál vagy epizódnál használd ezt: {choose}.",
+	"mediafiles.releaseFilter.label": "Kiadások szűrése",
+	"mediafiles.releaseFilter.any": "Mind",
+	"mediafiles.releaseFilter.clear": "Szűrők törlése",
+	"mediafiles.releaseFilter.lang": "Nyelv",
+	"mediafiles.releaseFilter.res": "Felbontás",
+	"mediafiles.releaseFilter.source": "Forrás",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Hang",
+	"mediafiles.releaseFilter.noLanguage": "Nincs megadva (többnyire eredeti)",
+	"mediafiles.releaseFilter.unknown": "Ismeretlen",
+	"mediafiles.releaseFilter.dual": "Német + eredeti (DL)",
+	"mediafiles.releaseFilter.subs": "Felirat: {language}"
 }

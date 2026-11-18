@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{of} में से {seen} देखे गए",
 	"mediafiles.watched.partly": "आंशिक रूप से देखा गया",
 	"mediafiles.adopt.not_looked_up": "खोजा नहीं गया",
-	"mediafiles.releaseSheet.showPickPart": "खोजने के लिए, किसी सीज़न या एपिसोड पर {choose} इस्तेमाल करें।"
+	"mediafiles.releaseSheet.showPickPart": "खोजने के लिए, किसी सीज़न या एपिसोड पर {choose} इस्तेमाल करें।",
+	"mediafiles.releaseFilter.label": "रिलीज़ फ़िल्टर करें",
+	"mediafiles.releaseFilter.any": "सभी",
+	"mediafiles.releaseFilter.clear": "फ़िल्टर हटाएँ",
+	"mediafiles.releaseFilter.lang": "भाषा",
+	"mediafiles.releaseFilter.res": "रेज़ोल्यूशन",
+	"mediafiles.releaseFilter.source": "स्रोत",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "कोडेक",
+	"mediafiles.releaseFilter.audio": "आवाज़",
+	"mediafiles.releaseFilter.noLanguage": "नहीं बताई (ज़्यादातर मूल)",
+	"mediafiles.releaseFilter.unknown": "पता नहीं",
+	"mediafiles.releaseFilter.dual": "जर्मन + मूल (DL)",
+	"mediafiles.releaseFilter.subs": "{language} सबटाइटल"
 }

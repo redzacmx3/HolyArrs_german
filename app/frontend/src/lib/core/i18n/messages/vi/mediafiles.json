@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Đã xem {seen} / {of}",
 	"mediafiles.watched.partly": "Đã xem một phần",
 	"mediafiles.adopt.not_looked_up": "Chưa tra cứu",
-	"mediafiles.releaseSheet.showPickPart": "Để tìm kiếm, hãy dùng {choose} ở một mùa hoặc một tập."
+	"mediafiles.releaseSheet.showPickPart": "Để tìm kiếm, hãy dùng {choose} ở một mùa hoặc một tập.",
+	"mediafiles.releaseFilter.label": "Lọc bản phát hành",
+	"mediafiles.releaseFilter.any": "Tất cả",
+	"mediafiles.releaseFilter.clear": "Xóa bộ lọc",
+	"mediafiles.releaseFilter.lang": "Ngôn ngữ",
+	"mediafiles.releaseFilter.res": "Độ phân giải",
+	"mediafiles.releaseFilter.source": "Nguồn",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Âm thanh",
+	"mediafiles.releaseFilter.noLanguage": "Không ghi (thường là bản gốc)",
+	"mediafiles.releaseFilter.unknown": "Không rõ",
+	"mediafiles.releaseFilter.dual": "Tiếng Đức + gốc (DL)",
+	"mediafiles.releaseFilter.subs": "Phụ đề {language}"
 }

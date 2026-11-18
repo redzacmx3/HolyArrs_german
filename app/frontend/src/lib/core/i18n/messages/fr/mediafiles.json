@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} sur {of} vus",
 	"mediafiles.watched.partly": "Vu en partie",
 	"mediafiles.adopt.not_looked_up": "Non recherché",
-	"mediafiles.releaseSheet.showPickPart": "Pour chercher, utilisez {choose} sur une saison ou un épisode."
+	"mediafiles.releaseSheet.showPickPart": "Pour chercher, utilisez {choose} sur une saison ou un épisode.",
+	"mediafiles.releaseFilter.label": "Filtrer les releases",
+	"mediafiles.releaseFilter.any": "Toutes",
+	"mediafiles.releaseFilter.clear": "Effacer les filtres",
+	"mediafiles.releaseFilter.lang": "Langue",
+	"mediafiles.releaseFilter.res": "Résolution",
+	"mediafiles.releaseFilter.source": "Source",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Son",
+	"mediafiles.releaseFilter.noLanguage": "Non précisée (souvent l'original)",
+	"mediafiles.releaseFilter.unknown": "Inconnu",
+	"mediafiles.releaseFilter.dual": "Allemand + original (DL)",
+	"mediafiles.releaseFilter.subs": "Sous-titres {language}"
 }

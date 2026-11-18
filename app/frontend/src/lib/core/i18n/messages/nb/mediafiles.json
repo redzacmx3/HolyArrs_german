@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Sett {seen} av {of}",
 	"mediafiles.watched.partly": "Delvis sett",
 	"mediafiles.adopt.not_looked_up": "Ikke slått opp",
-	"mediafiles.releaseSheet.showPickPart": "For å søke, bruk {choose} på en sesong eller episode."
+	"mediafiles.releaseSheet.showPickPart": "For å søke, bruk {choose} på en sesong eller episode.",
+	"mediafiles.releaseFilter.label": "Filtrer releaser",
+	"mediafiles.releaseFilter.any": "Alle",
+	"mediafiles.releaseFilter.clear": "Fjern filtre",
+	"mediafiles.releaseFilter.lang": "Språk",
+	"mediafiles.releaseFilter.res": "Oppløsning",
+	"mediafiles.releaseFilter.source": "Kilde",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Lyd",
+	"mediafiles.releaseFilter.noLanguage": "Ikke oppgitt (oftest originalen)",
+	"mediafiles.releaseFilter.unknown": "Ukjent",
+	"mediafiles.releaseFilter.dual": "Tysk + original (DL)",
+	"mediafiles.releaseFilter.subs": "Undertekster på {language}"
 }

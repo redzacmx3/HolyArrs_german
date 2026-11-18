@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Žiūrėta {seen} iš {of}",
 	"mediafiles.watched.partly": "Iš dalies žiūrėta",
 	"mediafiles.adopt.not_looked_up": "Neieškota",
-	"mediafiles.releaseSheet.showPickPart": "Norėdami ieškoti, naudokite {choose} prie sezono ar epizodo."
+	"mediafiles.releaseSheet.showPickPart": "Norėdami ieškoti, naudokite {choose} prie sezono ar epizodo.",
+	"mediafiles.releaseFilter.label": "Filtruoti leidimus",
+	"mediafiles.releaseFilter.any": "Visi",
+	"mediafiles.releaseFilter.clear": "Išvalyti filtrus",
+	"mediafiles.releaseFilter.lang": "Kalba",
+	"mediafiles.releaseFilter.res": "Raiška",
+	"mediafiles.releaseFilter.source": "Šaltinis",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodekas",
+	"mediafiles.releaseFilter.audio": "Garsas",
+	"mediafiles.releaseFilter.noLanguage": "Nenurodyta (dažniausiai originalas)",
+	"mediafiles.releaseFilter.unknown": "Nežinoma",
+	"mediafiles.releaseFilter.dual": "Vokiečių + originalas (DL)",
+	"mediafiles.releaseFilter.subs": "Subtitrai: {language}"
 }

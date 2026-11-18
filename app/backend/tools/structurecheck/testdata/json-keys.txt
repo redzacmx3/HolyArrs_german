@@ -510,6 +510,7 @@ dropped_at
 dropped_season
 dry
 dry_run
+dual
 duplicates
 duration
 each_limit
@@ -1739,6 +1740,7 @@ sub
 sub_languages
 subdl
 subject
+subs
 subtitle
 subtitleId
 subtitles

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "ดูแล้ว {seen} จาก {of}",
 	"mediafiles.watched.partly": "ดูแล้วบางส่วน",
 	"mediafiles.adopt.not_looked_up": "ยังไม่ได้ค้นหา",
-	"mediafiles.releaseSheet.showPickPart": "หากต้องการค้นหา ให้ใช้ {choose} ที่ซีซันหรือตอน"
+	"mediafiles.releaseSheet.showPickPart": "หากต้องการค้นหา ให้ใช้ {choose} ที่ซีซันหรือตอน",
+	"mediafiles.releaseFilter.label": "กรองรีลีส",
+	"mediafiles.releaseFilter.any": "ทั้งหมด",
+	"mediafiles.releaseFilter.clear": "ล้างตัวกรอง",
+	"mediafiles.releaseFilter.lang": "ภาษา",
+	"mediafiles.releaseFilter.res": "ความละเอียด",
+	"mediafiles.releaseFilter.source": "แหล่งที่มา",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "โคเดก",
+	"mediafiles.releaseFilter.audio": "เสียง",
+	"mediafiles.releaseFilter.noLanguage": "ไม่ระบุ (ส่วนใหญ่เป็นต้นฉบับ)",
+	"mediafiles.releaseFilter.unknown": "ไม่ทราบ",
+	"mediafiles.releaseFilter.dual": "เยอรมัน + ต้นฉบับ (DL)",
+	"mediafiles.releaseFilter.subs": "คำบรรยาย{language}"
 }

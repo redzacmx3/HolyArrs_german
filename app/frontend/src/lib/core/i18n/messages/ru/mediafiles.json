@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Просмотрено {seen} из {of}",
 	"mediafiles.watched.partly": "Просмотрено частично",
 	"mediafiles.adopt.not_looked_up": "Не проверено",
-	"mediafiles.releaseSheet.showPickPart": "Чтобы искать, используйте «{choose}» у сезона или серии."
+	"mediafiles.releaseSheet.showPickPart": "Чтобы искать, используйте «{choose}» у сезона или серии.",
+	"mediafiles.releaseFilter.label": "Фильтр релизов",
+	"mediafiles.releaseFilter.any": "Все",
+	"mediafiles.releaseFilter.clear": "Сбросить фильтры",
+	"mediafiles.releaseFilter.lang": "Язык",
+	"mediafiles.releaseFilter.res": "Разрешение",
+	"mediafiles.releaseFilter.source": "Источник",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Кодек",
+	"mediafiles.releaseFilter.audio": "Звук",
+	"mediafiles.releaseFilter.noLanguage": "Не указан (обычно оригинал)",
+	"mediafiles.releaseFilter.unknown": "Неизвестно",
+	"mediafiles.releaseFilter.dual": "Немецкий + оригинал (DL)",
+	"mediafiles.releaseFilter.subs": "Субтитры: {language}"
 }

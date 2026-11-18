@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Vistos {seen} de {of}",
 	"mediafiles.watched.partly": "Vist en part",
 	"mediafiles.adopt.not_looked_up": "No cercat",
-	"mediafiles.releaseSheet.showPickPart": "Per cercar, fes servir {choose} en una temporada o un episodi."
+	"mediafiles.releaseSheet.showPickPart": "Per cercar, fes servir {choose} en una temporada o un episodi.",
+	"mediafiles.releaseFilter.label": "Filtra els releases",
+	"mediafiles.releaseFilter.any": "Tots",
+	"mediafiles.releaseFilter.clear": "Esborra els filtres",
+	"mediafiles.releaseFilter.lang": "Idioma",
+	"mediafiles.releaseFilter.res": "Resolució",
+	"mediafiles.releaseFilter.source": "Origen",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Còdec",
+	"mediafiles.releaseFilter.audio": "So",
+	"mediafiles.releaseFilter.noLanguage": "Sense indicar (sovint l'original)",
+	"mediafiles.releaseFilter.unknown": "Desconegut",
+	"mediafiles.releaseFilter.dual": "Alemany + original (DL)",
+	"mediafiles.releaseFilter.subs": "Subtítols en {language}"
 }

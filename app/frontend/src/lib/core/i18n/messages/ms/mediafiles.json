@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} daripada {of} ditonton",
 	"mediafiles.watched.partly": "Ditonton sebahagian",
 	"mediafiles.adopt.not_looked_up": "Belum dicari",
-	"mediafiles.releaseSheet.showPickPart": "Untuk mencari, gunakan {choose} pada musim atau episod."
+	"mediafiles.releaseSheet.showPickPart": "Untuk mencari, gunakan {choose} pada musim atau episod.",
+	"mediafiles.releaseFilter.label": "Tapis keluaran",
+	"mediafiles.releaseFilter.any": "Semua",
+	"mediafiles.releaseFilter.clear": "Kosongkan penapis",
+	"mediafiles.releaseFilter.lang": "Bahasa",
+	"mediafiles.releaseFilter.res": "Resolusi",
+	"mediafiles.releaseFilter.source": "Sumber",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Bunyi",
+	"mediafiles.releaseFilter.noLanguage": "Tidak dinyatakan (biasanya asal)",
+	"mediafiles.releaseFilter.unknown": "Tidak diketahui",
+	"mediafiles.releaseFilter.dual": "Jerman + asal (DL)",
+	"mediafiles.releaseFilter.subs": "Sari kata {language}"
 }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{of}টির মধ্যে {seen}টি দেখা হয়েছে",
 	"mediafiles.watched.partly": "আংশিক দেখা হয়েছে",
 	"mediafiles.adopt.not_looked_up": "খোঁজা হয়নি",
-	"mediafiles.releaseSheet.showPickPart": "খুঁজতে, কোনো সিজন বা পর্বে {choose} ব্যবহার করুন।"
+	"mediafiles.releaseSheet.showPickPart": "খুঁজতে, কোনো সিজন বা পর্বে {choose} ব্যবহার করুন।",
+	"mediafiles.releaseFilter.label": "রিলিজ ফিল্টার করুন",
+	"mediafiles.releaseFilter.any": "সব",
+	"mediafiles.releaseFilter.clear": "ফিল্টার মুছুন",
+	"mediafiles.releaseFilter.lang": "ভাষা",
+	"mediafiles.releaseFilter.res": "রেজোলিউশন",
+	"mediafiles.releaseFilter.source": "উৎস",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "কোডেক",
+	"mediafiles.releaseFilter.audio": "শব্দ",
+	"mediafiles.releaseFilter.noLanguage": "উল্লেখ নেই (সাধারণত মূল)",
+	"mediafiles.releaseFilter.unknown": "অজানা",
+	"mediafiles.releaseFilter.dual": "জার্মান + মূল (DL)",
+	"mediafiles.releaseFilter.subs": "{language} সাবটাইটেল"
 }

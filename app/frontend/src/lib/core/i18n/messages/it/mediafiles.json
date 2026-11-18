@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Visti {seen} di {of}",
 	"mediafiles.watched.partly": "Visto in parte",
 	"mediafiles.adopt.not_looked_up": "Non cercato",
-	"mediafiles.releaseSheet.showPickPart": "Per cercare, usa {choose} su una stagione o un episodio."
+	"mediafiles.releaseSheet.showPickPart": "Per cercare, usa {choose} su una stagione o un episodio.",
+	"mediafiles.releaseFilter.label": "Filtra le release",
+	"mediafiles.releaseFilter.any": "Tutte",
+	"mediafiles.releaseFilter.clear": "Azzera i filtri",
+	"mediafiles.releaseFilter.lang": "Lingua",
+	"mediafiles.releaseFilter.res": "Risoluzione",
+	"mediafiles.releaseFilter.source": "Sorgente",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Audio",
+	"mediafiles.releaseFilter.noLanguage": "Non indicata (di solito l'originale)",
+	"mediafiles.releaseFilter.unknown": "Sconosciuto",
+	"mediafiles.releaseFilter.dual": "Tedesco + originale (DL)",
+	"mediafiles.releaseFilter.subs": "Sottotitoli {language}"
 }

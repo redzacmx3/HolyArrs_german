@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Katsottu {seen} / {of}",
 	"mediafiles.watched.partly": "Osittain katsottu",
 	"mediafiles.adopt.not_looked_up": "Ei haettu",
-	"mediafiles.releaseSheet.showPickPart": "Hae käyttämällä toimintoa {choose} kaudella tai jaksolla."
+	"mediafiles.releaseSheet.showPickPart": "Hae käyttämällä toimintoa {choose} kaudella tai jaksolla.",
+	"mediafiles.releaseFilter.label": "Suodata julkaisuja",
+	"mediafiles.releaseFilter.any": "Kaikki",
+	"mediafiles.releaseFilter.clear": "Tyhjennä suodattimet",
+	"mediafiles.releaseFilter.lang": "Kieli",
+	"mediafiles.releaseFilter.res": "Resoluutio",
+	"mediafiles.releaseFilter.source": "Lähde",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Koodekki",
+	"mediafiles.releaseFilter.audio": "Ääni",
+	"mediafiles.releaseFilter.noLanguage": "Ei mainittu (yleensä alkuperäinen)",
+	"mediafiles.releaseFilter.unknown": "Tuntematon",
+	"mediafiles.releaseFilter.dual": "Saksa + alkuperäinen (DL)",
+	"mediafiles.releaseFilter.subs": "Tekstitys: {language}"
 }

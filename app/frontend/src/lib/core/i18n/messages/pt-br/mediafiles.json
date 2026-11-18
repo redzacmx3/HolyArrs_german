@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} de {of} assistidos",
 	"mediafiles.watched.partly": "Assistido em parte",
 	"mediafiles.adopt.not_looked_up": "Não buscado",
-	"mediafiles.releaseSheet.showPickPart": "Para buscar, use {choose} em uma temporada ou episódio."
+	"mediafiles.releaseSheet.showPickPart": "Para buscar, use {choose} em uma temporada ou episódio.",
+	"mediafiles.releaseFilter.label": "Filtrar releases",
+	"mediafiles.releaseFilter.any": "Todos",
+	"mediafiles.releaseFilter.clear": "Limpar filtros",
+	"mediafiles.releaseFilter.lang": "Idioma",
+	"mediafiles.releaseFilter.res": "Resolução",
+	"mediafiles.releaseFilter.source": "Origem",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Som",
+	"mediafiles.releaseFilter.noLanguage": "Não informado (quase sempre o original)",
+	"mediafiles.releaseFilter.unknown": "Desconhecido",
+	"mediafiles.releaseFilter.dual": "Alemão + original (DL)",
+	"mediafiles.releaseFilter.subs": "Legendas em {language}"
 }

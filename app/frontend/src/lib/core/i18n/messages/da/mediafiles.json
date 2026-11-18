@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Set {seen} af {of}",
 	"mediafiles.watched.partly": "Delvist set",
 	"mediafiles.adopt.not_looked_up": "Ikke slået op",
-	"mediafiles.releaseSheet.showPickPart": "For at søge skal du bruge {choose} på en sæson eller et afsnit."
+	"mediafiles.releaseSheet.showPickPart": "For at søge skal du bruge {choose} på en sæson eller et afsnit.",
+	"mediafiles.releaseFilter.label": "Filtrér releases",
+	"mediafiles.releaseFilter.any": "Alle",
+	"mediafiles.releaseFilter.clear": "Ryd filtre",
+	"mediafiles.releaseFilter.lang": "Sprog",
+	"mediafiles.releaseFilter.res": "Opløsning",
+	"mediafiles.releaseFilter.source": "Kilde",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Lyd",
+	"mediafiles.releaseFilter.noLanguage": "Ikke angivet (oftest originalen)",
+	"mediafiles.releaseFilter.unknown": "Ukendt",
+	"mediafiles.releaseFilter.dual": "Tysk + original (DL)",
+	"mediafiles.releaseFilter.subs": "Undertekster på {language}"
 }

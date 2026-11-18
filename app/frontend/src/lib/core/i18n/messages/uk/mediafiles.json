@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Переглянуто {seen} із {of}",
 	"mediafiles.watched.partly": "Переглянуто частково",
 	"mediafiles.adopt.not_looked_up": "Не перевірено",
-	"mediafiles.releaseSheet.showPickPart": "Щоб шукати, використайте «{choose}» біля сезону чи серії."
+	"mediafiles.releaseSheet.showPickPart": "Щоб шукати, використайте «{choose}» біля сезону чи серії.",
+	"mediafiles.releaseFilter.label": "Фільтр релізів",
+	"mediafiles.releaseFilter.any": "Усі",
+	"mediafiles.releaseFilter.clear": "Скинути фільтри",
+	"mediafiles.releaseFilter.lang": "Мова",
+	"mediafiles.releaseFilter.res": "Роздільність",
+	"mediafiles.releaseFilter.source": "Джерело",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Кодек",
+	"mediafiles.releaseFilter.audio": "Звук",
+	"mediafiles.releaseFilter.noLanguage": "Не вказано (зазвичай оригінал)",
+	"mediafiles.releaseFilter.unknown": "Невідомо",
+	"mediafiles.releaseFilter.dual": "Німецька + оригінал (DL)",
+	"mediafiles.releaseFilter.subs": "Субтитри: {language}"
 }

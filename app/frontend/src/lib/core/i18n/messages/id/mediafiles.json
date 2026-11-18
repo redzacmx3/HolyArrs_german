@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} dari {of} ditonton",
 	"mediafiles.watched.partly": "Ditonton sebagian",
 	"mediafiles.adopt.not_looked_up": "Belum dicari",
-	"mediafiles.releaseSheet.showPickPart": "Untuk mencari, gunakan {choose} pada musim atau episode."
+	"mediafiles.releaseSheet.showPickPart": "Untuk mencari, gunakan {choose} pada musim atau episode.",
+	"mediafiles.releaseFilter.label": "Saring rilis",
+	"mediafiles.releaseFilter.any": "Semua",
+	"mediafiles.releaseFilter.clear": "Hapus saringan",
+	"mediafiles.releaseFilter.lang": "Bahasa",
+	"mediafiles.releaseFilter.res": "Resolusi",
+	"mediafiles.releaseFilter.source": "Sumber",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Suara",
+	"mediafiles.releaseFilter.noLanguage": "Tidak disebut (biasanya asli)",
+	"mediafiles.releaseFilter.unknown": "Tidak diketahui",
+	"mediafiles.releaseFilter.dual": "Jerman + asli (DL)",
+	"mediafiles.releaseFilter.subs": "Subtitel {language}"
 }
