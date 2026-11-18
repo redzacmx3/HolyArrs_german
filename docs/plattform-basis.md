@@ -95,3 +95,38 @@ Dann geht es weiter vom letzten AGPL-Stand, und von Upstream kommen nur noch Sic
 
 - Ob Upstream deutsche Sonderfälle annimmt. Das klärt das erste Issue, am besten mit dem kleinsten Kandidaten (WebHD oder German DL im Parser).
 - Wie es um das Tempo in ein paar Monaten steht. Neun Tage Historie reichen nicht, um das sicher zu sagen; die Auslöser oben fangen das ab.
+
+## Andere Projekte im Vergleich (18.11.2026)
+
+Geprüft wurden die Repos selbst (Code, Historie, README), nicht die laufenden Apps.
+
+| | **HolyArrs** (heute) | **Mydia** | **Cinephage** | **MediaManager** |
+|---|---|---|---|---|
+| Repo | HolyArrs/HolyArrs | getmydia/mydia | Cinephage/Cinephage | maxdorninger/MediaManager |
+| Technik | Go + SvelteKit | Elixir (Phoenix) + Rust, Player in Flutter | TypeScript, SvelteKit, SQLite | Python + Svelte |
+| Größe (Codezeilen, grob) | ~600.000 mit Tests | ~560.000 ohne Tests | ~400.000 ohne Tests | ~27.000 ohne Tests |
+| Öffentlich seit | 11/2026 (Version 1.0) | 11/2025 | 12/2025 | 02/2025 |
+| Letzter Commit | 18.11.2026 | 18.11.2026 | 03.11.2026 | 05.07.2026 |
+| Tempo zuletzt | 46 Commits in 10 Tagen | 2.000 bis 2.700 Commits pro Monat | 150 bis 300 pro Monat, im November 5 | seit Juli nichts |
+| Wer pflegt | fast nur eine Person | fast nur eine Person (10.300 von 10.500 Commits) | zwei Hauptleute, gut 20 insgesamt | eine Hauptperson, rund 35 insgesamt |
+| Lizenz | AGPL-3.0 + CLA | AGPL-3.0 | GPL-3.0 | AGPL-3.0 |
+| Ersetzt | Sonarr, Radarr, Prowlarr, Seerr, Bazarr, Lidarr | Sonarr, Radarr, Prowlarr, Overseerr | Sonarr, Radarr, Prowlarr, Bazarr, Overseerr, FlareSolverr, IPTV | Sonarr, Radarr (Grundfunktionen) |
+| Deutsche Releases | im Fork gebaut (German DL/ML, TRaSH-Sprache, FuN, TVmaze) | Sprachwunsch wie `["de", "original"]`, Parser mit Radarr/Sonarr-Testkorpus | nur Sprachauswahl, kein German-DL-Parser gefunden | nichts gefunden |
+| TRaSH-Profile | ja | ja (Custom Formats) | eigene Punkte, TRaSH-Benennung | nein |
+| Anfragen / Familie | ja, Seerr-Plan im Fork | Gäste fragen an, Admin gibt frei | Listen, kaum Anfragen | einfache Anfragen |
+| TV-Gerät | Web-App, eigene TV-App geplant | **eigener Player für Android TV**, iOS, Desktop, Web | Web-App | Web-App |
+
+### Einschätzung
+
+- **Mydia** ist die einzige ernsthafte Alternative. Es ist ein Jahr älter, bei deutschen Releases schon weiter als HolyArrs ohne Fork und hat mit dem eigenen Player für Android TV etwas, das zu Fire TV und Google TV passt. Dagegen spricht: Elixir und Rust sind eine Technik, in der ein Fork für dich schwerer zu pflegen ist als Go. Und es hängt genauso an einer einzigen Person wie HolyArrs, bei einem Tempo, das ein Fork kaum mitgehen kann.
+- **Cinephage** setzt auf Streaming über `.strm`-Dateien aus Online-Quellen, das Umgehen von Cloudflare und das Absuchen von IPTV-Portalen nach MAC-Adressen. Das ist rechtlich und technisch wackelig und hat mit deinen Zielen (deutsche Releases, Familie, wenig Pflege) wenig zu tun. Im November ist es fast still.
+- **MediaManager** ist klein und seit über vier Monaten ohne Commit. Es kann deutlich weniger als HolyArrs und kommt nicht in Frage.
+
+### Folgerung
+
+Ein Wechsel des Unterbaus lohnt sich jetzt nicht. Alles, was im Fork für deutsche Releases und Kinderserien gebaut ist (rund 20 PRs), müsste neu entstehen, und bei Mydia in einer anderen Sprache. Der Nutzen wäre vor allem der TV-Player.
+
+Zwei Dinge lohnen sich trotzdem:
+
+1. **Mydia als Plan B.** Falls einer der Auslöser oben eintritt (Upstream still, Lizenzwechsel, Richtung passt nicht mehr), ist Mydia der erste Kandidat und nicht ein eigener Neubau. Vorher einmal testen: eine Testinstanz mit deinen Indexern und einem PAW-Patrol-Fall.
+2. **Mydia Player für den Fernseher ansehen.** Laut README spielt er auch ohne Mydia Server von Jellyfin ab. Falls er auf Fire TV gut läuft, spart das vielleicht einen Teil der eigenen TV-App. Anfragen bleiben dann in HolyArrs.
