@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Julkaisunimien numerointi",
 	"discover.titleLibrary.releaseNumbersOrder": "Tämän järjestyksen mukaan",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB:n mukaan",
-	"discover.titleLibrary.releaseNumbersHint": "Miten julkaisunimet numeroivat jaksot. Tiedostot pitävät tämän järjestyksen numerot."
+	"discover.titleLibrary.releaseNumbersHint": "Miten julkaisunimet numeroivat jaksot. Tiedostot pitävät tämän järjestyksen numerot.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB):n mukaan"
 }

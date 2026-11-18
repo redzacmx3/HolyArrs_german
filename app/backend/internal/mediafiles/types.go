@@ -38,7 +38,7 @@ type Title struct {
 	MetadataSource   string            `db:"metadata_source"` // tmdb, tvmaze, tvdb, musicbrainz
 	EpisodeOrder     *string           `db:"episode_order"`
 	EpisodeGroupID   *string           `db:"episode_group_id"` // the TMDB episode order followed; nil: TMDB's own
-	ReleaseNumbers   string            `db:"release_numbers"`  // how release names number episodes: "" by the chosen order, "tmdb" by TMDB's own
+	ReleaseNumbers   string            `db:"release_numbers"`  // how release names number episodes: "" by the chosen order, "tmdb" by TMDB's own, "tvmaze" by TVmaze's
 	KeepUpToDate     bool              `db:"keep_up_to_date"`
 	NewPartsPolicy   string            `db:"new_parts_policy"` // all, future_only, none
 	ReleaseGate      string            `db:"release_gate"`     // announced, in_cinemas, released
@@ -140,6 +140,11 @@ type Numbers struct {
 	AltEpisode *int `json:"alt_episode,omitempty"`
 	Disc       *int `json:"disc,omitempty"`
 	Track      *int `json:"track,omitempty"`
+
+	// NameSeason and NameEpisode are TVmaze's numbers for the episode, read
+	// when release names count by TVmaze (titles.release_numbers tvmaze).
+	NameSeason  *int `json:"name_season,omitempty"`
+	NameEpisode *int `json:"name_episode,omitempty"`
 }
 
 // Item is the smallest wanted unit. A movie is its own single Item.

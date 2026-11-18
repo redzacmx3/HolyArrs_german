@@ -190,25 +190,7 @@ func (im *Importer) byHandTitle(ctx context.Context, db *sql.DB, cache map[int64
 	return bt, nil
 }
 
-func episodeRef(it mediafiles.Item) mediafiles.EpisodeRef {
-	r := mediafiles.EpisodeRef{ItemID: it.ID}
-	if it.Numbers.Season != nil {
-		r.Season = *it.Numbers.Season
-	}
-	if it.Numbers.Episode != nil {
-		r.Episode = *it.Numbers.Episode
-	}
-	if it.Numbers.Absolute != nil {
-		r.Absolute = *it.Numbers.Absolute
-	}
-	if it.Numbers.AltSeason != nil && it.Numbers.AltEpisode != nil {
-		r.AltSeason, r.AltEpisode = *it.Numbers.AltSeason, *it.Numbers.AltEpisode
-	}
-	if it.AirDay != nil {
-		r.AirDay = *it.AirDay
-	}
-	return r
-}
+func episodeRef(it mediafiles.Item) mediafiles.EpisodeRef { return mediafiles.RefOf(it) }
 
 // ScanByHand lists the importable files under root.
 func (im *Importer) ScanByHand(ctx context.Context, root string) (ByHandScan, error) {

@@ -198,22 +198,7 @@ func (s *Searcher) loadShow(ctx context.Context, ti mediafiles.Title, ver mediaf
 	soon := time.Now().Add(24 * time.Hour)
 	for _, it := range its {
 		e := epSlot{it: it, sl: byItem[it.ID]}
-		e.ref = mediafiles.EpisodeRef{ItemID: it.ID}
-		if it.Numbers.Season != nil {
-			e.ref.Season = *it.Numbers.Season
-		}
-		if it.Numbers.Episode != nil {
-			e.ref.Episode = *it.Numbers.Episode
-		}
-		if it.Numbers.Absolute != nil {
-			e.ref.Absolute = *it.Numbers.Absolute
-		}
-		if it.Numbers.AltSeason != nil && it.Numbers.AltEpisode != nil {
-			e.ref.AltSeason, e.ref.AltEpisode = *it.Numbers.AltSeason, *it.Numbers.AltEpisode
-		}
-		if it.AirDay != nil {
-			e.ref.AirDay = *it.AirDay
-		}
+		e.ref = mediafiles.RefOf(it)
 		if it.Runtime != nil {
 			e.runtime = *it.Runtime
 		}

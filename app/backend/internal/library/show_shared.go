@@ -233,7 +233,7 @@ var (
 	ErrNoShowSources      = errors.New("show details sources are not set up")
 	ErrNoSuchSeason       = errors.New("the show has no such season")
 	ErrBadPackWindow      = errors.New("pack_window must be between 0 and 10")
-	ErrBadReleaseNumbers  = errors.New(`release_numbers must be "" or tmdb`)
+	ErrBadReleaseNumbers  = errors.New(`release_numbers must be "", tmdb or tvmaze`)
 )
 
 // MaxPackWindow is the most episodes ahead a season pack may fetch.

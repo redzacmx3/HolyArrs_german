@@ -129,7 +129,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 	}
 	t := ShowTarget{LibraryPath: lf.Path, Show: mediafiles.TitleRef{ID: ti.ID, Name: ti.Name, Aliases: OtherNames(ti), Year: year, Kind: "show"},
 		IDs: ti.SourceIDs, Order: mediafiles.OrderAired, ReleaseName: relName, Naming: &ns, ByOrder: ti.EpisodeGroupID != nil && *ti.EpisodeGroupID != "",
-		TMDBNames: ti.TMDBNames()}
+		ReleaseNames: ti.ReleaseNames()}
 	if ti.EpisodeOrder != nil && *ti.EpisodeOrder != "" {
 		t.Order = *ti.EpisodeOrder
 	}
@@ -138,22 +138,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 		t.FolderName = mediafiles.ShowFolder(ns, mediafiles.NameFacts{Title: ti.Name, Year: year})
 	}
 	for _, it := range items {
-		e := Episode{Ref: mediafiles.EpisodeRef{ItemID: it.ID}, SlotID: slotOf[it.ID]}
-		if it.Numbers.Season != nil {
-			e.Ref.Season = *it.Numbers.Season
-		}
-		if it.Numbers.Episode != nil {
-			e.Ref.Episode = *it.Numbers.Episode
-		}
-		if it.Numbers.Absolute != nil {
-			e.Ref.Absolute = *it.Numbers.Absolute
-		}
-		if it.Numbers.AltSeason != nil && it.Numbers.AltEpisode != nil {
-			e.Ref.AltSeason, e.Ref.AltEpisode = *it.Numbers.AltSeason, *it.Numbers.AltEpisode
-		}
-		if it.AirDay != nil {
-			e.Ref.AirDay = *it.AirDay
-		}
+		e := Episode{Ref: mediafiles.RefOf(it), SlotID: slotOf[it.ID]}
 		if it.Name != nil {
 			e.Name = *it.Name
 		}

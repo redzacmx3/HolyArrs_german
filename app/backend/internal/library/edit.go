@@ -32,9 +32,9 @@ type TitleChange struct {
 	// EpisodeGroupID picks one of the show's TMDB episode orders; "" goes
 	// back to TMDB's own numbering.
 	EpisodeGroupID *string `json:"episode_group_id"`
-	// ReleaseNumbers is how release names number the episodes of a show
-	// that follows a chosen episode order: "" by that order, "tmdb" by
-	// TMDB's own numbering.
+	// ReleaseNumbers is how release names number the episodes of a show:
+	// "" by its episode order, "tmdb" by TMDB's own numbering (with a
+	// chosen order), "tvmaze" by TVmaze's numbering, which follows TVDB.
 	ReleaseNumbers *string `json:"release_numbers"`
 	// PackWindow takes a season pack a few episodes at a time (0 = off).
 	PackWindow *int `json:"pack_window"`
@@ -93,7 +93,7 @@ func (s *Service) Edit(ctx context.Context, titleID int64, c TitleChange, dryRun
 		return res, ErrBadOrder
 	case c.NewSeasons != nil && *c.NewSeasons != "all" && *c.NewSeasons != "none":
 		return res, ErrBadNewSeasons
-	case c.ReleaseNumbers != nil && *c.ReleaseNumbers != "" && *c.ReleaseNumbers != mediafiles.ReleaseNumbersTMDB:
+	case c.ReleaseNumbers != nil && *c.ReleaseNumbers != "" && *c.ReleaseNumbers != mediafiles.ReleaseNumbersTMDB && *c.ReleaseNumbers != mediafiles.ReleaseNumbersTVmaze:
 		return res, ErrBadReleaseNumbers
 	}
 	if c.EpisodeGroupID != nil && *c.EpisodeGroupID != "" {

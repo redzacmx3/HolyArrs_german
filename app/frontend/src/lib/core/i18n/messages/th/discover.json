@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "การนับเลขในชื่อรีลีส",
 	"discover.titleLibrary.releaseNumbersOrder": "ตามลำดับนี้",
 	"discover.titleLibrary.releaseNumbersTmdb": "ตาม TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "ชื่อรีลีสนับเลขตอนอย่างไร ไฟล์ยังคงใช้เลขของลำดับนี้"
+	"discover.titleLibrary.releaseNumbersHint": "ชื่อรีลีสนับเลขตอนอย่างไร ไฟล์ยังคงใช้เลขของลำดับนี้",
+	"discover.titleLibrary.releaseNumbersTvmaze": "ตาม TVmaze (TVDB)"
 }

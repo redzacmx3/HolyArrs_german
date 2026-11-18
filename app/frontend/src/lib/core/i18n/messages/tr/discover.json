@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Sürüm adlarının numaralaması",
 	"discover.titleLibrary.releaseNumbersOrder": "Bu sıraya göre",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB'ye göre",
-	"discover.titleLibrary.releaseNumbersHint": "Sürüm adlarının bölümleri nasıl numaralandırdığı. Dosyalar bu sıranın numaralarını korur."
+	"discover.titleLibrary.releaseNumbersHint": "Sürüm adlarının bölümleri nasıl numaralandırdığı. Dosyalar bu sıranın numaralarını korur.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)'ye göre"
 }

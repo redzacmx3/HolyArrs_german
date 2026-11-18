@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Leidimų numeracija",
 	"discover.titleLibrary.releaseNumbersOrder": "Pagal šią tvarką",
 	"discover.titleLibrary.releaseNumbersTmdb": "Pagal TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Kaip leidimų pavadinimai numeruoja serijas. Failai išlaiko šios tvarkos numerius."
+	"discover.titleLibrary.releaseNumbersHint": "Kaip leidimų pavadinimai numeruoja serijas. Failai išlaiko šios tvarkos numerius.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Pagal TVmaze (TVDB)"
 }

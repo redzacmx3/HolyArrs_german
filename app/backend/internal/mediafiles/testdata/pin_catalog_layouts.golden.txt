@@ -95,6 +95,8 @@ AltSeason *int `json:"alt_season,omitempty"`
 AltEpisode *int `json:"alt_episode,omitempty"`
 Disc *int `json:"disc,omitempty"`
 Track *int `json:"track,omitempty"`
+NameSeason *int `json:"name_season,omitempty"`
+NameEpisode *int `json:"name_episode,omitempty"`
 == Item
 Meta Meta ``
 TitleID int64 `db:"title_id"`

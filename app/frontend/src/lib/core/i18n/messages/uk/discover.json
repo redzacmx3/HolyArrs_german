@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Нумерація релізів",
 	"discover.titleLibrary.releaseNumbersOrder": "За цим порядком",
 	"discover.titleLibrary.releaseNumbersTmdb": "За TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Як назви релізів нумерують серії. Файли зберігають номери цього порядку."
+	"discover.titleLibrary.releaseNumbersHint": "Як назви релізів нумерують серії. Файли зберігають номери цього порядку.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "За TVmaze (TVDB)"
 }

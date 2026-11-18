@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "リリース名の番号",
 	"discover.titleLibrary.releaseNumbersOrder": "この順序で",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDBで",
-	"discover.titleLibrary.releaseNumbersHint": "リリース名がエピソードに付ける番号です。ファイルはこの順序の番号のままです。"
+	"discover.titleLibrary.releaseNumbersHint": "リリース名がエピソードに付ける番号です。ファイルはこの順序の番号のままです。",
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)で"
 }

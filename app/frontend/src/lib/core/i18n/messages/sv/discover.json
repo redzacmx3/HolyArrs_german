@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Releasenamnens numrering",
 	"discover.titleLibrary.releaseNumbersOrder": "Enligt denna ordning",
 	"discover.titleLibrary.releaseNumbersTmdb": "Enligt TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Hur releasenamn numrerar avsnitten. Filer behåller denna ordnings nummer."
+	"discover.titleLibrary.releaseNumbersHint": "Hur releasenamn numrerar avsnitten. Filer behåller denna ordnings nummer.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Enligt TVmaze (TVDB)"
 }

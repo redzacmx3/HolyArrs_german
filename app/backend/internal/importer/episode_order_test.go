@@ -49,7 +49,7 @@ func TestPlanRefusesOrderNameClash(t *testing.T) {
 	}
 }
 
-// With release names read by TMDB's numbers (TMDBNames), a file named
+// With release names read by TMDB's numbers (ReleaseNames tmdb), a file named
 // S02E46 fills the episode TMDB numbers S02E46 and is named by the chosen
 // order (S03E47), not the episode the order calls S02E46.
 func TestPlanTMDBNames(t *testing.T) {
@@ -60,8 +60,12 @@ func TestPlanTMDBNames(t *testing.T) {
 		{Ref: mediafiles.EpisodeRef{ItemID: 2, Season: 2, Episode: 45, AltSeason: 2, AltEpisode: 46}, Name: "Pups Save the Bunnies", SlotID: 12, Wanted: true},
 	}
 	for _, tmdb := range []bool{true, false} {
+		names := ""
+		if tmdb {
+			names = mediafiles.ReleaseNumbersTMDB
+		}
 		tgt := ShowTarget{LibraryPath: "/lib", FolderName: "PAW Patrol (2013)", Show: mediafiles.TitleRef{Name: "PAW Patrol", Year: 2013}, Order: mediafiles.OrderAired,
-			Naming: &ns, Episodes: eps, ByOrder: true, TMDBNames: tmdb}
+			Naming: &ns, Episodes: eps, ByOrder: true, ReleaseNames: names}
 		steps := PlanEpisodes([]Candidate{{Path: "/dl/PAW.Patrol.S02E46.German.AC3.DL.1080p.WebHD.x265-FuN.mkv", Size: 1}}, tgt)
 		want := "S02E46"
 		if tmdb {
@@ -69,6 +73,31 @@ func TestPlanTMDBNames(t *testing.T) {
 		}
 		if steps[0].Method == "refuse" || steps[0].Method == "skip" || !strings.Contains(steps[0].TargetPath, want) {
 			t.Fatalf("tmdb %v: want %s, got %+v", tmdb, want, steps[0])
+		}
+	}
+}
+
+// With release names read by TVmaze's numbers (ReleaseNames tvmaze), a
+// FuN double episode S02E40-E41 fills the two episodes TVmaze numbers so
+// and is named by the chosen order; an episode without TVmaze numbers is
+// not matched by its other numbers.
+func TestPlanTVmazeNames(t *testing.T) {
+	ns := mediafiles.NamingDefaults()
+	ns.RenameOnImport = true
+	eps := []Episode{
+		{Ref: mediafiles.EpisodeRef{ItemID: 1, Season: 2, Episode: 46, AltSeason: 3, AltEpisode: 47, NameSeason: 2, NameEpisode: 41}, Name: "Pups Save an Eagle", SlotID: 11, Wanted: true},
+		{Ref: mediafiles.EpisodeRef{ItemID: 2, Season: 2, Episode: 45, AltSeason: 3, AltEpisode: 46, NameSeason: 2, NameEpisode: 40}, Name: "Pups Save the Woof and Roll Show", SlotID: 12, Wanted: true},
+		{Ref: mediafiles.EpisodeRef{ItemID: 3, Season: 2, Episode: 41, AltSeason: 2, AltEpisode: 41}, Name: "Not on TVmaze", SlotID: 13, Wanted: true},
+	}
+	tgt := ShowTarget{LibraryPath: "/lib", FolderName: "PAW Patrol (2013)", Show: mediafiles.TitleRef{Name: "PAW Patrol", Year: 2013}, Order: mediafiles.OrderAired,
+		Naming: &ns, Episodes: eps, ByOrder: true, ReleaseNames: mediafiles.ReleaseNumbersTVmaze}
+	steps := PlanEpisodes([]Candidate{{Path: "/dl/PAW.Patrol.S02E40-E41.German.AC3.DL.1080p.WebHD.x265-FuN.mkv", Size: 1}}, tgt)
+	if steps[0].Method == "refuse" || steps[0].Method == "skip" || len(steps[0].TargetSlotIDs) != 2 || !strings.Contains(steps[0].TargetPath, "S03E46") {
+		t.Fatalf("want S03E46-E47 for slots 12 and 11, got %+v", steps[0])
+	}
+	for _, id := range steps[0].TargetSlotIDs {
+		if id == 13 {
+			t.Fatalf("the episode without TVmaze numbers was matched: %+v", steps[0])
 		}
 	}
 }

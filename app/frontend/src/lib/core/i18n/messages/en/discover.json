@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Release names count",
 	"discover.titleLibrary.releaseNumbersOrder": "By this order",
 	"discover.titleLibrary.releaseNumbersTmdb": "By TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "How release names number the episodes. Files keep this order's numbers."
+	"discover.titleLibrary.releaseNumbersHint": "How release names number the episodes. Files keep this order's numbers.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "By TVmaze (TVDB)"
 }

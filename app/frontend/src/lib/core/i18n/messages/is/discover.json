@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Númer í útgáfuheitum",
 	"discover.titleLibrary.releaseNumbersOrder": "Eftir þessari röð",
 	"discover.titleLibrary.releaseNumbersTmdb": "Eftir TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Hvernig útgáfuheiti tölusetja þættina. Skrár halda númerum þessarar raðar."
+	"discover.titleLibrary.releaseNumbersHint": "Hvernig útgáfuheiti tölusetja þættina. Skrár halda númerum þessarar raðar.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Eftir TVmaze (TVDB)"
 }

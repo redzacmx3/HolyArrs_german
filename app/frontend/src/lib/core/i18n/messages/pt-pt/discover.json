@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Numeração das releases",
 	"discover.titleLibrary.releaseNumbersOrder": "Por esta ordem",
 	"discover.titleLibrary.releaseNumbersTmdb": "Pelo TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Como os nomes das releases numeram os episódios. Os ficheiros mantêm os números desta ordem."
+	"discover.titleLibrary.releaseNumbersHint": "Como os nomes das releases numeram os episódios. Os ficheiros mantêm os números desta ordem.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Pelo TVmaze (TVDB)"
 }

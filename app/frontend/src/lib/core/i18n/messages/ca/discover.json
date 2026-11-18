@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Numeració de les releases",
 	"discover.titleLibrary.releaseNumbersOrder": "Segons aquest ordre",
 	"discover.titleLibrary.releaseNumbersTmdb": "Segons TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Com numeren els episodis els noms de release. Els fitxers mantenen els números d'aquest ordre."
+	"discover.titleLibrary.releaseNumbersHint": "Com numeren els episodis els noms de release. Els fitxers mantenen els números d'aquest ordre.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Segons TVmaze (TVDB)"
 }

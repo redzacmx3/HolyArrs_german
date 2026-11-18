@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Αρίθμηση κυκλοφοριών",
 	"discover.titleLibrary.releaseNumbersOrder": "Με αυτή τη σειρά",
 	"discover.titleLibrary.releaseNumbersTmdb": "Με το TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Πώς αριθμούν τα επεισόδια τα ονόματα κυκλοφοριών. Τα αρχεία κρατούν τους αριθμούς αυτής της σειράς."
+	"discover.titleLibrary.releaseNumbersHint": "Πώς αριθμούν τα επεισόδια τα ονόματα κυκλοφοριών. Τα αρχεία κρατούν τους αριθμούς αυτής της σειράς.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Με το TVmaze (TVDB)"
 }

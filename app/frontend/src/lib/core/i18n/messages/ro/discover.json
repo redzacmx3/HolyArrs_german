@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Numerotarea lansărilor",
 	"discover.titleLibrary.releaseNumbersOrder": "După această ordine",
 	"discover.titleLibrary.releaseNumbersTmdb": "După TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Cum numerotează numele lansărilor episoadele. Fișierele păstrează numerele acestei ordini."
+	"discover.titleLibrary.releaseNumbersHint": "Cum numerotează numele lansărilor episoadele. Fișierele păstrează numerele acestei ordini.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "După TVmaze (TVDB)"
 }

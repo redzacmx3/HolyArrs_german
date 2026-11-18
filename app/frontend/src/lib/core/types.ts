@@ -140,7 +140,7 @@ export interface ShowInfo {
 	new_seasons: string;
 	// Episodes ahead a season pack fetches; 0 or missing gets the whole season.
 	pack_window?: number;
-	// How release names number episodes under a chosen order: '' by it, 'tmdb' by TMDB.
+	// How release names number episodes: '' by the order, 'tmdb' by TMDB (chosen order only), 'tvmaze' by TVmaze (like TVDB).
 	release_numbers?: string;
 	status: string;
 	network?: string;
