@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Megjelenik",
 	"discover.popularRail.comingDay": "Érkezik",
 	"discover.titleLibrary.turnShowOnHint": "Kapcsold be a sorozatot, hogy elinduljon a keresés.",
-	"discover.leftovers.reason.seasons_differ": "Csak a régi alkalmazás TMDB-száma alapján található meg: ellenőrizd, hogy ugyanaz a sorozat-e, majd párosítsd a fájlt magad"
+	"discover.leftovers.reason.seasons_differ": "Csak a régi alkalmazás TMDB-száma alapján található meg: ellenőrizd, hogy ugyanaz a sorozat-e, majd párosítsd a fájlt magad",
+	"discover.titleLibrary.releaseNumbers": "Kiadásnevek számozása",
+	"discover.titleLibrary.releaseNumbersOrder": "E sorrend szerint",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB szerint",
+	"discover.titleLibrary.releaseNumbersHint": "Hogyan számozzák a kiadásnevek az epizódokat. A fájlok megtartják e sorrend számait."
 }

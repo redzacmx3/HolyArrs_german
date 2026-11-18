@@ -12,24 +12,26 @@ import (
 
 // Info is what a show's page needs besides the shared Title fields.
 type Info struct {
-	DetailsSource string          `json:"details_source"`
-	EpisodeOrder  string          `json:"episode_order"`
-	SeasonChoice  string          `json:"season_choice,omitempty"`
-	NewSeasons    string          `json:"new_seasons"`
-	PackWindow    int             `json:"pack_window"`
-	Status        string          `json:"status"`
-	Network       string          `json:"network,omitempty"`
-	AirTime       string          `json:"air_time,omitempty"`
-	TimeZone      string          `json:"time_zone,omitempty"`
-	Seasons       []SeasonSummary `json:"seasons"`
-	Episodes      int             `json:"episodes"`
-	Missing       int             `json:"missing"`
-	NotOutYet     int             `json:"not_out_yet"`
-	InLibrary     int             `json:"in_library"`
-	BetterWanted  int             `json:"better_wanted"`
-	Downloading   int             `json:"downloading"`
-	Failed        int             `json:"failed"`
-	NextAirDate   *time.Time      `json:"next_air_date,omitempty"`
+	DetailsSource string `json:"details_source"`
+	EpisodeOrder  string `json:"episode_order"`
+	SeasonChoice  string `json:"season_choice,omitempty"`
+	NewSeasons    string `json:"new_seasons"`
+	PackWindow    int    `json:"pack_window"`
+	// ReleaseNumbers is "" (release names follow the chosen order) or tmdb.
+	ReleaseNumbers string          `json:"release_numbers"`
+	Status         string          `json:"status"`
+	Network        string          `json:"network,omitempty"`
+	AirTime        string          `json:"air_time,omitempty"`
+	TimeZone       string          `json:"time_zone,omitempty"`
+	Seasons        []SeasonSummary `json:"seasons"`
+	Episodes       int             `json:"episodes"`
+	Missing        int             `json:"missing"`
+	NotOutYet      int             `json:"not_out_yet"`
+	InLibrary      int             `json:"in_library"`
+	BetterWanted   int             `json:"better_wanted"`
+	Downloading    int             `json:"downloading"`
+	Failed         int             `json:"failed"`
+	NextAirDate    *time.Time      `json:"next_air_date,omitempty"`
 	// SeasonCount counts numbered seasons (specials left out); LastAirDate
 	// is the most recent episode that has aired.
 	SeasonCount int        `json:"season_count"`
@@ -69,7 +71,7 @@ func InfoOf(ctx context.Context, db database.Lister, t mediafiles.Title) (*Info,
 	if err != nil {
 		return nil, err
 	}
-	si := &Info{DetailsSource: t.MetadataSource, EpisodeOrder: strOrEmpty(t.EpisodeOrder), SeasonChoice: strOrEmpty(t.SeasonChoice), NewSeasons: t.NewPartsPolicy, PackWindow: t.PackWindow,
+	si := &Info{DetailsSource: t.MetadataSource, EpisodeOrder: strOrEmpty(t.EpisodeOrder), SeasonChoice: strOrEmpty(t.SeasonChoice), NewSeasons: t.NewPartsPolicy, PackWindow: t.PackWindow, ReleaseNumbers: t.ReleaseNumbers,
 		Status: t.Status, Network: strOrEmpty(t.Network), AirTime: strOrEmpty(t.AirTime), TimeZone: strOrEmpty(t.TimeZone), Seasons: ss}
 	if g := strOrEmpty(t.EpisodeGroupID); g != "" {
 		si.EpisodeGroup = &EpisodeGroupRef{ID: g}

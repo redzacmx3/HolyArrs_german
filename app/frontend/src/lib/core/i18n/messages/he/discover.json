@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "יוצא",
 	"discover.popularRail.comingDay": "בקרוב",
 	"discover.titleLibrary.turnShowOnHint": "הפעילו את הסדרה כדי להתחיל לחפש.",
-	"discover.leftovers.reason.seasons_differ": "נמצאה רק לפי מספר ה-TMDB מהאפליקציה הישנה: בדוק שזו אותה סדרה, ואז התאם את הקובץ בעצמך"
+	"discover.leftovers.reason.seasons_differ": "נמצאה רק לפי מספר ה-TMDB מהאפליקציה הישנה: בדוק שזו אותה סדרה, ואז התאם את הקובץ בעצמך",
+	"discover.titleLibrary.releaseNumbers": "מספור שמות הגרסאות",
+	"discover.titleLibrary.releaseNumbersOrder": "לפי סדר זה",
+	"discover.titleLibrary.releaseNumbersTmdb": "לפי TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "איך שמות הגרסאות ממספרים את הפרקים. הקבצים שומרים על המספרים של סדר זה."
 }

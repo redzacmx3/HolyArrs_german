@@ -38,6 +38,7 @@ type Title struct {
 	MetadataSource   string            `db:"metadata_source"` // tmdb, tvmaze, tvdb, musicbrainz
 	EpisodeOrder     *string           `db:"episode_order"`
 	EpisodeGroupID   *string           `db:"episode_group_id"` // the TMDB episode order followed; nil: TMDB's own
+	ReleaseNumbers   string            `db:"release_numbers"`  // how release names number episodes: "" by the chosen order, "tmdb" by TMDB's own
 	KeepUpToDate     bool              `db:"keep_up_to_date"`
 	NewPartsPolicy   string            `db:"new_parts_policy"` // all, future_only, none
 	ReleaseGate      string            `db:"release_gate"`     // announced, in_cinemas, released

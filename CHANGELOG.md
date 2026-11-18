@@ -11,6 +11,7 @@ All notable changes to HolyArrs are listed here. The format follows [Keep a Chan
 - Your own traits can look at a Release's languages (`de`, `original`, `!en`).
 - Language and quality assistant: choose the language (this one or the original, only this one, original only) and the resolution (720p, 1080p, 4K) for every movie or show, one title, one season or one episode, with a preview of what changes. Lower levels lay over higher ones; the Pick rules stay as they are.
 - The Upkeep page shows the usual save and discard bar when its rules change.
+- A show that follows another TMDB episode order (such as Production) can read release names by TMDB's own numbering (**Release names count: By TMDB** on its Library tab), so German releases that count that way are found and imported, while files keep the chosen order's numbers.
 - Applying a TRaSH profile also takes its qualities, cutoff and language, and a merged quality group ranks on points first, so German profiles put German releases on top. A profile whose language is Any keeps the languages the rules already name.
 - Importing a Radarr or Sonarr profile, or one sent through the arr API, ranks on points first when an allowed quality group spans several steps (such as TRaSH's "Merged QPs"), as the app ranked it.
 - Status checks every Pick rules set in use: a language trait worth thousands of points that still loses on quality, or good enough at 0 points or empty, gets a warning. Fix opens the set with the fix filled in, ready to save.

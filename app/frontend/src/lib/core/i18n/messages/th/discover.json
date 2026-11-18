@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "ออกฉาย",
 	"discover.popularRail.comingDay": "เร็วๆ นี้",
 	"discover.titleLibrary.turnShowOnHint": "เปิดรายการนี้เพื่อเริ่มค้นหา",
-	"discover.leftovers.reason.seasons_differ": "พบจากหมายเลข TMDB ของแอปเดิมเท่านั้น: ตรวจดูว่าเป็นเรื่องเดียวกัน แล้วจับคู่ไฟล์เอง"
+	"discover.leftovers.reason.seasons_differ": "พบจากหมายเลข TMDB ของแอปเดิมเท่านั้น: ตรวจดูว่าเป็นเรื่องเดียวกัน แล้วจับคู่ไฟล์เอง",
+	"discover.titleLibrary.releaseNumbers": "การนับเลขในชื่อรีลีส",
+	"discover.titleLibrary.releaseNumbersOrder": "ตามลำดับนี้",
+	"discover.titleLibrary.releaseNumbersTmdb": "ตาม TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "ชื่อรีลีสนับเลขตอนอย่างไร ไฟล์ยังคงใช้เลขของลำดับนี้"
 }

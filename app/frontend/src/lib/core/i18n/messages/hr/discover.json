@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Izlazi",
 	"discover.popularRail.comingDay": "Uskoro",
 	"discover.titleLibrary.turnShowOnHint": "Uključite seriju da bi traženje počelo.",
-	"discover.leftovers.reason.seasons_differ": "Pronađena samo po TMDB broju iz stare aplikacije: provjerite je li to ista serija, a zatim sami uparite datoteku"
+	"discover.leftovers.reason.seasons_differ": "Pronađena samo po TMDB broju iz stare aplikacije: provjerite je li to ista serija, a zatim sami uparite datoteku",
+	"discover.titleLibrary.releaseNumbers": "Numeriranje izdanja",
+	"discover.titleLibrary.releaseNumbersOrder": "Prema ovom redoslijedu",
+	"discover.titleLibrary.releaseNumbersTmdb": "Prema TMDB-u",
+	"discover.titleLibrary.releaseNumbersHint": "Kako nazivi izdanja numeriraju epizode. Datoteke zadržavaju brojeve ovog redoslijeda."
 }

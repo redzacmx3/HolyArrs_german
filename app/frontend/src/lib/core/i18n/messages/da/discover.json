@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Udkommer",
 	"discover.popularRail.comingDay": "Kommer",
 	"discover.titleLibrary.turnShowOnHint": "Slå serien til for at begynde at lede.",
-	"discover.leftovers.reason.seasons_differ": "Fundet kun via den gamle apps TMDB-nummer: tjek, at det er den samme serie, og match så filen selv"
+	"discover.leftovers.reason.seasons_differ": "Fundet kun via den gamle apps TMDB-nummer: tjek, at det er den samme serie, og match så filen selv",
+	"discover.titleLibrary.releaseNumbers": "Udgivelsesnavnes nummerering",
+	"discover.titleLibrary.releaseNumbersOrder": "Efter denne rækkefølge",
+	"discover.titleLibrary.releaseNumbersTmdb": "Efter TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Hvordan udgivelsesnavne nummererer afsnittene. Filer beholder denne rækkefølges numre."
 }

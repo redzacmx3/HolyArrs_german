@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Виходить",
 	"discover.popularRail.comingDay": "Незабаром",
 	"discover.titleLibrary.turnShowOnHint": "Увімкніть серіал, щоб почати пошук.",
-	"discover.leftovers.reason.seasons_differ": "Знайдено лише за номером TMDB зі старого застосунку: перевірте, що це той самий серіал, потім зіставте файл самі"
+	"discover.leftovers.reason.seasons_differ": "Знайдено лише за номером TMDB зі старого застосунку: перевірте, що це той самий серіал, потім зіставте файл самі",
+	"discover.titleLibrary.releaseNumbers": "Нумерація релізів",
+	"discover.titleLibrary.releaseNumbersOrder": "За цим порядком",
+	"discover.titleLibrary.releaseNumbersTmdb": "За TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Як назви релізів нумерують серії. Файли зберігають номери цього порядку."
 }

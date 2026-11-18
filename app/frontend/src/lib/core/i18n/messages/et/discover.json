@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Ilmub",
 	"discover.popularRail.comingDay": "Tulekul",
 	"discover.titleLibrary.turnShowOnHint": "Lülita sari sisse, et otsimine algaks.",
-	"discover.leftovers.reason.seasons_differ": "Leiti ainult vana rakenduse TMDB numbri järgi: kontrolli, et see on sama sari, ja seo siis fail ise"
+	"discover.leftovers.reason.seasons_differ": "Leiti ainult vana rakenduse TMDB numbri järgi: kontrolli, et see on sama sari, ja seo siis fail ise",
+	"discover.titleLibrary.releaseNumbers": "Väljalasete nummerdus",
+	"discover.titleLibrary.releaseNumbersOrder": "Selle järjestuse järgi",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB järgi",
+	"discover.titleLibrary.releaseNumbersHint": "Kuidas väljalasete nimed osasid nummerdavad. Failid hoiavad selle järjestuse numbreid."
 }

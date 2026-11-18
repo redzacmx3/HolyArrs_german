@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Sortie",
 	"discover.popularRail.comingDay": "Bientôt",
 	"discover.titleLibrary.turnShowOnHint": "Activez la série pour lancer la recherche.",
-	"discover.leftovers.reason.seasons_differ": "Trouvée uniquement par le numéro TMDB de l'ancienne application : vérifiez que c'est la même série, puis associez le fichier vous-même"
+	"discover.leftovers.reason.seasons_differ": "Trouvée uniquement par le numéro TMDB de l'ancienne application : vérifiez que c'est la même série, puis associez le fichier vous-même",
+	"discover.titleLibrary.releaseNumbers": "Numéros des releases",
+	"discover.titleLibrary.releaseNumbersOrder": "Selon cet ordre",
+	"discover.titleLibrary.releaseNumbersTmdb": "Selon TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Comment les noms de release numérotent les épisodes. Les fichiers gardent les numéros de cet ordre."
 }

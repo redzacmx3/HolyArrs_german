@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Iznāk",
 	"discover.popularRail.comingDay": "Drīzumā",
 	"discover.titleLibrary.turnShowOnHint": "Ieslēdziet seriālu, lai sāktu meklēšanu.",
-	"discover.leftovers.reason.seasons_differ": "Atrasts tikai pēc vecās lietotnes TMDB numura: pārbaudiet, vai tas ir tas pats seriāls, un tad sasaistiet failu paši"
+	"discover.leftovers.reason.seasons_differ": "Atrasts tikai pēc vecās lietotnes TMDB numura: pārbaudiet, vai tas ir tas pats seriāls, un tad sasaistiet failu paši",
+	"discover.titleLibrary.releaseNumbers": "Laidienu numerācija",
+	"discover.titleLibrary.releaseNumbersOrder": "Pēc šīs secības",
+	"discover.titleLibrary.releaseNumbersTmdb": "Pēc TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Kā laidienu nosaukumi numurē sērijas. Faili saglabā šīs secības numurus."
 }

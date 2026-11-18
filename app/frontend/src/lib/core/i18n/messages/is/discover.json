@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Kemur út",
 	"discover.popularRail.comingDay": "Væntanlegt",
 	"discover.titleLibrary.turnShowOnHint": "Kveiktu á þáttaröðinni til að byrja að leita.",
-	"discover.leftovers.reason.seasons_differ": "Fannst aðeins eftir TMDB-númeri gamla forritsins: athugaðu hvort þetta sé sami þátturinn og paraðu svo skrána sjálf(ur)"
+	"discover.leftovers.reason.seasons_differ": "Fannst aðeins eftir TMDB-númeri gamla forritsins: athugaðu hvort þetta sé sami þátturinn og paraðu svo skrána sjálf(ur)",
+	"discover.titleLibrary.releaseNumbers": "Númer í útgáfuheitum",
+	"discover.titleLibrary.releaseNumbersOrder": "Eftir þessari röð",
+	"discover.titleLibrary.releaseNumbersTmdb": "Eftir TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Hvernig útgáfuheiti tölusetja þættina. Skrár halda númerum þessarar raðar."
 }

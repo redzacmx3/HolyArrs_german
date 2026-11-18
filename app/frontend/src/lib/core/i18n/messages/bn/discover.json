@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "প্রকাশিত",
 	"discover.popularRail.comingDay": "আসছে",
 	"discover.titleLibrary.turnShowOnHint": "খোঁজা শুরু করতে শোটি চালু করুন।",
-	"discover.leftovers.reason.seasons_differ": "শুধু পুরোনো অ্যাপের TMDB নম্বর দিয়ে পাওয়া গেছে: এটি একই শো কি না দেখুন, তারপর ফাইলটি নিজে মিলিয়ে নিন"
+	"discover.leftovers.reason.seasons_differ": "শুধু পুরোনো অ্যাপের TMDB নম্বর দিয়ে পাওয়া গেছে: এটি একই শো কি না দেখুন, তারপর ফাইলটি নিজে মিলিয়ে নিন",
+	"discover.titleLibrary.releaseNumbers": "রিলিজ নামের নম্বর",
+	"discover.titleLibrary.releaseNumbersOrder": "এই ক্রম অনুযায়ী",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB অনুযায়ী",
+	"discover.titleLibrary.releaseNumbersHint": "রিলিজ নাম পর্বগুলোকে কীভাবে নম্বর দেয়। ফাইলগুলো এই ক্রমের নম্বর রাখে।"
 }

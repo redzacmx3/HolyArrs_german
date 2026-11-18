@@ -65,6 +65,31 @@ type EpisodeRef struct {
 // Label names an episode the way people write it: S01E02.
 func (e EpisodeRef) Label() string { return fmt.Sprintf("S%02dE%02d", e.Season, e.Episode) }
 
+// ReleaseNumbersTMDB (titles.release_numbers) reads release names by
+// TMDB's own numbering although the show follows a chosen episode order.
+const ReleaseNumbersTMDB = "tmdb"
+
+// TMDBNames says the title follows a chosen episode order but reads release
+// names by TMDB's own numbering.
+func (t Title) TMDBNames() bool {
+	return t.ReleaseNumbers == ReleaseNumbersTMDB && t.EpisodeGroupID != nil && *t.EpisodeGroupID != ""
+}
+
+// ReleaseRefs gives the episodes as the title's release names number them:
+// when it reads names by TMDB's numbering (TMDBNames) the chosen order's
+// numbers are dropped; otherwise refs as they are.
+func ReleaseRefs(t Title, refs []EpisodeRef) []EpisodeRef {
+	if !t.TMDBNames() {
+		return refs
+	}
+	out := make([]EpisodeRef, len(refs))
+	for i, r := range refs {
+		r.AltSeason, r.AltEpisode = 0, 0
+		out[i] = r
+	}
+	return out
+}
+
 // Named is the season and episode release names use for the episode.
 func (e EpisodeRef) Named() (int, int) {
 	if e.AltSeason > 0 {

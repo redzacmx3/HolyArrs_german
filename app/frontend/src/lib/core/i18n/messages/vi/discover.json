@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Ra mắt",
 	"discover.popularRail.comingDay": "Sắp ra mắt",
 	"discover.titleLibrary.turnShowOnHint": "Bật chương trình để bắt đầu tìm.",
-	"discover.leftovers.reason.seasons_differ": "Chỉ tìm thấy qua số TMDB của ứng dụng cũ: hãy kiểm tra đó có đúng là cùng một chương trình không, rồi tự ghép tệp"
+	"discover.leftovers.reason.seasons_differ": "Chỉ tìm thấy qua số TMDB của ứng dụng cũ: hãy kiểm tra đó có đúng là cùng một chương trình không, rồi tự ghép tệp",
+	"discover.titleLibrary.releaseNumbers": "Cách đánh số bản phát hành",
+	"discover.titleLibrary.releaseNumbersOrder": "Theo thứ tự này",
+	"discover.titleLibrary.releaseNumbersTmdb": "Theo TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Cách tên bản phát hành đánh số các tập. Tệp vẫn giữ số theo thứ tự này."
 }

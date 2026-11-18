@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "صدر",
 	"discover.popularRail.comingDay": "قادم",
 	"discover.titleLibrary.turnShowOnHint": "شغّل المسلسل ليبدأ البحث.",
-	"discover.leftovers.reason.seasons_differ": "وُجد فقط برقم TMDB من التطبيق القديم: تأكد أنه المسلسل نفسه، ثم طابق الملف بنفسك"
+	"discover.leftovers.reason.seasons_differ": "وُجد فقط برقم TMDB من التطبيق القديم: تأكد أنه المسلسل نفسه، ثم طابق الملف بنفسك",
+	"discover.titleLibrary.releaseNumbers": "ترقيم الإصدارات",
+	"discover.titleLibrary.releaseNumbersOrder": "حسب هذا الترتيب",
+	"discover.titleLibrary.releaseNumbersTmdb": "حسب TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "كيف ترقّم أسماء الإصدارات الحلقات. تحتفظ الملفات بأرقام هذا الترتيب."
 }

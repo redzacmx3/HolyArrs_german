@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Verschijnt",
 	"discover.popularRail.comingDay": "Binnenkort",
 	"discover.titleLibrary.turnShowOnHint": "Zet de serie aan om te beginnen met zoeken.",
-	"discover.leftovers.reason.seasons_differ": "Alleen gevonden via het TMDB-nummer van de oude app: controleer of het dezelfde serie is en koppel het bestand dan zelf"
+	"discover.leftovers.reason.seasons_differ": "Alleen gevonden via het TMDB-nummer van de oude app: controleer of het dezelfde serie is en koppel het bestand dan zelf",
+	"discover.titleLibrary.releaseNumbers": "Nummering releases",
+	"discover.titleLibrary.releaseNumbersOrder": "Volgens deze volgorde",
+	"discover.titleLibrary.releaseNumbersTmdb": "Volgens TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Hoe releasenamen de afleveringen nummeren. Bestanden houden de nummers van deze volgorde."
 }

@@ -7,7 +7,7 @@
 	import Menu, { type MenuItem } from '#lib/ui/Menu.svelte';
 	import Sheet from '#lib/ui/Sheet.svelte';
 	import type { OwnedTitle } from './title-owned.svelte.ts';
-	import { airWords, epFile, epQuality, epTone, getAllMissingShown, nothingQueuedKey, searchQueued, showOffHint } from './title-library-words.ts'; import SeasonPacksRow from './SeasonPacksRow.svelte'; import TitleLeftovers from './TitleLeftovers.svelte';
+	import { airWords, epFile, epQuality, epTone, getAllMissingShown, nothingQueuedKey, searchQueued, showOffHint } from './title-library-words.ts'; import SeasonPacksRow from './SeasonPacksRow.svelte'; import ReleaseNumbersRow from './ReleaseNumbersRow.svelte'; import TitleLeftovers from './TitleLeftovers.svelte';
 	import { ShowVersions, SeasonToolsSheet, EpisodeSheet, chosenWhy, type SheetEpisode } from '#lib/shows/index.ts';
 	import { HistoryLine as CompactRow, isRoutine, groupDownloads, downloadTone } from '#lib/downloads/index.ts';
 	import { qualityBadges, ShowDeleteDialog, splitSteps, type RenameStep } from '#lib/mediafiles/index.ts';
@@ -557,7 +557,7 @@
 						<div class="lib-row static">
 							<span><b>{t('discover.titleLibrary.episodeOrder')}</b>{#if eo.hint}<small>{eo.hint}</small>{/if}</span>
 							<div class="lib-pick"><Menu label={t('discover.titleLibrary.episodeOrder')} variant="button" items={eo.menu} width={eo.groupList?.groups.length ? 300 : 200}>{#snippet trigger()}<span>{busyAction === 'order' ? t('discover.titleLibrary.saving') : orderLabel(chosenGroup, orders.find(([v]) => v === o.show?.episode_order)?.[1] ?? t('discover.titleLibrary.orderAired'), t('discover.titleLibrary.orderUnavailable'))}</span><Icon name="chevronDown" size={14} />{/snippet}</Menu></div>
-						</div><SeasonPacksRow value={o.show?.pack_window ?? 0} busy={busyAction === 'pack'} onpick={(n) => void putTitle({ pack_window: n }, 'pack')} />
+						</div>{#if chosenGroup}<ReleaseNumbersRow value={o.show?.release_numbers ?? ''} busy={busyAction === 'numbers'} onpick={(v) => void putTitle({ release_numbers: v }, 'numbers')} />{/if}<SeasonPacksRow value={o.show?.pack_window ?? 0} busy={busyAction === 'pack'} onpick={(n) => void putTitle({ pack_window: n }, 'pack')} />
 					{/if}
 					<!-- Only when there is another folder of this kind to move to. -->
 					{#if kindFolders.length > 1}

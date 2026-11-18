@@ -83,7 +83,7 @@ func (s *Searcher) showSearchSlots(ctx context.Context, rel domain.Release) (out
 		refs[i] = e.ref
 		slots[e.it.ID] = e.sl
 	}
-	held, why := mediafiles.MatchEpisodes(p, set.order(), refs)
+	held, why := mediafiles.MatchEpisodes(p, set.order(), mediafiles.ReleaseRefs(set.ti, refs))
 	if why != "" {
 		return nil, nil, "", false
 	}
