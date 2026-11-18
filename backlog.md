@@ -22,13 +22,19 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Wish:** One clear reason per row, plus quick actions such as "use the file already in the library", "pick another file / release", "import anyway" and "remove and search again".
 - **Note:** Many of the blocked rows are PAW Patrol (S06/S07, 0 %, from HolyArrs). Check whether item 4 below fixes them once "Release-Namen zählen: Nach TMDB" is set.
 
+### 6. Read release names by TVDB numbering
+- **Status:** open (noted 2026-11-18), waiting on Thomas: is a TVDB key set, and which TMDB episode orders does PAW Patrol offer?
+- **Problem:** German groups (FuN) name PAW Patrol by TVDB. The library follows TMDB "Production". Neither TMDB order matches the release names.
+- **Ideas:** "Release-Namen zählen: Nach TVDB", using TVDB episode numbers (needs the person's TVDB key) or a TMDB episode group that follows TVDB. As a fallback, match by episode title or air date when the numbers do not fit.
+- **Related:** "every episode must gain" blocks double episodes where one half is already there (S02E40-E41).
+
 ## Done
 
 ### 4. German releases with other numbering and double episodes (PAW Patrol)
 - **Status:** done, [PR #6](https://github.com/redzacmx3/HolyArrs_german/pull/6) (2026-11-18)
 - **Problem:** The library follows "Production", but German releases (FuN) count by TMDB. `S02E46` named another episode, so every release was turned down.
 - **Fix:** A per-show setting "Release-Namen zählen: Nach TMDB" on the Library tab. Search, matching and import read release names by TMDB's numbers, and files keep the chosen order's numbers.
-- **Still to check:** Thomas tests it on his instance. For double episodes where one half is already there, the setting Settings › Search "every episode must gain" decides.
+- **Follow-up:** for PAW Patrol it is not enough. FuN releases count by **TVDB** ("Pups Save an Eagle" = TVDB S02E41, Production S03E47), not by TMDB. See item 6.
 
 ### 5. Profile check: Fix fills in the advice
 - **Status:** done, [PR #5](https://github.com/redzacmx3/HolyArrs_german/pull/5) (2026-11-17)
