@@ -22,6 +22,12 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Wish:** One clear reason per row, plus quick actions such as "use the file already in the library", "pick another file / release", "import anyway" and "remove and search again".
 - **Note:** Many of the blocked rows are PAW Patrol (S06/S07, 0 %, from HolyArrs). Check whether item 4 below fixes them once "Release-Namen zählen: Nach TMDB" is set.
 
+### 7. Quicker requests, modelled on Seerr
+- **Status:** open (noted 2026-11-18), after the running features are stable
+- **Problem:** Requesting a new title takes many steps. People who manage the Library always get "Zur Library hinzufügen" with up to ten fields (folder, Pick rules, seasons, order, search …), and a new show does not search by default.
+- **Wish:** A short request like in Seerr: confirm a movie, tick seasons for a show, the rest comes from the request settings and sits under "Erweitert". Request button right in the search suggestions and on the cards, status badges on posters, and rules that pick folder and Pick rules by language or genre (German titles, kids' shows, anime).
+- **Plan:** [docs/ui-seerr-plan.md](docs/ui-seerr-plan.md)
+
 ## Done
 
 ### 6. Read release names by TVDB numbering
