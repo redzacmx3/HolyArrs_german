@@ -153,6 +153,8 @@ func (h *TitleHandlers) editTitle(w http.ResponseWriter, r *http.Request) {
 	// A new episode order renumbers the episodes: the show is refreshed
 	// after the edit, and a rename is offered when the numbers moved.
 	regroup := c.EpisodeGroupID != nil && !dry && t.Kind == "show" && *c.EpisodeGroupID != strOr(t.EpisodeGroupID)
+	// Release names by TVmaze need TVmaze's numbers: read them right away.
+	mazeNames := c.ReleaseNumbers != nil && !dry && !regroup && t.Kind == "show" && *c.ReleaseNumbers == mediafiles.ReleaseNumbersTVmaze && t.ReleaseNumbers != *c.ReleaseNumbers
 	var before map[int64][2]int
 	if regroup {
 		var err error
@@ -168,6 +170,12 @@ func (h *TitleHandlers) editTitle(w http.ResponseWriter, r *http.Request) {
 	}
 	if c.DetailsSource != nil && !dry && *c.DetailsSource != t.MetadataSource {
 		if _, err := shows.New(h.Library).SwitchSource(r.Context(), t.ID, *c.DetailsSource, h.Actor(r)); err != nil {
+			h.ShowError(w, err)
+			return
+		}
+	}
+	if mazeNames {
+		if _, err := shows.New(h.Library).RefreshShow(r.Context(), t.ID, h.Actor(r), nil); err != nil {
 			h.ShowError(w, err)
 			return
 		}

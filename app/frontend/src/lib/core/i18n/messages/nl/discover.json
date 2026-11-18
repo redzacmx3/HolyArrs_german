@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Nummering releases",
 	"discover.titleLibrary.releaseNumbersOrder": "Volgens deze volgorde",
 	"discover.titleLibrary.releaseNumbersTmdb": "Volgens TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Hoe releasenamen de afleveringen nummeren. Bestanden houden de nummers van deze volgorde."
+	"discover.titleLibrary.releaseNumbersHint": "Hoe releasenamen de afleveringen nummeren. Bestanden houden de nummers van deze volgorde.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Volgens TVmaze (TVDB)"
 }

@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Kiadásnevek számozása",
 	"discover.titleLibrary.releaseNumbersOrder": "E sorrend szerint",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB szerint",
-	"discover.titleLibrary.releaseNumbersHint": "Hogyan számozzák a kiadásnevek az epizódokat. A fájlok megtartják e sorrend számait."
+	"discover.titleLibrary.releaseNumbersHint": "Hogyan számozzák a kiadásnevek az epizódokat. A fájlok megtartják e sorrend számait.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) szerint"
 }

@@ -36,9 +36,10 @@ type ShowTarget struct {
 	Naming      *mediafiles.NamingSettings
 	// ByOrder names files by the show's chosen episode order.
 	ByOrder bool
-	// TMDBNames reads release names by TMDB's own numbering although files
-	// are named by the chosen order (titles.release_numbers tmdb).
-	TMDBNames bool
+	// ReleaseNames is how release names number the episodes when not by
+	// the chosen order (mediafiles.Title.ReleaseNames): tmdb, tvmaze or "".
+	// Files are still named by the chosen order.
+	ReleaseNames string
 }
 
 func (t ShowTarget) episodePath(p releasename.Result, source string, eps []Episode) string {
@@ -87,7 +88,7 @@ func NamedEpisodes(eps []Episode) []Episode {
 // orderClash names an episode of eps the chosen order leaves out whose
 // TMDB numbers another episode has in the order, or "" when none does.
 func (t ShowTarget) orderClash(eps []Episode) string {
-	if !t.ByOrder || t.TMDBNames {
+	if !t.ByOrder || t.ReleaseNames != "" {
 		return ""
 	}
 	for _, e := range eps {
@@ -103,17 +104,9 @@ func (t ShowTarget) orderClash(eps []Episode) string {
 	return ""
 }
 
-// releaseRefs gives refs as release names number them (mediafiles.ReleaseRefs).
+// releaseRefs gives refs as release names number them (mediafiles.ReleaseRefsBy).
 func (t ShowTarget) releaseRefs(refs []mediafiles.EpisodeRef) []mediafiles.EpisodeRef {
-	if !t.TMDBNames {
-		return refs
-	}
-	out := make([]mediafiles.EpisodeRef, len(refs))
-	for i, r := range refs {
-		r.AltSeason, r.AltEpisode = 0, 0
-		out[i] = r
-	}
-	return out
+	return mediafiles.ReleaseRefsBy(t.ReleaseNames, refs)
 }
 
 func labels(eps []Episode) string {

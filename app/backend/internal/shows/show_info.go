@@ -17,7 +17,7 @@ type Info struct {
 	SeasonChoice  string `json:"season_choice,omitempty"`
 	NewSeasons    string `json:"new_seasons"`
 	PackWindow    int    `json:"pack_window"`
-	// ReleaseNumbers is "" (release names follow the chosen order) or tmdb.
+	// ReleaseNumbers is "" (release names follow the episode order), tmdb or tvmaze.
 	ReleaseNumbers string          `json:"release_numbers"`
 	Status         string          `json:"status"`
 	Network        string          `json:"network,omitempty"`

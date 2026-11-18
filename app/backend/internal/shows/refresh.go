@@ -93,6 +93,7 @@ func (s *Service) refreshShow(ctx context.Context, titleID int64, switchTo strin
 	s.addAirTimes(metadata.NoCache(ctx), &sh)
 	s.fixCopiedTMDB(ctx, &sh)
 	s.applyEpisodeGroup(metadata.NoCache(ctx), t, &sh)
+	s.addMazeNumbers(metadata.NoCache(ctx), t, &sh)
 	out.AltStale = sh.AltStale
 	was := t.MetadataSource
 	err = s.Store.Write(ctx, func(tx *sql.Tx) error {

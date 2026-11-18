@@ -135,7 +135,9 @@ Feed check interval and the nightly search count are shared with movies, see [Se
 
 HolyArrs matches the release to the show by its name or another name the show is known by. It then matches episodes by season and episode, air date or running number. Show releases never match movies, and movie releases never match shows. A season pack goes to your Downloader once, as one download.
 
-When a show follows another episode order from TMDB (such as Production), release names are read by that order's numbers. Some releases still count by TMDB's own numbering: German releases of kids' shows such as PAW Patrol are one example. On the show's **Library** tab, set **Release names count** to **By TMDB**. Search, matching and import then read release names by TMDB's numbers, and files keep the chosen order's numbers. The row shows only while the show follows another order.
+When a show follows another episode order from TMDB (such as Production), release names are read by that order's numbers. Some releases still count by TMDB's own numbering. On the show's **Library** tab, set **Release names count** to **By TMDB**. Search, matching and import then read release names by TMDB's numbers, and files keep the chosen order's numbers. **By TMDB** is offered only while the show follows another order.
+
+Other releases count like TVDB, which needs a key of your own. German releases of kids' shows such as PAW Patrol are one example. Set **Release names count** to **By TVmaze (TVDB)**: TVmaze numbers episodes like TVDB and needs no key. HolyArrs reads TVmaze's episode list right away and on every refresh of the show, and finds each episode there by its name, else by its air day. Search, matching and import then read release names by TVmaze's numbers, and files keep the show's own numbers. An episode TVmaze does not list is not matched by release names; pick its release by hand. When TVmaze cannot be reached, the numbers read last time stay.
 
 </details>
 

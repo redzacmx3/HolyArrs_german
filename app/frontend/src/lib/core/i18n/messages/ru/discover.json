@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Нумерация релизов",
 	"discover.titleLibrary.releaseNumbersOrder": "По этому порядку",
 	"discover.titleLibrary.releaseNumbersTmdb": "По TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Как названия релизов нумеруют серии. Файлы сохраняют номера этого порядка."
+	"discover.titleLibrary.releaseNumbersHint": "Как названия релизов нумеруют серии. Файлы сохраняют номера этого порядка.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "По TVmaze (TVDB)"
 }

@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Numeración de releases",
 	"discover.titleLibrary.releaseNumbersOrder": "Según este orden",
 	"discover.titleLibrary.releaseNumbersTmdb": "Según TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Cómo numeran los episodios los nombres de release. Los archivos mantienen los números de este orden."
+	"discover.titleLibrary.releaseNumbersHint": "Cómo numeran los episodios los nombres de release. Los archivos mantienen los números de este orden.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Según TVmaze (TVDB)"
 }

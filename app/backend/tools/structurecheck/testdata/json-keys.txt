@@ -1082,6 +1082,8 @@ musicbrainz_url
 must_have
 n
 name
+name_episode
+name_season
 names
 naming
 naming_id

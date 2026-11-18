@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "发布名称的编号",
 	"discover.titleLibrary.releaseNumbersOrder": "按此顺序",
 	"discover.titleLibrary.releaseNumbersTmdb": "按 TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "发布名称如何为剧集编号。文件保留此顺序的编号。"
+	"discover.titleLibrary.releaseNumbersHint": "发布名称如何为剧集编号。文件保留此顺序的编号。",
+	"discover.titleLibrary.releaseNumbersTvmaze": "按 TVmaze (TVDB)"
 }

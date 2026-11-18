@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "شماره‌گذاری نام انتشارها",
 	"discover.titleLibrary.releaseNumbersOrder": "طبق این ترتیب",
 	"discover.titleLibrary.releaseNumbersTmdb": "طبق TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "نام انتشارها قسمت‌ها را چگونه شماره می‌زنند. فایل‌ها شماره‌های این ترتیب را نگه می‌دارند."
+	"discover.titleLibrary.releaseNumbersHint": "نام انتشارها قسمت‌ها را چگونه شماره می‌زنند. فایل‌ها شماره‌های این ترتیب را نگه می‌دارند.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "طبق TVmaze (TVDB)"
 }

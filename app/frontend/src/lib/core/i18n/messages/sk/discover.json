@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "Číslovanie vydaní",
 	"discover.titleLibrary.releaseNumbersOrder": "Podľa tohto poradia",
 	"discover.titleLibrary.releaseNumbersTmdb": "Podľa TMDB",
-	"discover.titleLibrary.releaseNumbersHint": "Ako názvy vydaní číslujú epizódy. Súbory si ponechajú čísla tohto poradia."
+	"discover.titleLibrary.releaseNumbersHint": "Ako názvy vydaní číslujú epizódy. Súbory si ponechajú čísla tohto poradia.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "Podľa TVmaze (TVDB)"
 }

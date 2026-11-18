@@ -60,6 +60,35 @@ type EpisodeRef struct {
 	// when that differs (an anime part TMDB keeps inside one season); 0: none.
 	AltSeason  int
 	AltEpisode int
+	// NameSeason and NameEpisode are TVmaze's numbers (Numbers.NameSeason);
+	// 0: none.
+	NameSeason  int
+	NameEpisode int
+}
+
+// RefOf is the matcher's view of an episode Item.
+func RefOf(it Item) EpisodeRef {
+	r := EpisodeRef{ItemID: it.ID}
+	n := it.Numbers
+	if n.Season != nil {
+		r.Season = *n.Season
+	}
+	if n.Episode != nil {
+		r.Episode = *n.Episode
+	}
+	if n.Absolute != nil {
+		r.Absolute = *n.Absolute
+	}
+	if n.AltSeason != nil && n.AltEpisode != nil {
+		r.AltSeason, r.AltEpisode = *n.AltSeason, *n.AltEpisode
+	}
+	if n.NameSeason != nil && n.NameEpisode != nil {
+		r.NameSeason, r.NameEpisode = *n.NameSeason, *n.NameEpisode
+	}
+	if it.AirDay != nil {
+		r.AirDay = *it.AirDay
+	}
+	return r
 }
 
 // Label names an episode the way people write it: S01E02.
@@ -69,25 +98,63 @@ func (e EpisodeRef) Label() string { return fmt.Sprintf("S%02dE%02d", e.Season, 
 // TMDB's own numbering although the show follows a chosen episode order.
 const ReleaseNumbersTMDB = "tmdb"
 
+// ReleaseNumbersTVmaze (titles.release_numbers) reads release names by
+// TVmaze's numbering, which follows TVDB (German releases of some kids'
+// shows count that way).
+const ReleaseNumbersTVmaze = "tvmaze"
+
 // TMDBNames says the title follows a chosen episode order but reads release
 // names by TMDB's own numbering.
 func (t Title) TMDBNames() bool {
 	return t.ReleaseNumbers == ReleaseNumbersTMDB && t.EpisodeGroupID != nil && *t.EpisodeGroupID != ""
 }
 
-// ReleaseRefs gives the episodes as the title's release names number them:
-// when it reads names by TMDB's numbering (TMDBNames) the chosen order's
-// numbers are dropped; otherwise refs as they are.
+// ReleaseNames is how the title's release names number episodes when that
+// is not the show's own order: ReleaseNumbersTMDB, ReleaseNumbersTVmaze,
+// or "".
+func (t Title) ReleaseNames() string {
+	if t.TMDBNames() || t.ReleaseNumbers == ReleaseNumbersTVmaze {
+		return t.ReleaseNumbers
+	}
+	return ""
+}
+
+// ReleaseRefs gives the episodes as the title's release names number them
+// (ReleaseRefsBy with Title.ReleaseNames).
 func ReleaseRefs(t Title, refs []EpisodeRef) []EpisodeRef {
-	if !t.TMDBNames() {
-		return refs
+	return ReleaseRefsBy(t.ReleaseNames(), refs)
+}
+
+// ReleaseRefsBy gives refs as release names number them. By TMDB the chosen
+// order's numbers are dropped. By TVmaze each episode takes its TVmaze
+// numbers as release-name numbers, and episodes TVmaze has none for are
+// left out, so their other numbers cannot name the wrong episode; while no
+// episode has TVmaze numbers yet (not read so far) refs stay as they are.
+// Otherwise refs as they are.
+func ReleaseRefsBy(names string, refs []EpisodeRef) []EpisodeRef {
+	switch names {
+	case ReleaseNumbersTMDB:
+		out := make([]EpisodeRef, len(refs))
+		for i, r := range refs {
+			r.AltSeason, r.AltEpisode = 0, 0
+			out[i] = r
+		}
+		return out
+	case ReleaseNumbersTVmaze:
+		if !slices.ContainsFunc(refs, func(r EpisodeRef) bool { return r.NameSeason > 0 }) {
+			return refs
+		}
+		out := make([]EpisodeRef, 0, len(refs))
+		for _, r := range refs {
+			if r.NameSeason <= 0 || r.NameEpisode <= 0 {
+				continue
+			}
+			r.AltSeason, r.AltEpisode = r.NameSeason, r.NameEpisode
+			out = append(out, r)
+		}
+		return out
 	}
-	out := make([]EpisodeRef, len(refs))
-	for i, r := range refs {
-		r.AltSeason, r.AltEpisode = 0, 0
-		out[i] = r
-	}
-	return out
+	return refs
 }
 
 // Named is the season and episode release names use for the episode.

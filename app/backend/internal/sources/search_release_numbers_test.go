@@ -46,3 +46,35 @@ func TestSearch_ReleaseNumbersTMDB(t *testing.T) {
 		}
 	}
 }
+
+// Release names by TVmaze (TVDB-style numbers, as German FuN releases of
+// PAW Patrol count): the search asks for the TVmaze numbers and a release
+// named so fills the episode, whatever the show's own numbers are.
+func TestSearch_ReleaseNumbersTVmaze(t *testing.T) {
+	const name = "Copper.Valley.S02E05.1080p.WEB-DL.H.264-FuN"
+	ts := &tvServer{answer: func(url.Values) []string { return []string{name} }}
+	f := seedShow(t, ts.start(t), nil)
+	setAlt(t, f, "S01E02", 3, 1)
+	for label, n := range map[string][2]int{"S01E02": {2, 5}, "S01E03": {2, 6}} {
+		if err := f.s.Write(context.Background(), func(tx *sql.Tx) error {
+			_, err := tx.Exec(`UPDATE items SET numbers = json_set(numbers, '$.name_season', ?, '$.name_episode', ?) WHERE id = ?`, n[0], n[1], f.items[label])
+			return err
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := f.s.Write(context.Background(), func(tx *sql.Tx) error {
+		_, err := tx.Exec("UPDATE titles SET episode_group_id = 'grp', release_numbers = ? WHERE id = ?", mediafiles.ReleaseNumbersTVmaze, f.titleID)
+		return err
+	}); err != nil {
+		t.Fatal(err)
+	}
+	runKind(t, f.fixture, &Searcher{Store: f.s}, jobs.KindSearchSlot, &domain.Subject{Type: "slot", ID: f.slots["S01E02"]}, nil)
+	if q := ts.queries[0]; q.Get("season") != "2" || q.Get("ep") != "5" {
+		t.Fatalf("first query %v", q)
+	}
+	if st := f.state(t, "S01E02"); st != mediafiles.SlotChosen {
+		r := relByName(t, f.fixture, name)
+		t.Fatalf("S01E02 %s (%s %v)", st, r.State, reasonCodes(r))
+	}
+}

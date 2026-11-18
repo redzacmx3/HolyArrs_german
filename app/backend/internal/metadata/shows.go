@@ -62,6 +62,9 @@ type Show struct {
 	// Grouped says the release-name numbers come from a chosen TMDB
 	// episode order.
 	Grouped bool `json:"-"`
+	// MazeNamed says the episodes carry TVmaze's numbers (NameSeason,
+	// NameEpisode) read this time; when false the stored ones stay.
+	MazeNamed bool `json:"-"`
 }
 
 // Season is one season of a looked-up show; 0 holds the specials.
@@ -91,6 +94,10 @@ type Episode struct {
 	// they agree or nothing is known.
 	AltSeason  int `json:"alt_season,omitempty"`
 	AltEpisode int `json:"alt_episode,omitempty"`
+	// NameSeason and NameEpisode are TVmaze's numbers for the episode
+	// (SetMazeNumbers); 0 when not read or not found.
+	NameSeason  int `json:"-"`
+	NameEpisode int `json:"-"`
 }
 
 // ShowProvider finds shows. Show takes "<kind>:<id>": the source's own id

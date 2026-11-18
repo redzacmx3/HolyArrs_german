@@ -557,7 +557,7 @@
 						<div class="lib-row static">
 							<span><b>{t('discover.titleLibrary.episodeOrder')}</b>{#if eo.hint}<small>{eo.hint}</small>{/if}</span>
 							<div class="lib-pick"><Menu label={t('discover.titleLibrary.episodeOrder')} variant="button" items={eo.menu} width={eo.groupList?.groups.length ? 300 : 200}>{#snippet trigger()}<span>{busyAction === 'order' ? t('discover.titleLibrary.saving') : orderLabel(chosenGroup, orders.find(([v]) => v === o.show?.episode_order)?.[1] ?? t('discover.titleLibrary.orderAired'), t('discover.titleLibrary.orderUnavailable'))}</span><Icon name="chevronDown" size={14} />{/snippet}</Menu></div>
-						</div>{#if chosenGroup}<ReleaseNumbersRow value={o.show?.release_numbers ?? ''} busy={busyAction === 'numbers'} onpick={(v) => void putTitle({ release_numbers: v }, 'numbers')} />{/if}<SeasonPacksRow value={o.show?.pack_window ?? 0} busy={busyAction === 'pack'} onpick={(n) => void putTitle({ pack_window: n }, 'pack')} />
+						</div><ReleaseNumbersRow value={o.show?.release_numbers ?? ''} grouped={!!chosenGroup} busy={busyAction === 'numbers'} onpick={(v) => void putTitle({ release_numbers: v }, 'numbers')} /><SeasonPacksRow value={o.show?.pack_window ?? 0} busy={busyAction === 'pack'} onpick={(n) => void putTitle({ pack_window: n }, 'pack')} />
 					{/if}
 					<!-- Only when there is another folder of this kind to move to. -->
 					{#if kindFolders.length > 1}

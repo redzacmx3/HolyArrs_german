@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"slices"
 	"sort"
 	"strconv"
 	"time"
@@ -98,43 +99,68 @@ func (s *Service) addAirTimes(ctx context.Context, sh *metadata.Show) {
 	if !untimed {
 		return
 	}
+	if maze, ok := s.mazeShow(ctx, *sh); ok {
+		metadata.AddAirTimes(sh, maze)
+	}
+}
+
+// mazeShow finds sh on TVMaze: by its TVMaze id, or by a TVDB or IMDb id
+// that TVMaze knows for the same show, or by name with a TVDB or IMDb id
+// that must match. False when TVMaze is unreachable or does not know it.
+func (s *Service) mazeShow(ctx context.Context, sh metadata.Show) (metadata.Show, bool) {
+	if s.Shows == nil {
+		return metadata.Show{}, false
+	}
 	p, err := s.Shows.Get("tvmaze")
 	if err != nil || p == nil {
-		return
+		return metadata.Show{}, false
 	}
-	var maze metadata.Show
-	found := false
 	for _, k := range []string{"tvmaze", "tvdb", "imdb"} {
 		v := sh.IDs[k]
 		if v == "" {
 			continue
 		}
 		m, err := p.Show(ctx, k+":"+v)
-		if err == nil && (k == "tvmaze" || metadata.SameShow(*sh, m)) {
-			maze, found = m, true
-			break
+		if err == nil && (k == "tvmaze" || metadata.SameShow(sh, m)) {
+			return m, true
 		}
 		if err != nil && !errors.Is(err, metadata.ErrShowNotFound) {
-			return // TVMaze is unreachable: try again on the next refresh
+			return metadata.Show{}, false // TVMaze is unreachable: try again on the next refresh
 		}
 	}
-	if !found && sh.Name != "" {
-		hits, err := p.SearchShows(ctx, sh.Name)
-		if err != nil {
+	if sh.Name == "" {
+		return metadata.Show{}, false
+	}
+	hits, err := p.SearchShows(ctx, sh.Name)
+	if err != nil {
+		return metadata.Show{}, false
+	}
+	for _, h := range hits {
+		if metadata.SameShow(sh, h) && h.IDs["tvmaze"] != "" {
+			m, err := p.Show(ctx, "tvmaze:"+h.IDs["tvmaze"])
+			return m, err == nil
+		}
+	}
+	return metadata.Show{}, false
+}
+
+// addMazeNumbers gives the episodes TVMaze's numbers when the title reads
+// release names by them. When TVMaze cannot be read the stored numbers
+// stay (sh.MazeNamed false).
+func (s *Service) addMazeNumbers(ctx context.Context, t mediafiles.Title, sh *metadata.Show) {
+	if t.ReleaseNumbers != mediafiles.ReleaseNumbersTVmaze || len(sh.Episodes) == 0 {
+		return
+	}
+	maze := *sh
+	if sh.Source != "tvmaze" {
+		var ok bool
+		if maze, ok = s.mazeShow(ctx, *sh); !ok {
 			return
 		}
-		for _, h := range hits {
-			if metadata.SameShow(*sh, h) && h.IDs["tvmaze"] != "" {
-				if m, err := p.Show(ctx, "tvmaze:"+h.IDs["tvmaze"]); err == nil {
-					maze, found = m, true
-				}
-				break
-			}
-		}
 	}
-	if found {
-		metadata.AddAirTimes(sh, maze)
-	}
+	sh.Episodes = slices.Clone(sh.Episodes) // a cached answer stays as it was
+	metadata.SetMazeNumbers(sh.Episodes, maze)
+	sh.MazeNamed = true
 }
 
 // applyShow copies looked-up details onto a show Title.
@@ -485,7 +511,15 @@ func syncShowTx(ctx context.Context, tx *sql.Tx, t mediafiles.Title, sh metadata
 			as, ae := e.AltSeason, e.AltEpisode
 			altS, altE = &as, &ae
 		}
+		var nameS, nameE *int
+		if e.NameSeason > 0 && e.NameEpisode > 0 {
+			ns, ne := e.NameSeason, e.NameEpisode
+			nameS, nameE = &ns, &ne
+		}
 		if it := match[key]; it != nil {
+			if !sh.MazeNamed {
+				nameS, nameE = it.Numbers.NameSeason, it.Numbers.NameEpisode
+			}
 			if sh.AltStale {
 				altS, altE = it.Numbers.AltSeason, it.Numbers.AltEpisode
 				if t.EpisodeGroupID != nil && *t.EpisodeGroupID != "" {
@@ -500,7 +534,8 @@ func syncShowTx(ctx context.Context, tx *sql.Tx, t mediafiles.Title, sh metadata
 				ids[sh.Source] = e.ID
 			}
 			changed := !library.EqStr(it.Name, name) || !library.EqTime(it.AirDate, e.AirDate) || it.AirTimed != (e.Timed && e.AirDate != nil) || !library.EqStr(it.AirDay, day) || !library.EqInt(it.Runtime, runtime) ||
-				!library.EqInt(it.Numbers.Absolute, absolute) || !library.EqInt(it.Numbers.AltSeason, altS) || !library.EqInt(it.Numbers.AltEpisode, altE) || it.Still != e.Still || it.DroppedAt != nil || len(ids) != len(it.SourceIDs) || ids[sh.Source] != it.SourceIDs[sh.Source] ||
+				!library.EqInt(it.Numbers.Absolute, absolute) || !library.EqInt(it.Numbers.AltSeason, altS) || !library.EqInt(it.Numbers.AltEpisode, altE) ||
+				!library.EqInt(it.Numbers.NameSeason, nameS) || !library.EqInt(it.Numbers.NameEpisode, nameE) || it.Still != e.Still || it.DroppedAt != nil || len(ids) != len(it.SourceIDs) || ids[sh.Source] != it.SourceIDs[sh.Source] ||
 				it.PartID == nil || *it.PartID != p.ID || *it.Numbers.Season != e.Season || *it.Numbers.Episode != e.Number
 			if !changed {
 				continue
@@ -509,6 +544,7 @@ func syncShowTx(ctx context.Context, tx *sql.Tx, t mediafiles.Title, sh metadata
 			it.Numbers.Season, it.Numbers.Episode = &season, &number
 			it.Name, it.AirDate, it.AirDay, it.Runtime, it.Numbers.Absolute, it.DroppedAt, it.SourceIDs, it.PartID = name, e.AirDate, day, runtime, absolute, nil, ids, &p.ID
 			it.Numbers.AltSeason, it.Numbers.AltEpisode = altS, altE
+			it.Numbers.NameSeason, it.Numbers.NameEpisode = nameS, nameE
 			it.Still, it.AirTimed = e.Still, e.Timed && e.AirDate != nil
 			if err := database.Update(tx, "items", it, by); err != nil {
 				return out, err
@@ -521,7 +557,7 @@ func syncShowTx(ctx context.Context, tx *sql.Tx, t mediafiles.Title, sh metadata
 		if cut := futureCut(t, choice, now); cut != nil && e.AirDate != nil && !e.AirDate.After(*cut) {
 			keep = false // future: only episodes still to air
 		}
-		it := &mediafiles.Item{TitleID: t.ID, PartID: &p.ID, Kind: "episode", Numbers: mediafiles.Numbers{Season: &season, Episode: &number, Absolute: absolute, AltSeason: altS, AltEpisode: altE},
+		it := &mediafiles.Item{TitleID: t.ID, PartID: &p.ID, Kind: "episode", Numbers: mediafiles.Numbers{Season: &season, Episode: &number, Absolute: absolute, AltSeason: altS, AltEpisode: altE, NameSeason: nameS, NameEpisode: nameE},
 			Name: name, AirDate: e.AirDate, AirDay: day, AirTimed: e.Timed && e.AirDate != nil, Runtime: runtime, KeepUpToDate: keep, SourceIDs: map[string]string{}, Still: e.Still}
 		if e.ID != "" {
 			it.SourceIDs[sh.Source] = e.ID

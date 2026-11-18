@@ -786,5 +786,6 @@
 	"discover.titleLibrary.releaseNumbers": "릴리스 이름 번호",
 	"discover.titleLibrary.releaseNumbersOrder": "이 순서대로",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB 기준",
-	"discover.titleLibrary.releaseNumbersHint": "릴리스 이름이 에피소드에 매기는 번호입니다. 파일은 이 순서의 번호를 유지합니다."
+	"discover.titleLibrary.releaseNumbersHint": "릴리스 이름이 에피소드에 매기는 번호입니다. 파일은 이 순서의 번호를 유지합니다.",
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) 기준"
 }
