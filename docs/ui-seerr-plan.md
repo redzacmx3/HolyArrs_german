@@ -66,9 +66,17 @@ Sortiert nach Nutzen pro Aufwand. Jeder Schritt lässt sich einzeln ausliefern u
 Ziel: Ein Familienmitglied sitzt mit der Fernbedienung vor dem Fernseher und fragt einen Film oder eine Serie an, ohne Maus, Tastatur oder Handy. Seerr kann das übrigens auch nicht gut, es ist auf Maus und Touch gebaut. Hier können wir besser werden als das Vorbild.
 
 *Wie die Familie HolyArrs am Fernseher öffnet*
-- Über den Browser des Fernsehers oder der Box (Fire TV Silk, Android-TV-Browser, Samsung/LG-Browser). Eine eigene TV-App ist nicht Teil dieses Plans.
-- Vorschlag: eine eigene Adresse `/tv` oder ein Schalter „Fernseher-Ansicht“ unter Einstellungen › Darstellung, der pro Gerät gespeichert wird. Automatisch erkennen ist unzuverlässig (TV-Browser melden sich oft wie ein Desktop), deshalb lieber ein fester Einstieg, den man einmal als Lesezeichen anlegt.
+- Geräte der Familie (Entscheidung 2026-11-18): **nur Fire TV und Android TV / Google TV**. Alle laufen auf Android. Samsung, LG und Apple TV müssen wir nicht bedienen.
+- **Stufe 1, Browser:** Auf Fire TV über Silk, auf Android/Google TV über einen nachinstallierten Browser (Google TV bringt keinen mit). Damit lässt sich die TV-Ansicht früh testen. Nachteil: Silk bedient Webseiten meist mit einem Mauszeiger statt mit Pfeiltasten-Fokus, die Zurück-Taste verlässt leicht die Seite, und es gibt keine Kachel im Startmenü.
+- **Stufe 2, kleine TV-App (Empfehlung für den Endausbau):** Weil alle Geräte Android sind, reicht eine einzige schlanke Android-TV-App, die nur die HolyArrs-Seite `/tv` in einer WebView anzeigt. Sie läuft auf Fire TV und Google TV, wird per APK installiert (Fire TV: „Apps unbekannter Herkunft“, z. B. über Downloader) und bringt:
+  - eine eigene Kachel im Startmenü,
+  - echte Pfeiltasten-Ereignisse vom Steuerkreuz statt Mauszeiger,
+  - eine Zurück-Taste, die erst Dialoge schließt und nie aus Versehen die App verlässt,
+  - die Server-Adresse einmal einstellen (z. B. `http://<server>:6262/tv`), danach startet sie direkt.
+  Die App enthält keine eigene Logik; alles bleibt in HolyArrs. Sie liegt als eigenes kleines Projekt neben dem Fork (eigener Ordner oder eigenes Repo), damit der Upstream-Sync sie nie berührt.
+- Vorschlag: eine eigene Adresse `/tv` oder ein Schalter „Fernseher-Ansicht“ unter Einstellungen › Darstellung, der pro Gerät gespeichert wird. Automatisch erkennen ist unzuverlässig, deshalb ein fester Einstieg; die TV-App öffnet immer `/tv`.
 - Die TV-Ansicht zeigt nur, was man dort braucht: Entdecken, Suchen, Anfragen, Meine Anfragen. Downloads, Library-Pflege und Einstellungen bleiben auf PC und Handy.
+- Sprechen statt tippen: Die Fernbedienungen von Fire TV und Google TV haben ein Mikrofon. Im Browser hängt das vom Gerät ab; die TV-App kann die Android-Spracheingabe direkt ins Suchfeld geben. Das gehört zu Stufe 2.
 
 *Anmelden am Fernseher*
 - Passwort mit der Fernbedienung tippen ist mühsam. Vorschlag: Anmelden per QR-Code. Der Fernseher zeigt einen Code, man scannt ihn mit dem Handy, auf dem man schon angemeldet ist, und bestätigt dort. HolyArrs kann QR-Codes schon zeichnen (`lib/accounts/QrCode.svelte`, heute für die Zwei-Faktor-Einrichtung).
@@ -90,9 +98,16 @@ Ziel: Ein Familienmitglied sitzt mit der Fernbedienung vor dem Fernseher und fra
 - Ziel: Ein Film in höchstens fünf Tastendrücken nach dem Finden, eine ganze Serie in höchstens sechs.
 
 *Kinder am Fernseher*
-- Kinderkonten gibt es schon (mit Altersgrenze und eigener Kennzeichnung, `lib/accounts/kid.ts`, `KidMark.svelte`). Am Fernseher sehen sie nur Titel innerhalb ihrer Altersgrenze, nur den kurzen Weg und keine Qualitätswahl.
-- Ihre Anfragen warten auf Freigabe durch die Eltern, wenn „Automatisch genehmigen“ für das Konto aus ist (gibt es schon). Vorschlag: Die Eltern bekommen dann eine Nachricht aufs Handy mit „Genehmigen“ und „Ablehnen“ direkt in der Nachricht, damit niemand an den PC muss.
-- „Meine Anfragen“ zeigt Kindern einfache Bilder statt Zustandswörtern: Uhr (wartet), Haken (kommt), Fernseher (kann man schauen).
+
+Entscheidung 2026-11-18: Ein Kind darf innerhalb seiner Altersgrenze selbst entscheiden. Zusätzlich gibt es eine Verriegelung; ist sie an, wird aus der Anfrage ein Wunsch an die Eltern.
+
+- Kinderkonten gibt es schon (mit Altersgrenze und eigener Kennzeichnung, `lib/accounts/kid.ts`, `KidMark.svelte`). Am Fernseher sehen sie nur Titel innerhalb ihrer Altersgrenze, nur den kurzen Weg und keine Qualitätswahl. Titel über der Altersgrenze erscheinen gar nicht, auch nicht in der Suche.
+- **Normalfall (Verriegelung aus):** Das Kind fragt an, die Anfrage ist sofort genehmigt und wird gesucht, genau wie bei Erwachsenen. Technisch ist das der vorhandene Schalter „Anfragen automatisch genehmigen“ pro Person, der für Kinderkonten dann standardmäßig an ist. Die Wochenlimits aus den Request-Einstellungen gelten weiter und schützen vor „alles anfragen“.
+- **Verriegelung an:** Der Knopf heißt beim Kind „Wünschen“ statt „Anfragen“. Der Wunsch wartet auf die Eltern; das Kind sieht „Wartet auf Mama/Papa“ (der Name des Kontos, das freigibt).
+- **Wo die Verriegelung sitzt:** Im Einstellungs-Menü, pro Kinderkonto (Einstellungen › Nutzer und Rollen › Kind › „Kindersicherung: Anfragen nur als Wunsch“). Zusätzlich in der TV-Ansicht unter einem Zahnrad, geschützt durch die Eltern-PIN, damit man sie am Fernseher schnell ein- und ausschalten kann (z. B. abends). Ohne PIN kommt ein Kind nicht hinein.
+- Optional später: Verriegelung nach Uhrzeit (z. B. ab 19 Uhr nur noch Wünsche) und eine strengere Altersgrenze nur für Anfragen, während das Kind beim Entdecken alles in seiner Grenze sieht.
+- **Freigabe durch die Eltern:** Eine Nachricht aufs Handy mit „Genehmigen“ und „Ablehnen“ direkt in der Nachricht, damit niemand an den PC muss. Auf der Requests-Seite stehen Wünsche oben in einer eigenen Gruppe „Wünsche der Kinder“.
+- „Meine Anfragen“ zeigt Kindern einfache Bilder statt Zustandswörtern: Herz (gewünscht, wartet), Uhr (kommt bald), Fernseher (kann man schauen).
 
 *Lesbarkeit aus drei Metern*
 - Mindestens 24 px Text auf 1080p, große Poster, wenige Elemente pro Bildschirm, hoher Kontrast im dunklen Design.
@@ -101,14 +116,15 @@ Ziel: Ein Familienmitglied sitzt mit der Fernbedienung vor dem Fernseher und fra
 
 *Prüfen und testen*
 - Jeder Schritt aus A1, A3, A4 und B1 bekommt einen Test, der nur mit Tastatur bedient wird (Pfeile, Enter, Escape/Zurück): Titel finden, anfragen, Staffel wählen, Dialog schließen. Das läuft mit Playwright in der Testsuite.
-- Einmal von Hand auf einem echten Gerät der Familie (welches, ist offen, siehe Fragen unten) prüfen, bevor B4 als fertig gilt.
+- Einmal von Hand auf einem Fire TV und einem Google-TV-Gerät der Familie prüfen, bevor B4 als fertig gilt.
 
 *Reihenfolge innerhalb von B4*
 1. Fokus sichtbar machen und Hover-only-Aktionen im Anfrage-Weg beseitigen (klein, hilft auch am PC).
 2. Pfeil-Navigation zwischen Reihen und Zurück-Taste.
 3. TV-Ansicht `/tv` mit Bildschirm-Alphabet und TV-Staffeldialog.
 4. Anmelden per QR-Code und Profilauswahl mit PIN.
-5. Freigabe für Eltern per Nachricht aufs Handy.
+5. Kindersicherung: Schalter pro Kinderkonto, „Wünschen“ statt „Anfragen“, Freigabe für Eltern per Nachricht aufs Handy.
+6. TV-App (Stufe 2) für Fire TV und Google TV, sobald die TV-Ansicht im Browser steht.
 
 ### C. Größere Schritte
 
@@ -171,7 +187,7 @@ Der Fork holt jeden Montag Upstream. Die betroffenen Dateien (`TitlePage.svelte`
   - Neu **B4. Bedienung am Fernseher**, ausgeführt oben unter B. Die Grundregeln (Fokus, keine Aktion nur über Hover) werden schon bei A1, A3, A4 und B1 mitgeprüft.
   - Kinderkonten (gibt es schon, mit Altersgrenze) sollen den kurzen Weg ohne „Erweitert“ sehen.
 
-## Offene Fragen an Thomas (B4)
+## Entscheidungen von Thomas zu B4 (2026-11-18)
 
-- Welche Geräte nutzt die Familie am Fernseher (Fire TV, Android TV/Google TV, Samsung, LG, Apple TV)? Apple TV hat keinen Browser; dort ginge es nur über das Handy oder eine eigene App.
-- Soll ein Kind am Fernseher überhaupt anfragen dürfen, oder nur wünschen, und die Eltern entscheiden?
+- **Geräte:** nur Fire TV und Android TV / Google TV. Daraus folgt die Empfehlung einer kleinen Android-TV-App als Endausbau (siehe B4, „Wie die Familie HolyArrs am Fernseher öffnet“).
+- **Kinder:** entscheiden innerhalb ihrer Altersgrenze selbst; eine Verriegelung im Einstellungs-Menü macht aus Anfragen Wünsche an die Eltern (siehe B4, „Kinder am Fernseher“).
