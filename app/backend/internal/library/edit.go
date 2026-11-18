@@ -32,6 +32,10 @@ type TitleChange struct {
 	// EpisodeGroupID picks one of the show's TMDB episode orders; "" goes
 	// back to TMDB's own numbering.
 	EpisodeGroupID *string `json:"episode_group_id"`
+	// ReleaseNumbers is how release names number the episodes of a show
+	// that follows a chosen episode order: "" by that order, "tmdb" by
+	// TMDB's own numbering.
+	ReleaseNumbers *string `json:"release_numbers"`
 	// PackWindow takes a season pack a few episodes at a time (0 = off).
 	PackWindow *int `json:"pack_window"`
 	// Tags route the title's grabs and searches (tagset); nil keeps them.
@@ -81,7 +85,7 @@ func (s *Service) Edit(ctx context.Context, titleID int64, c TitleChange, dryRun
 	switch {
 	case show && (c.ReleaseGate != nil || c.GateDelayDays != nil):
 		return res, ErrMovieOnly
-	case !show && (c.EpisodeOrder != nil || c.NewSeasons != nil || c.EpisodeGroupID != nil || c.PackWindow != nil):
+	case !show && (c.EpisodeOrder != nil || c.NewSeasons != nil || c.EpisodeGroupID != nil || c.PackWindow != nil || c.ReleaseNumbers != nil):
 		return res, ErrShowOnly
 	case c.PackWindow != nil && (*c.PackWindow < 0 || *c.PackWindow > MaxPackWindow):
 		return res, ErrBadPackWindow
@@ -89,6 +93,8 @@ func (s *Service) Edit(ctx context.Context, titleID int64, c TitleChange, dryRun
 		return res, ErrBadOrder
 	case c.NewSeasons != nil && *c.NewSeasons != "all" && *c.NewSeasons != "none":
 		return res, ErrBadNewSeasons
+	case c.ReleaseNumbers != nil && *c.ReleaseNumbers != "" && *c.ReleaseNumbers != mediafiles.ReleaseNumbersTMDB:
+		return res, ErrBadReleaseNumbers
 	}
 	if c.EpisodeGroupID != nil && *c.EpisodeGroupID != "" {
 		if err := s.checkGroup(ctx, cur, *c.EpisodeGroupID); err != nil {
@@ -144,6 +150,9 @@ func (s *Service) Edit(ctx context.Context, titleID int64, c TitleChange, dryRun
 		}
 		if c.PackWindow != nil {
 			t.PackWindow = *c.PackWindow
+		}
+		if c.ReleaseNumbers != nil {
+			t.ReleaseNumbers = *c.ReleaseNumbers
 		}
 		if c.EpisodeGroupID != nil {
 			t.EpisodeGroupID = nil

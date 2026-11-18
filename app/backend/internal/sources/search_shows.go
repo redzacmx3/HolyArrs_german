@@ -394,7 +394,7 @@ func matchFail(rule, detail string) mediafiles.Reason {
 func (set showSet) lines(ss *mediafiles.SlotSet, rel mediafiles.ReleaseFacts, refs []mediafiles.EpisodeRef, byItem map[int64]*epSlot, rules showRules,
 	turnedFor func(int64) []string) {
 	p := rel.Parse
-	found, why := mediafiles.MatchEpisodes(p, set.order(), refs)
+	found, why := mediafiles.MatchEpisodes(p, set.order(), mediafiles.ReleaseRefs(set.ti, refs))
 	if why != "" {
 		ss.MatchReasons = append(ss.MatchReasons, matchFail("episode", why))
 		return

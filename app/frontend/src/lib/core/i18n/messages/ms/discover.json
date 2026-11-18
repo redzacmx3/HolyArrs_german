@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Keluar",
 	"discover.popularRail.comingDay": "Akan datang",
 	"discover.titleLibrary.turnShowOnHint": "Hidupkan rancangan ini untuk mula mencari.",
-	"discover.leftovers.reason.seasons_differ": "Ditemui hanya melalui nombor TMDB aplikasi lama: pastikan ini rancangan yang sama, kemudian padankan fail itu sendiri"
+	"discover.leftovers.reason.seasons_differ": "Ditemui hanya melalui nombor TMDB aplikasi lama: pastikan ini rancangan yang sama, kemudian padankan fail itu sendiri",
+	"discover.titleLibrary.releaseNumbers": "Penomboran nama keluaran",
+	"discover.titleLibrary.releaseNumbersOrder": "Mengikut susunan ini",
+	"discover.titleLibrary.releaseNumbersTmdb": "Mengikut TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Cara nama keluaran menomborkan episod. Fail kekal dengan nombor susunan ini."
 }

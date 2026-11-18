@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Apare",
 	"discover.popularRail.comingDay": "În curând",
 	"discover.titleLibrary.turnShowOnHint": "Activează serialul ca să înceapă căutarea.",
-	"discover.leftovers.reason.seasons_differ": "Găsit doar după numărul TMDB din aplicația veche: verifică dacă este același serial, apoi potrivește singur fișierul"
+	"discover.leftovers.reason.seasons_differ": "Găsit doar după numărul TMDB din aplicația veche: verifică dacă este același serial, apoi potrivește singur fișierul",
+	"discover.titleLibrary.releaseNumbers": "Numerotarea lansărilor",
+	"discover.titleLibrary.releaseNumbersOrder": "După această ordine",
+	"discover.titleLibrary.releaseNumbersTmdb": "După TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Cum numerotează numele lansărilor episoadele. Fișierele păstrează numerele acestei ordini."
 }

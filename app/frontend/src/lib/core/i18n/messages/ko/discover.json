@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "공개",
 	"discover.popularRail.comingDay": "공개 예정",
 	"discover.titleLibrary.turnShowOnHint": "찾기를 시작하려면 프로그램을 켜세요.",
-	"discover.leftovers.reason.seasons_differ": "이전 앱의 TMDB 번호로만 찾았어요. 같은 쇼인지 확인한 뒤 파일을 직접 맞춰 주세요"
+	"discover.leftovers.reason.seasons_differ": "이전 앱의 TMDB 번호로만 찾았어요. 같은 쇼인지 확인한 뒤 파일을 직접 맞춰 주세요",
+	"discover.titleLibrary.releaseNumbers": "릴리스 이름 번호",
+	"discover.titleLibrary.releaseNumbersOrder": "이 순서대로",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB 기준",
+	"discover.titleLibrary.releaseNumbersHint": "릴리스 이름이 에피소드에 매기는 번호입니다. 파일은 이 순서의 번호를 유지합니다."
 }

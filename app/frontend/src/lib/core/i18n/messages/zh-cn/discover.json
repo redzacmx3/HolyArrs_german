@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "上映",
 	"discover.popularRail.comingDay": "即将上映",
 	"discover.titleLibrary.turnShowOnHint": "打开这部剧即可开始查找。",
-	"discover.leftovers.reason.seasons_differ": "仅通过旧应用的 TMDB 编号找到：请确认是同一部剧，然后手动匹配文件"
+	"discover.leftovers.reason.seasons_differ": "仅通过旧应用的 TMDB 编号找到：请确认是同一部剧，然后手动匹配文件",
+	"discover.titleLibrary.releaseNumbers": "发布名称的编号",
+	"discover.titleLibrary.releaseNumbersOrder": "按此顺序",
+	"discover.titleLibrary.releaseNumbersTmdb": "按 TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "发布名称如何为剧集编号。文件保留此顺序的编号。"
 }

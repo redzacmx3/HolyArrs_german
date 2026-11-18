@@ -35,11 +35,16 @@ func showQuery(ti mediafiles.Title, season int, ep *epSlot) Query {
 		q.Season, q.Episode = d.Year(), d.Format("01/02")
 		q.Words = d.Format("2006 01 02")
 	default:
-		season, number := ep.ref.Named()
+		season, number := releaseNumbers(ti, ep.ref)
 		q.Season, q.Episode = season, strconv.Itoa(number)
 		q.Words = fmt.Sprintf("S%02dE%02d", season, number)
 	}
 	return q
+}
+
+// releaseNumbers is the season and episode release names give the episode.
+func releaseNumbers(ti mediafiles.Title, r mediafiles.EpisodeRef) (int, int) {
+	return mediafiles.ReleaseRefs(ti, []mediafiles.EpisodeRef{r})[0].Named()
 }
 
 // absoluteQuery is the second search for an episode in absolute order: the
@@ -292,7 +297,7 @@ func (s *Searcher) HandleSeason(ctx context.Context, r *jobs.Run) error {
 	// title only, so the other names are asked once a search.
 	asked := map[int]bool{season: true}
 	for _, e := range looking {
-		named, _ := e.ref.Named()
+		named, _ := releaseNumbers(ti, e.ref)
 		if asked[named] {
 			continue
 		}

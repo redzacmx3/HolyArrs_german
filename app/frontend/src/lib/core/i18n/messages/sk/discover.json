@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Vychádza",
 	"discover.popularRail.comingDay": "Čoskoro",
 	"discover.titleLibrary.turnShowOnHint": "Zapnite seriál, aby sa začalo hľadanie.",
-	"discover.leftovers.reason.seasons_differ": "Nájdené len podľa čísla TMDB zo starej aplikácie: skontrolujte, či ide o rovnaký seriál, a potom súbor priraďte sami"
+	"discover.leftovers.reason.seasons_differ": "Nájdené len podľa čísla TMDB zo starej aplikácie: skontrolujte, či ide o rovnaký seriál, a potom súbor priraďte sami",
+	"discover.titleLibrary.releaseNumbers": "Číslovanie vydaní",
+	"discover.titleLibrary.releaseNumbersOrder": "Podľa tohto poradia",
+	"discover.titleLibrary.releaseNumbersTmdb": "Podľa TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Ako názvy vydaní číslujú epizódy. Súbory si ponechajú čísla tohto poradia."
 }

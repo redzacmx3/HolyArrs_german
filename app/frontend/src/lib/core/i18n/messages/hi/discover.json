@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "रिलीज़",
 	"discover.popularRail.comingDay": "आने वाला",
 	"discover.titleLibrary.turnShowOnHint": "खोज शुरू करने के लिए शो चालू करें।",
-	"discover.leftovers.reason.seasons_differ": "सिर्फ़ पुराने ऐप के TMDB नंबर से मिला: जाँच लें कि यह वही शो है, फिर फ़ाइल खुद मिलाएँ"
+	"discover.leftovers.reason.seasons_differ": "सिर्फ़ पुराने ऐप के TMDB नंबर से मिला: जाँच लें कि यह वही शो है, फिर फ़ाइल खुद मिलाएँ",
+	"discover.titleLibrary.releaseNumbers": "रिलीज़ नामों की गिनती",
+	"discover.titleLibrary.releaseNumbersOrder": "इस क्रम से",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB से",
+	"discover.titleLibrary.releaseNumbersHint": "रिलीज़ नाम एपिसोड को कैसे क्रमांकित करते हैं। फ़ाइलें इसी क्रम के नंबर रखती हैं।"
 }

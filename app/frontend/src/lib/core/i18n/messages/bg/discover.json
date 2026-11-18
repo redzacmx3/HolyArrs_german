@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Излиза",
 	"discover.popularRail.comingDay": "Предстои",
 	"discover.titleLibrary.turnShowOnHint": "Включете сериала, за да започне търсенето.",
-	"discover.leftovers.reason.seasons_differ": "Намерен само по номера в TMDB от старото приложение: проверете дали е същият сериал и после свържете файла сами"
+	"discover.leftovers.reason.seasons_differ": "Намерен само по номера в TMDB от старото приложение: проверете дали е същият сериал и после свържете файла сами",
+	"discover.titleLibrary.releaseNumbers": "Номерация на изданията",
+	"discover.titleLibrary.releaseNumbersOrder": "По този ред",
+	"discover.titleLibrary.releaseNumbersTmdb": "По TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Как имената на изданията номерират епизодите. Файловете запазват номерата от този ред."
 }

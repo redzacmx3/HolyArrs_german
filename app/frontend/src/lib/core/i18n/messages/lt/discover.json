@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Išeina",
 	"discover.popularRail.comingDay": "Netrukus",
 	"discover.titleLibrary.turnShowOnHint": "Įjunkite serialą, kad prasidėtų paieška.",
-	"discover.leftovers.reason.seasons_differ": "Rastas tik pagal senos programos TMDB numerį: patikrinkite, ar tai tas pats serialas, tada patys susiekite failą"
+	"discover.leftovers.reason.seasons_differ": "Rastas tik pagal senos programos TMDB numerį: patikrinkite, ar tai tas pats serialas, tada patys susiekite failą",
+	"discover.titleLibrary.releaseNumbers": "Leidimų numeracija",
+	"discover.titleLibrary.releaseNumbersOrder": "Pagal šią tvarką",
+	"discover.titleLibrary.releaseNumbersTmdb": "Pagal TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Kaip leidimų pavadinimai numeruoja serijas. Failai išlaiko šios tvarkos numerius."
 }

@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "منتشر می‌شود",
 	"discover.popularRail.comingDay": "به‌زودی",
 	"discover.titleLibrary.turnShowOnHint": "سریال را روشن کنید تا جستجو شروع شود.",
-	"discover.leftovers.reason.seasons_differ": "فقط با شمارهٔ TMDB برنامهٔ قدیمی پیدا شد: بررسی کنید همان سریال باشد، سپس فایل را خودتان جور کنید"
+	"discover.leftovers.reason.seasons_differ": "فقط با شمارهٔ TMDB برنامهٔ قدیمی پیدا شد: بررسی کنید همان سریال باشد، سپس فایل را خودتان جور کنید",
+	"discover.titleLibrary.releaseNumbers": "شماره‌گذاری نام انتشارها",
+	"discover.titleLibrary.releaseNumbersOrder": "طبق این ترتیب",
+	"discover.titleLibrary.releaseNumbersTmdb": "طبق TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "نام انتشارها قسمت‌ها را چگونه شماره می‌زنند. فایل‌ها شماره‌های این ترتیب را نگه می‌دارند."
 }

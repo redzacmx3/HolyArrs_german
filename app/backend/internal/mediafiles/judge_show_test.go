@@ -264,3 +264,26 @@ func TestMatchEpisodesReleaseNumbers(t *testing.T) {
 		}
 	}
 }
+
+// TMDB numbering for release names applies only while the show follows a
+// chosen episode order; otherwise release numbers (anime parts) stay.
+func TestReleaseRefs(t *testing.T) {
+	refs := []EpisodeRef{{ItemID: 1, Season: 2, Episode: 46, AltSeason: 3, AltEpisode: 47}}
+	grp := "grp"
+	for _, c := range []struct {
+		t   Title
+		alt int
+	}{
+		{Title{}, 3},
+		{Title{ReleaseNumbers: ReleaseNumbersTMDB}, 3},
+		{Title{EpisodeGroupID: &grp}, 3},
+		{Title{EpisodeGroupID: &grp, ReleaseNumbers: ReleaseNumbersTMDB}, 0},
+	} {
+		if got := ReleaseRefs(c.t, refs)[0].AltSeason; got != c.alt {
+			t.Fatalf("%+v: alt season %d, want %d", c.t, got, c.alt)
+		}
+	}
+	if refs[0].AltSeason != 3 {
+		t.Fatal("the refs given are left as they were")
+	}
+}

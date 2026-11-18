@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Surt",
 	"discover.popularRail.comingDay": "Aviat",
 	"discover.titleLibrary.turnShowOnHint": "Activa la sèrie per començar a cercar.",
-	"discover.leftovers.reason.seasons_differ": "Trobada només pel número de TMDB de l'app antiga: comprova que és la mateixa sèrie i després associa el fitxer tu mateix"
+	"discover.leftovers.reason.seasons_differ": "Trobada només pel número de TMDB de l'app antiga: comprova que és la mateixa sèrie i després associa el fitxer tu mateix",
+	"discover.titleLibrary.releaseNumbers": "Numeració de les releases",
+	"discover.titleLibrary.releaseNumbersOrder": "Segons aquest ordre",
+	"discover.titleLibrary.releaseNumbersTmdb": "Segons TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Com numeren els episodis els noms de release. Els fitxers mantenen els números d'aquest ordre."
 }

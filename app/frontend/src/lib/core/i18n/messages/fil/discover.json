@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Labas",
 	"discover.popularRail.comingDay": "Darating",
 	"discover.titleLibrary.turnShowOnHint": "I-on ang palabas para magsimulang maghanap.",
-	"discover.leftovers.reason.seasons_differ": "Nahanap lang gamit ang TMDB number ng lumang app: tiyaking iisang palabas ito, saka ikaw mismo ang magtugma ng file"
+	"discover.leftovers.reason.seasons_differ": "Nahanap lang gamit ang TMDB number ng lumang app: tiyaking iisang palabas ito, saka ikaw mismo ang magtugma ng file",
+	"discover.titleLibrary.releaseNumbers": "Pagbilang ng mga release",
+	"discover.titleLibrary.releaseNumbersOrder": "Ayon sa ayos na ito",
+	"discover.titleLibrary.releaseNumbersTmdb": "Ayon sa TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Kung paano binibilang ng mga pangalan ng release ang mga episode. Mananatili sa mga file ang numero ng ayos na ito."
 }

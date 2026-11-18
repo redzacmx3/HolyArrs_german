@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Κυκλοφορεί",
 	"discover.popularRail.comingDay": "Έρχεται",
 	"discover.titleLibrary.turnShowOnHint": "Ενεργοποιήστε τη σειρά για να ξεκινήσει η αναζήτηση.",
-	"discover.leftovers.reason.seasons_differ": "Βρέθηκε μόνο από τον αριθμό TMDB της παλιάς εφαρμογής: έλεγξε ότι είναι η ίδια σειρά και μετά αντιστοίχισε το αρχείο μόνος σου"
+	"discover.leftovers.reason.seasons_differ": "Βρέθηκε μόνο από τον αριθμό TMDB της παλιάς εφαρμογής: έλεγξε ότι είναι η ίδια σειρά και μετά αντιστοίχισε το αρχείο μόνος σου",
+	"discover.titleLibrary.releaseNumbers": "Αρίθμηση κυκλοφοριών",
+	"discover.titleLibrary.releaseNumbersOrder": "Με αυτή τη σειρά",
+	"discover.titleLibrary.releaseNumbersTmdb": "Με το TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "Πώς αριθμούν τα επεισόδια τα ονόματα κυκλοφοριών. Τα αρχεία κρατούν τους αριθμούς αυτής της σειράς."
 }

@@ -135,6 +135,8 @@ Feed check interval and the nightly search count are shared with movies, see [Se
 
 HolyArrs matches the release to the show by its name or another name the show is known by. It then matches episodes by season and episode, air date or running number. Show releases never match movies, and movie releases never match shows. A season pack goes to your Downloader once, as one download.
 
+When a show follows another episode order from TMDB (such as Production), release names are read by that order's numbers. Some releases still count by TMDB's own numbering: German releases of kids' shows such as PAW Patrol are one example. On the show's **Library** tab, set **Release names count** to **By TMDB**. Search, matching and import then read release names by TMDB's numbers, and files keep the chosen order's numbers. The row shows only while the show follows another order.
+
 </details>
 
 ## Related

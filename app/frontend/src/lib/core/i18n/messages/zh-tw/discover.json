@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "上映",
 	"discover.popularRail.comingDay": "即將上映",
 	"discover.titleLibrary.turnShowOnHint": "開啟這部劇即可開始尋找。",
-	"discover.leftovers.reason.seasons_differ": "僅透過舊應用程式的 TMDB 編號找到：請確認是同一部劇，然後手動配對檔案"
+	"discover.leftovers.reason.seasons_differ": "僅透過舊應用程式的 TMDB 編號找到：請確認是同一部劇，然後手動配對檔案",
+	"discover.titleLibrary.releaseNumbers": "發布名稱的編號",
+	"discover.titleLibrary.releaseNumbersOrder": "依此順序",
+	"discover.titleLibrary.releaseNumbersTmdb": "依 TMDB",
+	"discover.titleLibrary.releaseNumbersHint": "發布名稱如何為集數編號。檔案保留此順序的編號。"
 }

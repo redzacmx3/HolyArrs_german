@@ -782,5 +782,9 @@
 	"discover.popularRail.out": "Çıkıyor",
 	"discover.popularRail.comingDay": "Yakında",
 	"discover.titleLibrary.turnShowOnHint": "Aramaya başlamak için diziyi açın.",
-	"discover.leftovers.reason.seasons_differ": "Yalnızca eski uygulamanın TMDB numarasıyla bulundu: aynı dizi olduğunu kontrol et, sonra dosyayı kendin eşleştir"
+	"discover.leftovers.reason.seasons_differ": "Yalnızca eski uygulamanın TMDB numarasıyla bulundu: aynı dizi olduğunu kontrol et, sonra dosyayı kendin eşleştir",
+	"discover.titleLibrary.releaseNumbers": "Sürüm adlarının numaralaması",
+	"discover.titleLibrary.releaseNumbersOrder": "Bu sıraya göre",
+	"discover.titleLibrary.releaseNumbersTmdb": "TMDB'ye göre",
+	"discover.titleLibrary.releaseNumbersHint": "Sürüm adlarının bölümleri nasıl numaralandırdığı. Dosyalar bu sıranın numaralarını korur."
 }
