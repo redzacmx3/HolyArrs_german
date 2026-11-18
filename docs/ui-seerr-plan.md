@@ -61,6 +61,55 @@ Sortiert nach Nutzen pro Aufwand. Jeder Schritt lässt sich einzeln ausliefern u
 - Vorschlag: Reihen „Beliebt in Deutschland“, „Deutsche Produktionen“ (TMDB `with_original_language=de`), „Neu bei Netflix/Prime/Disney+ in DE“. Die Region-Logik für Streaming-Toplisten gibt es schon (`ServiceTop(ctx, region)` in `cmd/holyarrs/services.go`).
 - Option „Angefragte und vorhandene Titel ausblenden“ (Seerr 3.5 hat das neu), damit Entdecken nur zeigt, was man noch nicht hat.
 
+**B4. Bedienung am Fernseher (für die Familie)**
+
+Ziel: Ein Familienmitglied sitzt mit der Fernbedienung vor dem Fernseher und fragt einen Film oder eine Serie an, ohne Maus, Tastatur oder Handy. Seerr kann das übrigens auch nicht gut, es ist auf Maus und Touch gebaut. Hier können wir besser werden als das Vorbild.
+
+*Wie die Familie HolyArrs am Fernseher öffnet*
+- Über den Browser des Fernsehers oder der Box (Fire TV Silk, Android-TV-Browser, Samsung/LG-Browser). Eine eigene TV-App ist nicht Teil dieses Plans.
+- Vorschlag: eine eigene Adresse `/tv` oder ein Schalter „Fernseher-Ansicht“ unter Einstellungen › Darstellung, der pro Gerät gespeichert wird. Automatisch erkennen ist unzuverlässig (TV-Browser melden sich oft wie ein Desktop), deshalb lieber ein fester Einstieg, den man einmal als Lesezeichen anlegt.
+- Die TV-Ansicht zeigt nur, was man dort braucht: Entdecken, Suchen, Anfragen, Meine Anfragen. Downloads, Library-Pflege und Einstellungen bleiben auf PC und Handy.
+
+*Anmelden am Fernseher*
+- Passwort mit der Fernbedienung tippen ist mühsam. Vorschlag: Anmelden per QR-Code. Der Fernseher zeigt einen Code, man scannt ihn mit dem Handy, auf dem man schon angemeldet ist, und bestätigt dort. HolyArrs kann QR-Codes schon zeichnen (`lib/accounts/QrCode.svelte`, heute für die Zwei-Faktor-Einrichtung).
+- Profilauswahl wie bei Netflix: Wer an diesem Fernseher schon angemeldet war, erscheint als Bild zum Antippen. „Konto wechseln“ gibt es schon (`switchAccount` im Layout), heute ist jeder Wechsel aber eine volle Anmeldung. Für den Fernseher sollte ein Wechsel zwischen gemerkten Profilen ohne Passwort gehen, bei Erwachsenenkonten optional mit 4-stelliger PIN, damit Kinder nicht als Eltern anfragen.
+
+*Bedienung mit der Fernbedienung*
+- Alles geht mit den Pfeiltasten, OK und Zurück. Die Zurück-Taste schließt zuerst den offenen Dialog, dann geht sie eine Seite zurück, nie aus der App heraus.
+- Räumliche Navigation: Pfeil hoch und runter springt zwischen Reihen, links und rechts innerhalb einer Reihe. Die Grundlage gibt es schon: `lib/ui/rove.ts` macht in einer Kartenreihe genau eine Karte per Tab erreichbar und bewegt den Fokus mit den Pfeiltasten. Für den Fernseher fehlt der Sprung zwischen den Reihen und an die richtige Stelle (die Karte, die senkrecht darunter liegt).
+- Der Fokus ist immer sichtbar und groß: Karte vergrößert sich leicht, dicker heller Rahmen, kein dünner Browser-Rahmen. Beim Betreten einer Seite liegt der Fokus sofort auf dem ersten sinnvollen Ziel (Suchfeld oder erste Karte), nie im Nichts.
+- Nichts darf nur über Hover gehen. Der Anfrage-Knopf auf der Karte (A3/A4) erscheint, sobald die Karte den Fokus hat, nicht nur beim Überfahren mit der Maus. HolyArrs trennt das heute schon teilweise mit `@media (hover: hover)` (z. B. in `WideCard.svelte`); das muss für jede Aktion im Anfrage-Weg gelten.
+
+*Anfrage-Ablauf am Fernseher*
+1. Startseite: oben „Suchen“, darunter Reihen (Beliebt, Für Kinder, Neu bei Netflix/Prime/Disney+ …, siehe B3).
+2. Suchen: Ein Bildschirm-Alphabet in einem Raster, Ergebnisse erscheinen schon nach zwei, drei Buchstaben neben dem Raster. Wo die Fernbedienung ein Mikrofon hat, kann der TV-Browser sprechen statt tippen; dafür reicht ein normales Eingabefeld, das wir nicht blockieren. Die zuletzt gesuchten und angefragten Titel stehen oben, damit man selten tippen muss.
+3. Titel öffnen: große Titelseite mit Poster, kurzer Beschreibung, Altersfreigabe und genau einem Hauptknopf „Anfragen“ (oder „Schon da“, „Angefragt“, „Lädt 45 %“). Der Fokus liegt schon auf diesem Knopf.
+4. Film: OK drücken, fertig. Ein kurzer Hinweis „Angefragt, du bekommst Bescheid“ erscheint und verschwindet von selbst.
+5. Serie: Der Staffel-Dialog aus B1 in TV-Form. Oben „Alle Staffeln“ (vorausgewählt), darunter eine Zeile pro Staffel zum An- und Abwählen mit OK, unten „Anfragen“. Alles passt ohne Scrollen auf einen 1080p-Bildschirm; bei sehr vielen Staffeln scrollt nur die Staffelliste.
+6. „Erweitert“ gibt es am Fernseher nicht. Ordner, Pick rules und Qualität kommen immer aus den Request-Einstellungen und den Zuordnungsregeln (C1).
+- Ziel: Ein Film in höchstens fünf Tastendrücken nach dem Finden, eine ganze Serie in höchstens sechs.
+
+*Kinder am Fernseher*
+- Kinderkonten gibt es schon (mit Altersgrenze und eigener Kennzeichnung, `lib/accounts/kid.ts`, `KidMark.svelte`). Am Fernseher sehen sie nur Titel innerhalb ihrer Altersgrenze, nur den kurzen Weg und keine Qualitätswahl.
+- Ihre Anfragen warten auf Freigabe durch die Eltern, wenn „Automatisch genehmigen“ für das Konto aus ist (gibt es schon). Vorschlag: Die Eltern bekommen dann eine Nachricht aufs Handy mit „Genehmigen“ und „Ablehnen“ direkt in der Nachricht, damit niemand an den PC muss.
+- „Meine Anfragen“ zeigt Kindern einfache Bilder statt Zustandswörtern: Uhr (wartet), Haken (kommt), Fernseher (kann man schauen).
+
+*Lesbarkeit aus drei Metern*
+- Mindestens 24 px Text auf 1080p, große Poster, wenige Elemente pro Bildschirm, hoher Kontrast im dunklen Design.
+- Sichere Ränder von etwa 5 % rundum, weil manche Fernseher den Bildrand abschneiden (Overscan).
+- Keine kleinen Symbole ohne Text, keine Tooltips (die gibt es am Fernseher nicht).
+
+*Prüfen und testen*
+- Jeder Schritt aus A1, A3, A4 und B1 bekommt einen Test, der nur mit Tastatur bedient wird (Pfeile, Enter, Escape/Zurück): Titel finden, anfragen, Staffel wählen, Dialog schließen. Das läuft mit Playwright in der Testsuite.
+- Einmal von Hand auf einem echten Gerät der Familie (welches, ist offen, siehe Fragen unten) prüfen, bevor B4 als fertig gilt.
+
+*Reihenfolge innerhalb von B4*
+1. Fokus sichtbar machen und Hover-only-Aktionen im Anfrage-Weg beseitigen (klein, hilft auch am PC).
+2. Pfeil-Navigation zwischen Reihen und Zurück-Taste.
+3. TV-Ansicht `/tv` mit Bildschirm-Alphabet und TV-Staffeldialog.
+4. Anmelden per QR-Code und Profilauswahl mit PIN.
+5. Freigabe für Eltern per Nachricht aufs Handy.
+
 ### C. Größere Schritte
 
 **C1. Zuordnungsregeln (Seerr: „Override rules“)**
@@ -110,7 +159,7 @@ Der Fork holt jeden Montag Upstream. Die betroffenen Dateien (`TitlePage.svelte`
 1. Stabilisierung abschließen (Backlog-Punkte 1 bis 3 und laufende Fehler).
 2. A2 (eine Zeile, sofort spürbar), dann A1, dann A3.
 3. B1, dann A4.
-4. B2, B3; B4 (Fernseher) läuft bei allen Schritten mit.
+4. B2, B3, dann B4 Schritt 3 bis 5 (TV-Ansicht, Anmelden, Eltern-Freigabe). B4 Schritt 1 und 2 laufen schon bei A1 bis B1 mit.
 5. C1 als eigenes Vorhaben mit eigenem Plan: Kinderserien, dann Anime, dann deutsche Originale.
 
 ## Entscheidungen von Thomas (2026-11-18)
@@ -119,5 +168,10 @@ Der Fork holt jeden Montag Upstream. Die betroffenen Dateien (`TitlePage.svelte`
 - **C1:** Reihenfolge der Regeln: zuerst Kinderserien, dann Anime, zum Schluss deutsche Originale.
 - **Nutzung:** Im Endausbau fragt die ganze Familie an, auch am Fernseher. Folgen für den Plan:
   - B1 (Staffel-Dialog) rückt nach vorn, direkt hinter A3.
-  - Neu **B4. Bedienung am Fernseher:** Anfragen muss mit Fernbedienung oder Pfeiltasten gehen (sichtbarer Fokus, große Ziele, keine Aktion nur über Hover, Dialoge ohne Scrollen auf 1080p). Das betrifft A1, A3, A4 und B1 und wird bei jedem dieser Schritte mitgeprüft.
+  - Neu **B4. Bedienung am Fernseher**, ausgeführt oben unter B. Die Grundregeln (Fokus, keine Aktion nur über Hover) werden schon bei A1, A3, A4 und B1 mitgeprüft.
   - Kinderkonten (gibt es schon, mit Altersgrenze) sollen den kurzen Weg ohne „Erweitert“ sehen.
+
+## Offene Fragen an Thomas (B4)
+
+- Welche Geräte nutzt die Familie am Fernseher (Fire TV, Android TV/Google TV, Samsung, LG, Apple TV)? Apple TV hat keinen Browser; dort ginge es nur über das Handy oder eine eigene App.
+- Soll ein Kind am Fernseher überhaupt anfragen dürfen, oder nur wünschen, und die Eltern entscheiden?
