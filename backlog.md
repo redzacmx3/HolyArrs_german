@@ -12,14 +12,14 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Wish:** Drop-down filters above the list for language (German, German DL, English …), picture (720p/1080p/2160p, HDR/DV, x264/x265, WEB/BluRay) and sound (DDP5.1, Atmos, TrueHD …). The filters could combine and use the facts the parser already reads, which the dialog shows as chips.
 
 ### 2. Bulk actions for problem downloads
-- **Status:** in progress (2026-11-18), branch `problem-bulk-actions`
+- **Status:** in progress (2026-11-18), [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17)
 - **Why greyed out:** the rows in "Prüfen" wait on a decision. Most have no download left in the Downloader (PAW Patrol at 0 %, or SABnzbd already cleaned up), so Starten, Pausieren and Entfernen have nothing to act on.
 - **Done in the branch:** with rows ticked, the selection bar shows "N zu prüfen:" with Verwerfen und neu suchen, Erneut suchen, Datei in der Bibliothek behalten (when a copy is there) and Nicht mehr suchen. Each runs for every ticked row at once.
 - **Problem:** On Downloads › Probleme you can select every row ("43 ausgewählt"), but the actions at the top left (Starten, Pausieren, Entfernen) stay greyed out. Nothing can be done with the selection.
 - **Wish:** Actions on the selection: remove (with or without files), remove and search again, and add the release to "abgewiesen" and search again. This would clear many blocked downloads at once and load them fresh.
 
 ### 3. Make "Prüfen / Import blockiert" understandable
-- **Status:** in progress (2026-11-18), branch `problem-bulk-actions`
+- **Status:** in progress (2026-11-18), [PR #17](https://github.com/redzacmx3/HolyArrs_german/pull/17)
 - **Done in the branch:** the list says the reason in a few words instead of "Import blockiert" (for example "Keine passenden Releases mehr", "Keine Datei passt", "Gehört in eine andere Variante"). The row details show the quick fixes next to the main button: Release von Hand wählen opens "Release auswählen" for just this episode or movie right there, Verwerfen und neu suchen, and Datei in der Bibliothek behalten.
 - **Problem:** Downloads in "Prüfen" with "Import blockiert" do not show clearly why they are blocked or what to do. There is no quick way to pick an existing file or a new file for the episode so the status clears.
 - **Wish:** One clear reason per row, plus quick actions such as "use the file already in the library", "pick another file / release", "import anyway" and "remove and search again".
