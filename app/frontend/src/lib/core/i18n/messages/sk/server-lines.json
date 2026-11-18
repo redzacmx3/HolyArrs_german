@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Seriály v trende na streamingu",
 	"server.suggest.trending-on-streaming": "V trende na streamingu",
 	"server.discover.popular": "Populárne",
-	"server.metadata.creator": "Tvorca"
+	"server.metadata.creator": "Tvorca",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

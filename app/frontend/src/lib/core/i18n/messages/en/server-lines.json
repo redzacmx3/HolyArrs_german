@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Trending shows on streaming",
 	"server.suggest.trending-shows-this-week": "Trending shows this week",
 	"server.suggest.trending-this-week-everywhere": "Trending this week everywhere",
-	"server.suggest.what-people-watch-this-week": "What people watch this week"
+	"server.suggest.what-people-watch-this-week": "What people watch this week",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }

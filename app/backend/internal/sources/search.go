@@ -335,6 +335,17 @@ func (s *Searcher) Handle(ctx context.Context, r *jobs.Run) error {
 		}
 		all, answered = append(all, more...), max(answered, n)
 	}
+	// Release names by TVmaze: German double episodes (S02E40-E41) often
+	// do not answer an episode search, so with no answer the release-name
+	// season is asked.
+	if isShow && ep != nil && len(all) == 0 && ti.ReleaseNames() == mediafiles.ReleaseNumbersTVmaze {
+		season, _ := releaseNumbers(ti, ep.ref)
+		more, _, n, _, _, err := s.askAll(ctx, r, showQuery(ti, season, nil), handSearch, true, ti, c.ver.ID, c.pr.Body.Tags)
+		if err != nil {
+			return err
+		}
+		all, answered = append(all, more...), max(answered, n)
+	}
 	jobID := r.Job.ID
 
 	if reason, data, ok, failed := noAnswer(failures, answered, skipped); ok {

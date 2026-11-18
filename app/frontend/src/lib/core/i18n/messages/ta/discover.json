@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "இந்த வரிசைப்படி",
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB படி",
 	"discover.titleLibrary.releaseNumbersHint": "வெளியீட்டுப் பெயர்கள் அத்தியாயங்களை எப்படி எண்ணிடுகின்றன. கோப்புகள் இந்த வரிசையின் எண்களை வைத்திருக்கும்.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) படி"
+	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) படி",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

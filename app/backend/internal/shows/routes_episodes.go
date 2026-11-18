@@ -51,6 +51,10 @@ type EpisodeView struct {
 	// episode order numbers the episode differently.
 	TMDBSeason  *int `json:"tmdb_season,omitempty"`
 	TMDBEpisode *int `json:"tmdb_episode,omitempty"`
+	// TVmazeSeason and TVmazeEpisode are TVmaze's numbers, which release
+	// names use when the show reads them by TVmaze.
+	TVmazeSeason  *int `json:"tvmaze_season,omitempty"`
+	TVmazeEpisode *int `json:"tvmaze_episode,omitempty"`
 }
 
 // EpisodeViewOf is an episode Item as the API shows it, without Slots.
@@ -72,6 +76,7 @@ func EpisodeViewOf(it mediafiles.Item) EpisodeView {
 	if v.IDs == nil {
 		v.IDs = map[string]string{}
 	}
+	v.TVmazeSeason, v.TVmazeEpisode = it.Numbers.NameSeason, it.Numbers.NameEpisode
 	return v
 }
 

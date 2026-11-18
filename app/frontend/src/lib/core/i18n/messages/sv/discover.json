@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "Enligt denna ordning",
 	"discover.titleLibrary.releaseNumbersTmdb": "Enligt TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Hur releasenamn numrerar avsnitten. Filer behåller denna ordnings nummer.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "Enligt TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "Enligt TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

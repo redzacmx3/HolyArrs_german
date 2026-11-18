@@ -65,6 +65,10 @@ type Show struct {
 	// MazeNamed says the episodes carry TVmaze's numbers (NameSeason,
 	// NameEpisode) read this time; when false the stored ones stay.
 	MazeNamed bool `json:"-"`
+	// MazeNumbered is how many episodes took TVmaze's numbers this time.
+	MazeNumbered int `json:"-"`
+	// MazeError says why TVmaze's numbers could not be read, "" when read.
+	MazeError string `json:"-"`
 }
 
 // Season is one season of a looked-up show; 0 holds the specials.

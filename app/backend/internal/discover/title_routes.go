@@ -174,11 +174,14 @@ func (h *TitleHandlers) editTitle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	mazeError := ""
 	if mazeNames {
-		if _, err := shows.New(h.Library).RefreshShow(r.Context(), t.ID, h.Actor(r), nil); err != nil {
+		out, err := shows.New(h.Library).RefreshShow(r.Context(), t.ID, h.Actor(r), nil)
+		if err != nil {
 			h.ShowError(w, err)
 			return
 		}
+		mazeError = out.TVmazeError
 	}
 	renamed := false
 	if regroup {
@@ -204,6 +207,9 @@ func (h *TitleHandlers) editTitle(w http.ResponseWriter, r *http.Request) {
 		h.PublishTitleView(v)
 	}
 	out := map[string]any{"title": v, "changes": res}
+	if mazeError != "" {
+		out["tvmaze_error"] = mazeError // saved, but TVmaze's numbers could not be read
+	}
 	if regroup {
 		out["rename_suggested"] = renamed
 	}

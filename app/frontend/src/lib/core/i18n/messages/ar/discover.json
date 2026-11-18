@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "حسب هذا الترتيب",
 	"discover.titleLibrary.releaseNumbersTmdb": "حسب TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "كيف ترقّم أسماء الإصدارات الحلقات. تحتفظ الملفات بأرقام هذا الترتيب.",
-	"discover.titleLibrary.releaseNumbersTvmaze": "حسب TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "حسب TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

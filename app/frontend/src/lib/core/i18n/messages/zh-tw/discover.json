@@ -787,5 +787,6 @@
 	"discover.titleLibrary.releaseNumbersOrder": "依此順序",
 	"discover.titleLibrary.releaseNumbersTmdb": "依 TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "發布名稱如何為集數編號。檔案保留此順序的編號。",
-	"discover.titleLibrary.releaseNumbersTvmaze": "依 TVmaze (TVDB)"
+	"discover.titleLibrary.releaseNumbersTvmaze": "依 TVmaze (TVDB)",
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
 }

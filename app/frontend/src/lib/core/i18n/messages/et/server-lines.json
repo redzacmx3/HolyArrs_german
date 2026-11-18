@@ -1579,5 +1579,7 @@
 	"server.suggest.trending-shows-on-streaming": "Menukad sarjad voogedastuses",
 	"server.suggest.trending-on-streaming": "Menukas voogedastuses",
 	"server.discover.popular": "Populaarsed",
-	"server.metadata.creator": "Looja"
+	"server.metadata.creator": "Looja",
+	"server.shows.tvmaze-numbers-for-of-episodes": "{name}: TVmaze numbers for {mazenumbered} of {regular} episodes",
+	"server.shows.tvmaze-numbers-not-read-release-names": "{name}: TVmaze numbers not read ({mazeerror}); release names keep the stored ones"
 }
