@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Noskatīts {seen} no {of}",
 	"mediafiles.watched.partly": "Daļēji noskatīts",
 	"mediafiles.adopt.not_looked_up": "Nav meklēts",
-	"mediafiles.releaseSheet.showPickPart": "Lai meklētu, izmantojiet {choose} pie sezonas vai sērijas."
+	"mediafiles.releaseSheet.showPickPart": "Lai meklētu, izmantojiet {choose} pie sezonas vai sērijas.",
+	"mediafiles.releaseFilter.label": "Filtrēt laidienus",
+	"mediafiles.releaseFilter.any": "Visi",
+	"mediafiles.releaseFilter.clear": "Notīrīt filtrus",
+	"mediafiles.releaseFilter.lang": "Valoda",
+	"mediafiles.releaseFilter.res": "Izšķirtspēja",
+	"mediafiles.releaseFilter.source": "Avots",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodeks",
+	"mediafiles.releaseFilter.audio": "Skaņa",
+	"mediafiles.releaseFilter.noLanguage": "Nav norādīta (parasti oriģināls)",
+	"mediafiles.releaseFilter.unknown": "Nezināms",
+	"mediafiles.releaseFilter.dual": "Vācu + oriģināls (DL)",
+	"mediafiles.releaseFilter.subs": "Subtitri: {language}"
 }

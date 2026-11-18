@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Zhlédnuto {seen} z {of}",
 	"mediafiles.watched.partly": "Částečně zhlédnuto",
 	"mediafiles.adopt.not_looked_up": "Nevyhledáno",
-	"mediafiles.releaseSheet.showPickPart": "Chcete-li hledat, použijte {choose} u řady nebo epizody."
+	"mediafiles.releaseSheet.showPickPart": "Chcete-li hledat, použijte {choose} u řady nebo epizody.",
+	"mediafiles.releaseFilter.label": "Filtrovat vydání",
+	"mediafiles.releaseFilter.any": "Vše",
+	"mediafiles.releaseFilter.clear": "Zrušit filtry",
+	"mediafiles.releaseFilter.lang": "Jazyk",
+	"mediafiles.releaseFilter.res": "Rozlišení",
+	"mediafiles.releaseFilter.source": "Zdroj",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Zvuk",
+	"mediafiles.releaseFilter.noLanguage": "Neuvedeno (většinou originál)",
+	"mediafiles.releaseFilter.unknown": "Neznámé",
+	"mediafiles.releaseFilter.dual": "Němčina + originál (DL)",
+	"mediafiles.releaseFilter.subs": "Titulky: {language}"
 }

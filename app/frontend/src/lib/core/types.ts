@@ -393,6 +393,21 @@ export interface ReleaseView {
 	slot_ids?: number[];
 	turned_down_for?: string;
 	album?: string;
+	/** What the name says about language, picture and sound (sources/release_tags.go). */
+	tags?: ReleaseTags;
+}
+
+export interface ReleaseTags {
+	languages?: string[];
+	dual?: boolean;
+	subs?: string[];
+	resolution?: number;
+	source?: string;
+	codec?: string;
+	hdr?: string[];
+	audio?: string;
+	channels?: string;
+	atmos?: boolean;
 }
 
 export interface ReleasePage {

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Гледани {seen} от {of}",
 	"mediafiles.watched.partly": "Частично гледано",
 	"mediafiles.adopt.not_looked_up": "Не е потърсено",
-	"mediafiles.releaseSheet.showPickPart": "За да търсите, използвайте {choose} за сезон или епизод."
+	"mediafiles.releaseSheet.showPickPart": "За да търсите, използвайте {choose} за сезон или епизод.",
+	"mediafiles.releaseFilter.label": "Филтриране на изданията",
+	"mediafiles.releaseFilter.any": "Всички",
+	"mediafiles.releaseFilter.clear": "Изчистване на филтрите",
+	"mediafiles.releaseFilter.lang": "Език",
+	"mediafiles.releaseFilter.res": "Резолюция",
+	"mediafiles.releaseFilter.source": "Източник",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Кодек",
+	"mediafiles.releaseFilter.audio": "Звук",
+	"mediafiles.releaseFilter.noLanguage": "Не е посочен (обикновено оригиналът)",
+	"mediafiles.releaseFilter.unknown": "Неизвестно",
+	"mediafiles.releaseFilter.dual": "Немски + оригинал (DL)",
+	"mediafiles.releaseFilter.subs": "Субтитри: {language}"
 }

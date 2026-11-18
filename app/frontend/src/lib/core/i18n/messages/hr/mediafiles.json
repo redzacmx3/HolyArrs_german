@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Pogledano {seen} od {of}",
 	"mediafiles.watched.partly": "Djelomično pogledano",
 	"mediafiles.adopt.not_looked_up": "Nije potraženo",
-	"mediafiles.releaseSheet.showPickPart": "Za pretraživanje koristite {choose} na sezoni ili epizodi."
+	"mediafiles.releaseSheet.showPickPart": "Za pretraživanje koristite {choose} na sezoni ili epizodi.",
+	"mediafiles.releaseFilter.label": "Filtriraj izdanja",
+	"mediafiles.releaseFilter.any": "Sve",
+	"mediafiles.releaseFilter.clear": "Očisti filtre",
+	"mediafiles.releaseFilter.lang": "Jezik",
+	"mediafiles.releaseFilter.res": "Razlučivost",
+	"mediafiles.releaseFilter.source": "Izvor",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Kodek",
+	"mediafiles.releaseFilter.audio": "Zvuk",
+	"mediafiles.releaseFilter.noLanguage": "Nije navedeno (uglavnom izvornik)",
+	"mediafiles.releaseFilter.unknown": "Nepoznato",
+	"mediafiles.releaseFilter.dual": "Njemački + izvornik (DL)",
+	"mediafiles.releaseFilter.subs": "Titlovi: {language}"
 }

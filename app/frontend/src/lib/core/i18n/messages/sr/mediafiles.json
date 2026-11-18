@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Одгледано {seen} од {of}",
 	"mediafiles.watched.partly": "Делимично одгледано",
 	"mediafiles.adopt.not_looked_up": "Није потражено",
-	"mediafiles.releaseSheet.showPickPart": "За претрагу користите {choose} на сезони или епизоди."
+	"mediafiles.releaseSheet.showPickPart": "За претрагу користите {choose} на сезони или епизоди.",
+	"mediafiles.releaseFilter.label": "Филтрирај издања",
+	"mediafiles.releaseFilter.any": "Сва",
+	"mediafiles.releaseFilter.clear": "Очисти филтере",
+	"mediafiles.releaseFilter.lang": "Језик",
+	"mediafiles.releaseFilter.res": "Резолуција",
+	"mediafiles.releaseFilter.source": "Извор",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Кодек",
+	"mediafiles.releaseFilter.audio": "Звук",
+	"mediafiles.releaseFilter.noLanguage": "Није наведено (углавном оригинал)",
+	"mediafiles.releaseFilter.unknown": "Непознато",
+	"mediafiles.releaseFilter.dual": "Немачки + оригинал (DL)",
+	"mediafiles.releaseFilter.subs": "Титлови: {language}"
 }

@@ -10,6 +10,7 @@
 	import { t } from '#lib/core/i18n/i18n.svelte.ts';
 	import { serverWords } from '#lib/core/i18n/server-words.ts';
 	import { chosenToast } from './chosen-toast.ts';
+	import { FACETS, facetLabel, fits, loadPicks, noPicks, options, picked, savePicks, type FacetKey } from './release-filters.ts';
 
 	let { open = $bindable(false), titleId, name, scope = null, show = false, onchosen }: { open?: boolean; titleId: number; name: string; scope?: { label: string; query: string; body: Record<string, unknown> } | null; show?: boolean; onchosen?: () => void } = $props();
 	// A show is searched by season or episode: the whole-show sheet lists what was found and says where to search.
@@ -25,10 +26,25 @@
 	// Time of the last search start, so an empty list is not read as done too early.
 	let startedAt = 0;
 
+	// Language, picture and sound picks on top of Good / All; kept for the next sheet.
+	let picks = $state(loadPicks());
+	function pick(f: FacetKey, v: string) {
+		picks = { ...picks, [f]: v };
+		savePicks(picks);
+	}
+	function clearPicks() {
+		picks = noPicks();
+		savePicks(picks);
+	}
+	const shown = $derived(releases.filter((r) => filter === 'all' || (r.passed && r.state !== 'turned_down')));
+	// A facet with one value and nothing picked would filter nothing, so it stays out of the way.
+	const facets = $derived(FACETS.map((f) => ({ f, opts: options(shown, f, picks) })).filter((x) => picks[x.f] || x.opts.length > 1));
+	const nPicked = $derived(picked(picks));
+
 	// Chosen first, then passed, then best rank. Good view hides failed and turned down ones.
 	const sorted = $derived(
-		[...releases]
-			.filter((r) => filter === 'all' || (r.passed && r.state !== 'turned_down'))
+		[...shown]
+			.filter((r) => fits(r, picks))
 			.sort((a, b) => Number(b.outcome === 'chosen') - Number(a.outcome === 'chosen') || Number(b.passed) - Number(a.passed) || (a.rank || 999) - (b.rank || 999) || b.points - a.points)
 	);
 	const hidden = $derived(releases.length - releases.filter((r) => r.passed && r.state !== 'turned_down').length);
@@ -47,7 +63,7 @@
 		loading = true;
 		try {
 			// Demo data only shows in dev builds.
-			const p = import.meta.env.DEV && new URLSearchParams(location.search).get('releases') === 'demo' ? demoPage(name) : await api.get<ReleasePage>(`/titles/${titleId}/releases?${scope ? scope.query + '&' : ''}limit=60&offset=0`);
+			const p = import.meta.env.DEV && new URLSearchParams(location.search).get('releases') === 'demo' ? demoPage(name) : await api.get<ReleasePage>(`/titles/${titleId}/releases?${scope ? scope.query + '&' : ''}limit=300&offset=0`);
 			releases = p.releases;
 			total = p.total;
 			// Keep our own job ids for a minute: the server may not list them yet.
@@ -129,9 +145,12 @@
 	}
 
 	// Pull the quality tags out of a release name.
-	function tags(n: string): string[] {
-		const s = n.toLowerCase();
-		const out: string[] = [];
+	function tags(r: ReleaseView): string[] {
+		const s = r.name.toLowerCase();
+		// The audio languages first, the way German names say them: "DE DL" holds German and the original.
+		const out: string[] = (r.tags?.languages ?? []).map((l) => l.toUpperCase());
+		if (r.tags?.dual) out.push('DL');
+		if (r.tags?.subs?.length) out.push(`${r.tags.subs.map((l) => l.toUpperCase()).join('/')} Sub`);
 		if (/2160p|\b4k\b|uhd/.test(s)) out.push('4K');
 		else if (/1080p/.test(s)) out.push('1080p');
 		else if (/720p/.test(s)) out.push('720p');
@@ -158,6 +177,20 @@
 			</div>
 			{#if !partOnly}<button type="button" class="rs-search" disabled={running.length > 0} onclick={search}><Icon name="search" size={15} />{running.length ? t('mediafiles.releaseSheet.searchingDots') : t('mediafiles.releaseSheet.searchAgain')}</button>{/if}
 		</div>
+		{#if releases.length && facets.length}
+			<div class="rs-filters" role="group" aria-label={t('mediafiles.releaseFilter.label')} data-testid="release-filters">
+				{#each facets as x (x.f)}
+					<label class="rs-f" class:on={!!picks[x.f]}>
+						<span class="rs-fl">{facetLabel(x.f)}</span>
+						<select value={picks[x.f]} onchange={(e) => pick(x.f, e.currentTarget.value)} data-testid="release-filter-{x.f}">
+							<option value="">{t('mediafiles.releaseFilter.any')}</option>
+							{#each x.opts as o (o.value)}<option value={o.value}>{o.label} ({o.n})</option>{/each}
+						</select>
+					</label>
+				{/each}
+				{#if nPicked}<button type="button" class="rs-link rs-reset" onclick={clearPicks} data-testid="release-filters-clear">{t('mediafiles.releaseFilter.clear')}</button>{/if}
+			</div>
+		{/if}
 		{#if running.length}<div class="rs-run" aria-live="polite"><span class="rs-spin" aria-hidden="true"></span>{t('mediafiles.releaseSheet.asking')}</div>{/if}
 
 		{#if loading && !releases.length}
@@ -182,7 +215,7 @@
 						<div class="rs-main">
 							<p class="rs-tags">
 								{#if best}<span class="rs-rec">{t('mediafiles.releaseSheet.recommended')}</span>{/if}
-								{#each tags(r.name) as t (t)}<span class="rs-tag">{t}</span>{/each}
+								{#each tags(r) as t (t)}<span class="rs-tag">{t}</span>{/each}
 								{#if !best && !(r.passed && r.outcome === 'passed_over' && r.state !== 'turned_down')}<span class="rs-verdict {verdictTone(r)}">{verdict(r)}</span>{/if}
 							</p>
 							<p class="rs-name" title={r.name}>{r.name}</p>
@@ -204,7 +237,7 @@
 						</div>
 					</li>
 				{:else}
-					<li class="rs-none muted">{t('mediafiles.releaseSheet.noMatches')}{#if hidden} <button type="button" class="rs-link" onclick={() => (filter = 'all')}>{t('mediafiles.releaseSheet.showHidden', { n: hidden })}</button>{/if}</li>
+					<li class="rs-none muted">{t('mediafiles.releaseSheet.noMatches')}{#if nPicked} <button type="button" class="rs-link" onclick={clearPicks}>{t('mediafiles.releaseFilter.clear')}</button>{:else if hidden} <button type="button" class="rs-link" onclick={() => (filter = 'all')}>{t('mediafiles.releaseSheet.showHidden', { n: hidden })}</button>{/if}</li>
 				{/each}
 			</ul>
 		{/if}
@@ -221,6 +254,14 @@
 	.rs-seg button.on { background: var(--surface-1, var(--bg)); color: var(--text); box-shadow: 0 1px 3px rgb(0 0 0 / 18%); }
 	.rs-search, .rs-primary { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); font: 600 13px/1 var(--font-ui); cursor: pointer; white-space: nowrap; }
 	.rs-primary { height: 40px; padding: 0 18px; background: var(--text); color: var(--bg); font-size: 14px; }
+	.rs-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+	.rs-f { position: relative; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 4px 0 12px; border-radius: 999px; background: color-mix(in srgb, var(--text) 7%, transparent); font: 600 12.5px/1 var(--font-ui); color: var(--text-muted); }
+	.rs-f.on { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--text); }
+	.rs-f select { height: 30px; max-width: 190px; padding: 0 6px; border: 0; border-radius: 999px; background: none; color: var(--text); font: 600 12.5px/1 var(--font-ui); cursor: pointer; }
+	.rs-f select:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+	.rs-f option { color: var(--text); background: var(--surface-1, var(--bg)); }
+	@media (pointer: coarse) { .rs-f, .rs-f select { height: 40px; } }
+	.rs-reset { font: 600 13px/1 var(--font-ui); padding: 0 6px; }
 	.rs-run { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; background: color-mix(in srgb, var(--info) 12%, transparent); font: 500 13px/1.3 var(--font-ui); }
 	.rs-spin { width: 14px; height: 14px; border-radius: 99px; border: 2px solid color-mix(in srgb, var(--info) 30%, transparent); border-top-color: var(--info); animation: spin .8s linear infinite; }
 	@keyframes spin { to { transform: rotate(360deg); } }

@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} از {of} دیده شده",
 	"mediafiles.watched.partly": "تا حدی دیده‌شده",
 	"mediafiles.adopt.not_looked_up": "جست‌وجو نشد",
-	"mediafiles.releaseSheet.showPickPart": "برای جست‌وجو، از {choose} روی یک فصل یا قسمت استفاده کنید."
+	"mediafiles.releaseSheet.showPickPart": "برای جست‌وجو، از {choose} روی یک فصل یا قسمت استفاده کنید.",
+	"mediafiles.releaseFilter.label": "فیلتر انتشارها",
+	"mediafiles.releaseFilter.any": "همه",
+	"mediafiles.releaseFilter.clear": "پاک کردن فیلترها",
+	"mediafiles.releaseFilter.lang": "زبان",
+	"mediafiles.releaseFilter.res": "وضوح",
+	"mediafiles.releaseFilter.source": "منبع",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "کدک",
+	"mediafiles.releaseFilter.audio": "صدا",
+	"mediafiles.releaseFilter.noLanguage": "ذکر نشده (معمولاً اصلی)",
+	"mediafiles.releaseFilter.unknown": "نامعلوم",
+	"mediafiles.releaseFilter.dual": "آلمانی + اصلی (DL)",
+	"mediafiles.releaseFilter.subs": "زیرنویس {language}"
 }

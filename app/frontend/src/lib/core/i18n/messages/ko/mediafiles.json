@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{of}개 중 {seen}개 시청",
 	"mediafiles.watched.partly": "일부 시청함",
 	"mediafiles.adopt.not_looked_up": "찾아보지 못함",
-	"mediafiles.releaseSheet.showPickPart": "검색하려면 시즌이나 에피소드에서 {choose}을(를) 사용하세요."
+	"mediafiles.releaseSheet.showPickPart": "검색하려면 시즌이나 에피소드에서 {choose}을(를) 사용하세요.",
+	"mediafiles.releaseFilter.label": "릴리스 필터",
+	"mediafiles.releaseFilter.any": "전체",
+	"mediafiles.releaseFilter.clear": "필터 지우기",
+	"mediafiles.releaseFilter.lang": "언어",
+	"mediafiles.releaseFilter.res": "해상도",
+	"mediafiles.releaseFilter.source": "소스",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "코덱",
+	"mediafiles.releaseFilter.audio": "음향",
+	"mediafiles.releaseFilter.noLanguage": "표기 없음 (대개 원어)",
+	"mediafiles.releaseFilter.unknown": "알 수 없음",
+	"mediafiles.releaseFilter.dual": "독일어 + 원어 (DL)",
+	"mediafiles.releaseFilter.subs": "{language} 자막"
 }

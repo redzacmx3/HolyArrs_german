@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{of} இல் {seen} பார்க்கப்பட்டது",
 	"mediafiles.watched.partly": "பகுதியளவு பார்க்கப்பட்டது",
 	"mediafiles.adopt.not_looked_up": "தேடப்படவில்லை",
-	"mediafiles.releaseSheet.showPickPart": "தேட, ஒரு சீசன் அல்லது எபிசோடில் {choose} பயன்படுத்துங்கள்."
+	"mediafiles.releaseSheet.showPickPart": "தேட, ஒரு சீசன் அல்லது எபிசோடில் {choose} பயன்படுத்துங்கள்.",
+	"mediafiles.releaseFilter.label": "வெளியீடுகளை வடிகட்டு",
+	"mediafiles.releaseFilter.any": "அனைத்தும்",
+	"mediafiles.releaseFilter.clear": "வடிகட்டிகளை அழி",
+	"mediafiles.releaseFilter.lang": "மொழி",
+	"mediafiles.releaseFilter.res": "தெளிவுத்திறன்",
+	"mediafiles.releaseFilter.source": "மூலம்",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "கோடெக்",
+	"mediafiles.releaseFilter.audio": "ஒலி",
+	"mediafiles.releaseFilter.noLanguage": "குறிப்பிடவில்லை (பெரும்பாலும் மூலம்)",
+	"mediafiles.releaseFilter.unknown": "தெரியவில்லை",
+	"mediafiles.releaseFilter.dual": "ஜெர்மன் + மூலம் (DL)",
+	"mediafiles.releaseFilter.subs": "{language} வசனங்கள்"
 }

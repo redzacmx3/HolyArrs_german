@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Προβλήθηκαν {seen} από {of}",
 	"mediafiles.watched.partly": "Προβλήθηκε εν μέρει",
 	"mediafiles.adopt.not_looked_up": "Δεν αναζητήθηκε",
-	"mediafiles.releaseSheet.showPickPart": "Για αναζήτηση, χρησιμοποίησε το {choose} σε μια σεζόν ή ένα επεισόδιο."
+	"mediafiles.releaseSheet.showPickPart": "Για αναζήτηση, χρησιμοποίησε το {choose} σε μια σεζόν ή ένα επεισόδιο.",
+	"mediafiles.releaseFilter.label": "Φιλτράρισμα releases",
+	"mediafiles.releaseFilter.any": "Όλα",
+	"mediafiles.releaseFilter.clear": "Καθαρισμός φίλτρων",
+	"mediafiles.releaseFilter.lang": "Γλώσσα",
+	"mediafiles.releaseFilter.res": "Ανάλυση",
+	"mediafiles.releaseFilter.source": "Πηγή",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Ήχος",
+	"mediafiles.releaseFilter.noLanguage": "Δεν αναφέρεται (συνήθως το πρωτότυπο)",
+	"mediafiles.releaseFilter.unknown": "Άγνωστο",
+	"mediafiles.releaseFilter.dual": "Γερμανικά + πρωτότυπο (DL)",
+	"mediafiles.releaseFilter.subs": "Υπότιτλοι: {language}"
 }

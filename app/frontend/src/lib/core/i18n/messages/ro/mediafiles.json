@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Vizionate {seen} din {of}",
 	"mediafiles.watched.partly": "Vizionat parțial",
 	"mediafiles.adopt.not_looked_up": "Necăutat",
-	"mediafiles.releaseSheet.showPickPart": "Pentru căutare, folosește {choose} la un sezon sau un episod."
+	"mediafiles.releaseSheet.showPickPart": "Pentru căutare, folosește {choose} la un sezon sau un episod.",
+	"mediafiles.releaseFilter.label": "Filtrează releaseurile",
+	"mediafiles.releaseFilter.any": "Toate",
+	"mediafiles.releaseFilter.clear": "Șterge filtrele",
+	"mediafiles.releaseFilter.lang": "Limbă",
+	"mediafiles.releaseFilter.res": "Rezoluție",
+	"mediafiles.releaseFilter.source": "Sursă",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Sunet",
+	"mediafiles.releaseFilter.noLanguage": "Nespecificată (de obicei originalul)",
+	"mediafiles.releaseFilter.unknown": "Necunoscut",
+	"mediafiles.releaseFilter.dual": "Germană + original (DL)",
+	"mediafiles.releaseFilter.subs": "Subtitrări {language}"
 }

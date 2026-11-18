@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} von {of} gesehen",
 	"mediafiles.watched.partly": "Teilweise gesehen",
 	"mediafiles.adopt.not_looked_up": "Nicht nachgeschlagen",
-	"mediafiles.releaseSheet.showPickPart": "Zum Suchen nutze {choose} bei einer Staffel oder Folge."
+	"mediafiles.releaseSheet.showPickPart": "Zum Suchen nutze {choose} bei einer Staffel oder Folge.",
+	"mediafiles.releaseFilter.label": "Releases filtern",
+	"mediafiles.releaseFilter.any": "Alle",
+	"mediafiles.releaseFilter.clear": "Filter zurücksetzen",
+	"mediafiles.releaseFilter.lang": "Sprache",
+	"mediafiles.releaseFilter.res": "Auflösung",
+	"mediafiles.releaseFilter.source": "Quelle",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Ton",
+	"mediafiles.releaseFilter.noLanguage": "Ohne Angabe (meist Original)",
+	"mediafiles.releaseFilter.unknown": "Unbekannt",
+	"mediafiles.releaseFilter.dual": "Deutsch + Original (DL)",
+	"mediafiles.releaseFilter.subs": "Untertitel {language}"
 }

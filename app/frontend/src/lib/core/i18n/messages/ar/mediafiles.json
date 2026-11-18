@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "تمت مشاهدة {seen} من {of}",
 	"mediafiles.watched.partly": "مشاهدة جزئية",
 	"mediafiles.adopt.not_looked_up": "لم يُبحث عنه",
-	"mediafiles.releaseSheet.showPickPart": "للبحث، استخدم {choose} على موسم أو حلقة."
+	"mediafiles.releaseSheet.showPickPart": "للبحث، استخدم {choose} على موسم أو حلقة.",
+	"mediafiles.releaseFilter.label": "تصفية الإصدارات",
+	"mediafiles.releaseFilter.any": "الكل",
+	"mediafiles.releaseFilter.clear": "مسح عوامل التصفية",
+	"mediafiles.releaseFilter.lang": "اللغة",
+	"mediafiles.releaseFilter.res": "الدقة",
+	"mediafiles.releaseFilter.source": "المصدر",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "الترميز",
+	"mediafiles.releaseFilter.audio": "الصوت",
+	"mediafiles.releaseFilter.noLanguage": "غير مذكورة (غالبًا الأصلية)",
+	"mediafiles.releaseFilter.unknown": "غير معروف",
+	"mediafiles.releaseFilter.dual": "الألمانية + الأصلية (DL)",
+	"mediafiles.releaseFilter.subs": "ترجمة: {language}"
 }

@@ -63,12 +63,14 @@ type ReleaseView struct {
 	Reasons       []Reason       `json:"reasons"`
 	Verdict       map[string]any `json:"verdict"`
 	CreatedAt     time.Time      `json:"created_at"`
+	// Tags: what the name says about language, picture and sound.
+	Tags *NameTags `json:"tags,omitempty"`
 }
 
 func releaseView(x domain.Release) ReleaseView {
 	v := ReleaseView{ID: x.ID, Name: x.Name, Size: x.Size, Seeders: x.Seeders, Peers: x.Peers, Protocol: x.Protocol, State: x.State, FoundBy: x.FoundBy,
 		JobID: x.JobID, SourceID: x.SourceID, Published: x.PublishedAt, HoldUntil: x.HoldUntil, Verdict: x.Verdict, CreatedAt: x.CreatedAt,
-		Reasons: []Reason{}, NeedsForce: x.State == "refused" || x.State == "turned_down" || RefusedByRules(x)}
+		Reasons: []Reason{}, NeedsForce: x.State == "refused" || x.State == "turned_down" || RefusedByRules(x), Tags: nameTags(x.Name)}
 	if len(x.MatchedSlotIDs) > 0 {
 		id := x.MatchedSlotIDs[0]
 		v.SlotID = &id

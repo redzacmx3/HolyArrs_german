@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "{seen} van {of} bekeken",
 	"mediafiles.watched.partly": "Deels bekeken",
 	"mediafiles.adopt.not_looked_up": "Niet opgezocht",
-	"mediafiles.releaseSheet.showPickPart": "Om te zoeken, gebruik {choose} bij een seizoen of aflevering."
+	"mediafiles.releaseSheet.showPickPart": "Om te zoeken, gebruik {choose} bij een seizoen of aflevering.",
+	"mediafiles.releaseFilter.label": "Releases filteren",
+	"mediafiles.releaseFilter.any": "Alle",
+	"mediafiles.releaseFilter.clear": "Filters wissen",
+	"mediafiles.releaseFilter.lang": "Taal",
+	"mediafiles.releaseFilter.res": "Resolutie",
+	"mediafiles.releaseFilter.source": "Bron",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Geluid",
+	"mediafiles.releaseFilter.noLanguage": "Niet genoemd (meestal origineel)",
+	"mediafiles.releaseFilter.unknown": "Onbekend",
+	"mediafiles.releaseFilter.dual": "Duits + origineel (DL)",
+	"mediafiles.releaseFilter.subs": "Ondertitels {language}"
 }

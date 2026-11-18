@@ -527,5 +527,18 @@
 	"mediafiles.watched.part": "Sett {seen} av {of}",
 	"mediafiles.watched.partly": "Delvis sedd",
 	"mediafiles.adopt.not_looked_up": "Inte uppslagen",
-	"mediafiles.releaseSheet.showPickPart": "För att söka, använd {choose} på en säsong eller ett avsnitt."
+	"mediafiles.releaseSheet.showPickPart": "För att söka, använd {choose} på en säsong eller ett avsnitt.",
+	"mediafiles.releaseFilter.label": "Filtrera releaser",
+	"mediafiles.releaseFilter.any": "Alla",
+	"mediafiles.releaseFilter.clear": "Rensa filter",
+	"mediafiles.releaseFilter.lang": "Språk",
+	"mediafiles.releaseFilter.res": "Upplösning",
+	"mediafiles.releaseFilter.source": "Källa",
+	"mediafiles.releaseFilter.hdr": "HDR",
+	"mediafiles.releaseFilter.codec": "Codec",
+	"mediafiles.releaseFilter.audio": "Ljud",
+	"mediafiles.releaseFilter.noLanguage": "Inte angivet (oftast originalet)",
+	"mediafiles.releaseFilter.unknown": "Okänd",
+	"mediafiles.releaseFilter.dual": "Tyska + original (DL)",
+	"mediafiles.releaseFilter.subs": "Undertexter på {language}"
 }

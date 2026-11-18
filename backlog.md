@@ -7,7 +7,8 @@ Status: **open** (noted, not started), **in progress**, **done**.
 ## Open
 
 ### 1. Filter list in "Release auswählen"
-- **Status:** open (noted 2026-11-18)
+- **Status:** in progress (2026-11-18), branch `release-filters`
+- **Done in the branch:** drop-downs above the list for Sprache, Auflösung, Quelle, HDR, Codec and Ton, each with how many Releases fit. They combine with each other and with Gute Treffer / Alle, and the browser keeps the picks for the next title. The server now sends what each name says (language, German DL, subtitles, picture, sound) as read by the parser, and the rows show DE / DL chips. The sheet loads up to 300 Releases instead of 60.
 - **Problem:** The dialog lists many releases (for example "Alle 92"). Only "Gute Treffer / Alle" narrows them, so finding the right one takes long.
 - **Wish:** Drop-down filters above the list for language (German, German DL, English …), picture (720p/1080p/2160p, HDR/DV, x264/x265, WEB/BluRay) and sound (DDP5.1, Atmos, TrueHD …). The filters could combine and use the facts the parser already reads, which the dialog shows as chips.
 
