@@ -109,12 +109,15 @@ Der Fork holt jeden Montag Upstream. Die betroffenen Dateien (`TitlePage.svelte`
 
 1. Stabilisierung abschließen (Backlog-Punkte 1 bis 3 und laufende Fehler).
 2. A2 (eine Zeile, sofort spürbar), dann A1, dann A3.
-3. A4 und B1.
-4. B2, B3.
-5. C1 als eigenes Vorhaben mit eigenem Plan.
+3. B1, dann A4.
+4. B2, B3; B4 (Fernseher) läuft bei allen Schritten mit.
+5. C1 als eigenes Vorhaben mit eigenem Plan: Kinderserien, dann Anime, dann deutsche Originale.
 
-## Offene Fragen an Thomas
+## Entscheidungen von Thomas (2026-11-18)
 
-- A1: Soll eine Admin-Anfrage auf der Requests-Seite erscheinen (wie in Seerr, mit Verlauf) oder nur direkt in die Library gehen?
-- C1: Welche Regeln brauchst du zuerst (Kinderserien, deutsche Originale, Anime)?
-- Nutzt außer dir noch jemand die Anfragen (Familie, Plex-Freunde)? Dann lohnt B1 früher.
+- **A1:** wie in Seerr. Eine Admin-Anfrage erscheint auf der Requests-Seite, mit Verlauf und Status, und ist sofort genehmigt.
+- **C1:** Reihenfolge der Regeln: zuerst Kinderserien, dann Anime, zum Schluss deutsche Originale.
+- **Nutzung:** Im Endausbau fragt die ganze Familie an, auch am Fernseher. Folgen für den Plan:
+  - B1 (Staffel-Dialog) rückt nach vorn, direkt hinter A3.
+  - Neu **B4. Bedienung am Fernseher:** Anfragen muss mit Fernbedienung oder Pfeiltasten gehen (sichtbarer Fokus, große Ziele, keine Aktion nur über Hover, Dialoge ohne Scrollen auf 1080p). Das betrifft A1, A3, A4 und B1 und wird bei jedem dieser Schritte mitgeprüft.
+  - Kinderkonten (gibt es schon, mit Altersgrenze) sollen den kurzen Weg ohne „Erweitert“ sehen.
