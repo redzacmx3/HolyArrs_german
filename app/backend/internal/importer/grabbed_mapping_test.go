@@ -84,3 +84,22 @@ func TestPlanReadsJobNameForHiddenFileName(t *testing.T) {
 		t.Fatalf("named file overridden: %+v", s[0])
 	}
 }
+
+// A double episode chosen by hand for one episode, whose numbers name other
+// episodes here (TVDB numbering under a TMDB order), fills that episode.
+func TestPlanGrabbedDoubleForOneEpisode(t *testing.T) {
+	ns := mediafiles.NamingDefaults()
+	ns.RenameOnImport = true
+	eps := []Episode{
+		{Ref: mediafiles.EpisodeRef{ItemID: 40, Season: 2, Episode: 40}, Name: "Pups Save a Hoot", SlotID: 140},
+		{Ref: mediafiles.EpisodeRef{ItemID: 41, Season: 2, Episode: 41}, Name: "Pups Save a Train", SlotID: 141},
+		{Ref: mediafiles.EpisodeRef{ItemID: 147, Season: 3, Episode: 47}, Name: "Pups Save an Eagle", SlotID: 247, Wanted: true},
+	}
+	rel := "PAW.Patrol.S02E40-E41.German.AC3.DL.1080p.WebHD.x265-FuN"
+	tgt := ShowTarget{LibraryPath: "/lib", FolderName: "PAW Patrol (2013)", Show: mediafiles.TitleRef{Name: "PAW Patrol", Year: 2013},
+		Order: mediafiles.OrderAired, Naming: &ns, Episodes: eps, ReleaseName: rel}
+	steps := PlanEpisodes([]Candidate{{Path: "/dl/" + rel + "/" + rel + ".mkv", Size: 1}}, tgt)
+	if steps[0].Method != "hardlink" || len(steps[0].TargetSlotIDs) != 1 || steps[0].TargetSlotIDs[0] != 247 || !strings.Contains(steps[0].TargetPath, "S03E47") {
+		t.Fatalf("double for one episode: %+v", steps[0])
+	}
+}
