@@ -4,31 +4,39 @@ Ideas and gaps from using the fork, with their status. New items go at the end o
 
 Status: **open** (noted, not started), **in progress**, **done**.
 
+**Upstream** says whether an item should also go to HolyArrs as an issue and pull request, so the fork stays small (see [docs/plattform-basis.md](docs/plattform-basis.md)): **offer it**, **ask first** or **keep in the fork**. New code goes into files of its own; upstream files get only small changes.
+
 ## Open
 
 ### 7. Quicker requests, modelled on Seerr
 - **Status:** open (noted 2026-11-18), after the running features are stable
+- **Upstream:** keep in the fork. Build it as own pages and modules and touch upstream files only with small hooks, because upstream changes these pages a lot.
 - **Problem:** Requesting a new title takes many steps. People who manage the Library always get "Zur Library hinzufügen" with up to ten fields (folder, Pick rules, seasons, order, search …), and a new show does not search by default.
 - **Wish:** A short request like in Seerr: confirm a movie, tick seasons for a show, the rest comes from the request settings and sits under "Erweitert". Request button right in the search suggestions and on the cards, status badges on posters, and rules that pick folder and Pick rules by language or genre (German titles, kids' shows, anime).
 - **Plan:** [docs/ui-seerr-plan.md](docs/ui-seerr-plan.md)
 
 ### 8. Show each episode's release-name number
 - **Status:** open (noted 2026-11-18). The episodes API lists `tvmaze_season`/`tvmaze_episode` since [PR #15](https://github.com/redzacmx3/HolyArrs_german/pull/15); the episode list in the UI does not show them yet.
+- **Upstream:** offer it. Build in the fork, then propose it to HolyArrs (issue first).
 - **Wish:** see per episode which number releases use (TVmaze, TMDB or the chosen order), so a wrong match can be spotted.
 
 ### 9. Rejection reasons in German, with the setting's UI name
 - **Status:** open (noted 2026-11-18)
+- **Upstream:** offer it. Wording in German is a locale fix; naming the setting by its UI name helps every language.
 - **Problem:** reasons such as "not every episode would gain … (Settings > Search: every episode must gain)" are English and name a setting the German UI calls "Einstellungen › Suche › Staffelpakete › Jede Folge darin neu oder besser wäre".
 
 ### 10. Points breakdown per release in "Release auswählen"
 - **Status:** open (noted 2026-11-18)
+- **Upstream:** offer it. Build in the fork, then propose it to HolyArrs (issue first).
 - **Problem:** a release shows only the sum ("−23300 points, needs at least 11000"); which trait cost −35000 is not visible at a glance.
 
 ### 11. Episode search finds double-episode releases
 - **Status:** done, [PR #15](https://github.com/redzacmx3/HolyArrs_german/pull/15) (2026-11-18), for shows that read release names by TVmaze: an episode search without an answer also asks the release-name season. Open: whether all shows should do this.
+- **Upstream:** offer it, together with the TVmaze numbering (item 6).
 
 ### 12. "German Microsized" by size per minute for short episodes
 - **Status:** open (noted 2026-11-18)
+- **Upstream:** ask first. If HolyArrs does not want it, it stays a small rule of its own in the fork.
 - **Problem:** TRaSH's fixed size limit hits 12-minute kids' episodes (377 MB, 1080p x265) with −35000. Judge by MB per minute of runtime instead.
 
 ## Done
