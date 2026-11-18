@@ -371,6 +371,11 @@ describe('adviceFix', () => {
 		expect(adviceFix(german(undefined)).good_enough_points).toBe(10000);
 		expect(adviceFix(german(35000)).good_enough_points).toBe(35000);
 	});
+	it('works on the page form, a state proxy structuredClone cannot copy', () => {
+		const b = new Proxy(german(0), {});
+		expect(() => structuredClone(b)).toThrow();
+		expect(adviceFix(b).good_enough_points).toBe(10000);
+	});
 	it('leaves rules without a language trait alone', () => {
 		const b = blankBody('movie');
 		expect(adviceFix(b)).toBe(b);

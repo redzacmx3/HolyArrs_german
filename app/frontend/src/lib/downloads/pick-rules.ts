@@ -386,7 +386,9 @@ function listProblem(values: string[], allowed: string[], what: string): string 
 export function adviceFix(body: PickRulesBody): PickRulesBody {
 	const lang = body.traits.map((t) => t.points).filter((p) => p >= 1000);
 	if (!lang.length) return body;
-	const next = structuredClone(body);
+	// A JSON copy: the page passes its form state, a proxy structuredClone
+	// cannot copy.
+	const next: PickRulesBody = JSON.parse(JSON.stringify(body));
 	if (next.order !== 'points_then_quality' && next.steps.filter((s) => s.allowed).length > 1) next.order = 'points_then_quality';
 	if (next.good_enough_points == null || next.good_enough_points <= 0) next.good_enough_points = Math.min(...lang);
 	return next;
