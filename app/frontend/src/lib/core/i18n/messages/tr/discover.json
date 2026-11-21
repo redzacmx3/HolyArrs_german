@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB'ye göre",
 	"discover.titleLibrary.releaseNumbersHint": "Sürüm adlarının bölümleri nasıl numaralandırdığı. Dosyalar bu sıranın numaralarını korur.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)'ye göre",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Sürüm adı: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "TVmaze'de bulunamadı"
 }

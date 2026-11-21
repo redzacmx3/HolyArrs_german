@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "По TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Как имената на изданията номерират епизодите. Файловете запазват номерата от този ред.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "По TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Име на релийза: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Не е намерено в TVmaze"
 }

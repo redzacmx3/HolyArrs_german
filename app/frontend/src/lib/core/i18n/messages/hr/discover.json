@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Prema TMDB-u",
 	"discover.titleLibrary.releaseNumbersHint": "Kako nazivi izdanja numeriraju epizode. Datoteke zadržavaju brojeve ovog redoslijeda.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Prema TVmaze (TVDB)-u",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Naziv izdanja: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Nije pronađeno na TVmazeu"
 }

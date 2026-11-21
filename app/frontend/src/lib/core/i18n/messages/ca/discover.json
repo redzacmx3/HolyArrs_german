@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Segons TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Com numeren els episodis els noms de release. Els fitxers mantenen els números d'aquest ordre.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Segons TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Nom del llançament: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "No s'ha trobat a TVmaze"
 }

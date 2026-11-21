@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Podle TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Jak názvy vydání číslují epizody. Soubory si ponechají čísla tohoto pořadí.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Podle TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Název vydání: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Na TVmaze nenalezeno"
 }

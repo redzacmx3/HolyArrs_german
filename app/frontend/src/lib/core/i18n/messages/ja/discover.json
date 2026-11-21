@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDBで",
 	"discover.titleLibrary.releaseNumbersHint": "リリース名がエピソードに付ける番号です。ファイルはこの順序の番号のままです。",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB)で",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "リリース名: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "TVmaze に見つかりません"
 }

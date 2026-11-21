@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Mengikut TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Cara nama keluaran menomborkan episod. Fail kekal dengan nombor susunan ini.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Mengikut TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Nama keluaran: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Tidak ditemui di TVmaze"
 }

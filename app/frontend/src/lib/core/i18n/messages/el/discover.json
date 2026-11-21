@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Με το TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Πώς αριθμούν τα επεισόδια τα ονόματα κυκλοφοριών. Τα αρχεία κρατούν τους αριθμούς αυτής της σειράς.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Με το TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Όνομα κυκλοφορίας: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Δεν βρέθηκε στο TVmaze"
 }

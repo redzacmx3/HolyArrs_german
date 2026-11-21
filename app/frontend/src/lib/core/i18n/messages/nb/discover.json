@@ -788,5 +788,7 @@
   "discover.titleLibrary.releaseNumbersTmdb": "Etter TMDB",
   "discover.titleLibrary.releaseNumbersHint": "Hvordan utgivelsesnavn nummererer episodene. Filer beholder numrene i denne rekkefølgen.",
   "discover.titleLibrary.releaseNumbersTvmaze": "Etter TVmaze (TVDB)",
-  "discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+  "discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+  "discover.titleLibrary.releaseNumberIs": "Utgivelsesnavn: {code}",
+  "discover.titleLibrary.releaseNumberMissing": "Ikke funnet på TVmaze"
 }

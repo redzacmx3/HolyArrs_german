@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB szerint",
 	"discover.titleLibrary.releaseNumbersHint": "Hogyan számozzák a kiadásnevek az epizódokat. A fájlok megtartják e sorrend számait.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) szerint",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Kiadás neve: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Nem található a TVmaze-en"
 }

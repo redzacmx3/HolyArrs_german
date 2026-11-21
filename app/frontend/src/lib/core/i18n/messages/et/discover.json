@@ -788,5 +788,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB järgi",
 	"discover.titleLibrary.releaseNumbersHint": "Kuidas väljalasete nimed osasid nummerdavad. Failid hoiavad selle järjestuse numbreid.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) järgi",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Väljalaske nimi: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "TVmaze'ist ei leitud"
 }
