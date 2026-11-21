@@ -433,6 +433,7 @@
   "mediafiles.releaseSheet.pick": "Velja",
   "mediafiles.releaseSheet.neverPick": "Aldrei velja {name}",
   "mediafiles.releaseSheet.neverPickThis": "Aldrei velja þessa",
+  "mediafiles.releaseSheet.pointsBreakdown": "Stig eftir eiginleika",
   "mediafiles.releaseSheet.noMatches": "Engar góðar samsvaranir.",
   "mediafiles.releaseSheet.showHidden": "Sýna þær {n} sem stóðust ekki",
   "mediafiles.rename.renamedOne": "1 skrá endurnefnd",

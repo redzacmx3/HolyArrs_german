@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Vybrat",
 	"mediafiles.releaseSheet.neverPick": "Nikdy nevybírat {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Nikdy nevybírat toto",
+	"mediafiles.releaseSheet.pointsBreakdown": "Body podle vlastnosti",
 	"mediafiles.releaseSheet.noMatches": "Žádné dobré shody.",
 	"mediafiles.releaseSheet.showHidden": "Zobrazit ta, která neprošla: {n}",
 	"mediafiles.rename.renamedOne": "1 soubor přejmenován",

@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "選用",
 	"mediafiles.releaseSheet.neverPick": "永不選用 {name}",
 	"mediafiles.releaseSheet.neverPickThis": "永不選用這個",
+	"mediafiles.releaseSheet.pointsBreakdown": "依特徵計分",
 	"mediafiles.releaseSheet.noMatches": "沒有良好符合。",
 	"mediafiles.releaseSheet.showHidden": "顯示 {n} 個未透過的",
 	"mediafiles.rename.renamedOne": "已重新命名 1 個檔案",

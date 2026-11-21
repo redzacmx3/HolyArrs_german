@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Επιλογή",
 	"mediafiles.releaseSheet.neverPick": "Να μην επιλεγεί ποτέ: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Να μην επιλεγεί ποτέ αυτή",
+	"mediafiles.releaseSheet.pointsBreakdown": "Πόντοι ανά χαρακτηριστικό",
 	"mediafiles.releaseSheet.noMatches": "Καμία καλή αντιστοίχιση.",
 	"mediafiles.releaseSheet.showHidden": "Εμφάνιση των {n} που δεν πέρασαν",
 	"mediafiles.rename.renamedOne": "1 αρχείο μετονομάστηκε",

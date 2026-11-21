@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "தேர்ந்தெடு",
 	"mediafiles.releaseSheet.neverPick": "{name} ஐ ஒருபோதும் தேர்ந்தெடுக்காதே",
 	"mediafiles.releaseSheet.neverPickThis": "இதை ஒருபோதும் தேர்ந்தெடுக்காதே",
+	"mediafiles.releaseSheet.pointsBreakdown": "பண்பு வாரியான புள்ளிகள்",
 	"mediafiles.releaseSheet.noMatches": "நல்ல பொருத்தங்கள் இல்லை.",
 	"mediafiles.releaseSheet.showHidden": "தேர்ச்சி பெறாத {n} ஐக் காட்டு",
 	"mediafiles.rename.renamedOne": "1 கோப்பு மறுபெயரிடப்பட்டது",

@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Chọn",
 	"mediafiles.releaseSheet.neverPick": "Không bao giờ chọn {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Không bao giờ chọn cái này",
+	"mediafiles.releaseSheet.pointsBreakdown": "Điểm theo đặc điểm",
 	"mediafiles.releaseSheet.noMatches": "Không có kết quả khớp tốt.",
 	"mediafiles.releaseSheet.showHidden": "Hiện {n} cái không đạt",
 	"mediafiles.rename.renamedOne": "Đã đổi tên 1 tệp",

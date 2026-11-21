@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Velg",
 	"mediafiles.releaseSheet.neverPick": "Velg aldri {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Velg aldri denne",
+	"mediafiles.releaseSheet.pointsBreakdown": "Poeng per egenskap",
 	"mediafiles.releaseSheet.noMatches": "Ingen gode treff.",
 	"mediafiles.releaseSheet.showHidden": "Vis de {n} som ikke besto",
 	"mediafiles.rename.renamedOne": "1 fil omdøpt",

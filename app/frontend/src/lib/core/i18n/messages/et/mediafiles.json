@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Vali",
 	"mediafiles.releaseSheet.neverPick": "Ära vali kunagi: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Ära vali seda kunagi",
+	"mediafiles.releaseSheet.pointsBreakdown": "Punktid tunnuse kaupa",
 	"mediafiles.releaseSheet.noMatches": "Häid vasteid pole.",
 	"mediafiles.releaseSheet.showHidden": "Näita {n}, mis ei läbinud",
 	"mediafiles.rename.renamedOne": "1 fail ümber nimetatud",

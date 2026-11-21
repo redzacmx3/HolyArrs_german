@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "اختر",
 	"mediafiles.releaseSheet.neverPick": "لا تختر {name} أبدًا",
 	"mediafiles.releaseSheet.neverPickThis": "لا تختر هذا أبدًا",
+	"mediafiles.releaseSheet.pointsBreakdown": "النقاط حسب السمة",
 	"mediafiles.releaseSheet.noMatches": "لا مطابقات جيدة.",
 	"mediafiles.releaseSheet.showHidden": "اعرض {n} التي لم تجتز",
 	"mediafiles.rename.renamedOne": "أُعيدت تسمية ملف واحد",

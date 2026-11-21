@@ -3,6 +3,7 @@
 	import Sheet from '#lib/ui/Sheet.svelte';
 	import Icon from '#lib/ui/Icon.svelte';
 	import { keyReasons, verdict, verdictTone } from './releases.ts';
+	import { pointsLines, signed } from './points-breakdown.ts';
 	import { toasts } from '#lib/core/toasts.svelte.ts';
 	import { api, message, ApiError } from '#lib/core/api.ts';
 	import { bytes } from '#lib/core/format.ts';
@@ -210,6 +211,7 @@
 			<ul class="rs-list">
 				{#each sorted as r (r.id)}
 					{@const why = deciding(r)}
+					{@const pts = pointsLines(r.reasons)}
 					{@const best = r.outcome === 'chosen' && r.state !== 'chosen' && r.state !== 'turned_down'}
 					<li class="rs-row" class:best class:off={!r.passed || r.state === 'turned_down'} data-testid="release">
 						<div class="rs-main">
@@ -226,6 +228,7 @@
 								{#if r.published_at}<span>{age(r.published_at)}</span>{/if}
 							</p>
 							{#each why as w, i (i)}<p class="rs-why {w.effect}">{serverWords(w.text)}</p>{/each}
+							{#if pts.length}<p class="rs-pts" aria-label={t('mediafiles.releaseSheet.pointsBreakdown')} data-testid="release-points">{#each pts as p, i (i)}<span class:minus={p.points < 0}>{p.name} {signed(p.points)}</span>{/each}<span class="rs-sum">= {t('mediafiles.release.points', { n: r.points })}</span></p>{/if}
 						</div>
 						<div class="rs-act">
 							{#if r.state === 'chosen'}
@@ -287,6 +290,10 @@
 	.rs-why { color: var(--text-muted); font: 500 12.5px/1.35 var(--font-ui); }
 	.rs-why.fail { color: var(--fail-text); }
 	.rs-why.hold, .rs-why.warn { color: var(--wait-text); }
+	.rs-pts { display: flex; flex-wrap: wrap; gap: 4px; font: 500 12px/1.2 var(--font-ui); font-variant-numeric: tabular-nums; }
+	.rs-pts span { padding: 3px 7px; border-radius: 5px; background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--text); }
+	.rs-pts span.minus { background: color-mix(in srgb, var(--fail) 12%, transparent); color: var(--fail-text); }
+	.rs-pts .rs-sum { background: none; color: var(--text-muted); font-weight: 600; }
 	.rs-act { display: flex; align-items: center; gap: 8px; flex: none; }
 	.rs-choose { height: 34px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--text); color: var(--bg); font: 600 13px/1 var(--font-ui); cursor: pointer; white-space: nowrap; }
 	.rs-choose.quiet { background: color-mix(in srgb, var(--text) 10%, transparent); color: var(--text); }

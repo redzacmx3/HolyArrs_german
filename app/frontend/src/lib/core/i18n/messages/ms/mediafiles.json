@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Pilih",
 	"mediafiles.releaseSheet.neverPick": "Jangan sekali memilih {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Jangan sekali memilih yang ini",
+	"mediafiles.releaseSheet.pointsBreakdown": "Mata mengikut ciri",
 	"mediafiles.releaseSheet.noMatches": "Tiada padanan yang baik.",
 	"mediafiles.releaseSheet.showHidden": "Tunjuk {n} yang tidak lulus",
 	"mediafiles.rename.renamedOne": "1 fail dinamakan semula",

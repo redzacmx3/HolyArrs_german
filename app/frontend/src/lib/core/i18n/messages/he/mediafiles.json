@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "בחירה",
 	"mediafiles.releaseSheet.neverPick": "לעולם לא לבחור את {name}",
 	"mediafiles.releaseSheet.neverPickThis": "לעולם לא לבחור בזה",
+	"mediafiles.releaseSheet.pointsBreakdown": "נקודות לפי תכונה",
 	"mediafiles.releaseSheet.noMatches": "אין התאמות טובות.",
 	"mediafiles.releaseSheet.showHidden": "הצגת {n} שלא עברו",
 	"mediafiles.rename.renamedOne": "קובץ אחד שונה שמו",

@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Pilih",
 	"mediafiles.releaseSheet.neverPick": "Jangan pernah pilih {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Jangan pernah pilih yang ini",
+	"mediafiles.releaseSheet.pointsBreakdown": "Poin per ciri",
 	"mediafiles.releaseSheet.noMatches": "Tidak ada yang cocok.",
 	"mediafiles.releaseSheet.showHidden": "Tampilkan {n} yang tidak lolos",
 	"mediafiles.rename.renamedOne": "1 file diganti namanya",

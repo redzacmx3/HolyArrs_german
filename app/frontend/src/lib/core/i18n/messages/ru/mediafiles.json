@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "Выбрать",
 	"mediafiles.releaseSheet.neverPick": "Больше не выбирать {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Больше не выбирать этот",
+	"mediafiles.releaseSheet.pointsBreakdown": "Баллы по признакам",
 	"mediafiles.releaseSheet.noMatches": "Хороших совпадений нет.",
 	"mediafiles.releaseSheet.showHidden": "Показать не прошедшие: {n}",
 	"mediafiles.rename.renamedOne": "Переименован 1 файл",

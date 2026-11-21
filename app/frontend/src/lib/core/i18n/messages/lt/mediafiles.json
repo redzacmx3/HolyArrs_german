@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Pasirinkti",
 	"mediafiles.releaseSheet.neverPick": "Niekada nerinkti: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Niekada nerinkti šito",
+	"mediafiles.releaseSheet.pointsBreakdown": "Taškai pagal požymį",
 	"mediafiles.releaseSheet.noMatches": "Gerų atitikmenų nėra.",
 	"mediafiles.releaseSheet.showHidden": "Rodyti nepraėjusius ({n})",
 	"mediafiles.rename.renamedOne": "1 failas pervardytas",

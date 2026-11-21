@@ -23,6 +23,8 @@ type Reason struct {
 	Code   string `json:"code"`   // step.rule, stable for the screens
 	Effect string `json:"effect"` // pass, fail, add, subtract, warn, hold, rank
 	Text   string `json:"text"`
+	// Points is what a trait adds or takes away; the text says it too.
+	Points int `json:"points,omitempty"`
 }
 
 // ReleaseView is a stored Release with its verdict and reasons.
@@ -106,13 +108,18 @@ func releaseView(x domain.Release) ReleaseView {
 		rule, _ := m["rule"].(string)
 		eff, _ := m["effect"].(string)
 		text, _ := m["detail"].(string)
-		if pts, ok := m["points"].(float64); ok && pts != 0 {
+		pts, _ := m["points"].(float64)
+		if pts != 0 {
 			text = fmt.Sprintf("%s (%+d points)", text, int(pts))
 		}
 		if step+"."+rule == "hard.gate_skipped" {
 			v.GateSkip = true
 		}
-		v.Reasons = append(v.Reasons, Reason{Code: step + "." + rule, Effect: eff, Text: text})
+		r := Reason{Code: step + "." + rule, Effect: eff, Text: text}
+		if eff == "add" || eff == "subtract" {
+			r.Points = int(pts)
+		}
+		v.Reasons = append(v.Reasons, r)
 	}
 	if why, _ := x.Verdict["turned_down_reason"].(string); why != "" {
 		v.Reasons = append(v.Reasons, Reason{Code: "turned_down.reason", Effect: "fail", Text: "turned down: " + why})

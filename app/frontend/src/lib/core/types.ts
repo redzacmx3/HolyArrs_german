@@ -360,6 +360,8 @@ export interface Reason {
 	code: string;
 	effect: string;
 	text: string;
+	// What a trait added or took away (effect add or subtract).
+	points?: number;
 }
 
 export interface ReleaseView {

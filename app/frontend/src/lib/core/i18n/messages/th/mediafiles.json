@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "เลือก",
 	"mediafiles.releaseSheet.neverPick": "ไม่เลือก {name} เลย",
 	"mediafiles.releaseSheet.neverPickThis": "ไม่เลือกอันนี้เลย",
+	"mediafiles.releaseSheet.pointsBreakdown": "คะแนนตามคุณลักษณะ",
 	"mediafiles.releaseSheet.noMatches": "ไม่มีรายการที่ตรงดี",
 	"mediafiles.releaseSheet.showHidden": "แสดง {n} รายการที่ไม่ผ่าน",
 	"mediafiles.rename.renamedOne": "เปลี่ยนชื่อ 1 ไฟล์แล้ว",

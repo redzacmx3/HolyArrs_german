@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "选用",
 	"mediafiles.releaseSheet.neverPick": "永不选用 {name}",
 	"mediafiles.releaseSheet.neverPickThis": "永不选用这个",
+	"mediafiles.releaseSheet.pointsBreakdown": "按特征计分",
 	"mediafiles.releaseSheet.noMatches": "没有良好匹配。",
 	"mediafiles.releaseSheet.showHidden": "显示 {n} 个未通过的",
 	"mediafiles.rename.renamedOne": "已重命名 1 个文件",

@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "Kiezen",
 	"mediafiles.releaseSheet.neverPick": "{name} nooit kiezen",
 	"mediafiles.releaseSheet.neverPickThis": "Deze nooit kiezen",
+	"mediafiles.releaseSheet.pointsBreakdown": "Punten per kenmerk",
 	"mediafiles.releaseSheet.noMatches": "Geen goede overeenkomsten.",
 	"mediafiles.releaseSheet.showHidden": "De {n} tonen die niet zijn geslaagd",
 	"mediafiles.rename.renamedOne": "1 bestand hernoemd",

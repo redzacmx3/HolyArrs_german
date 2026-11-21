@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Изабери",
 	"mediafiles.releaseSheet.neverPick": "Никад не бирај {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Никад не бирај ово",
+	"mediafiles.releaseSheet.pointsBreakdown": "Бодови по особини",
 	"mediafiles.releaseSheet.noMatches": "Нема добрих подударања.",
 	"mediafiles.releaseSheet.showHidden": "Прикажи оних {n} које нису прошле",
 	"mediafiles.rename.renamedOne": "1 датотека је преименована",

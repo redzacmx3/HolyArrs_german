@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Избор",
 	"mediafiles.releaseSheet.neverPick": "Никога да не се избира {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Никога да не се избира този",
+	"mediafiles.releaseSheet.pointsBreakdown": "Точки по признак",
 	"mediafiles.releaseSheet.noMatches": "Няма добри съвпадения.",
 	"mediafiles.releaseSheet.showHidden": "Показване на {n}, които не преминаха",
 	"mediafiles.rename.renamedOne": "1 файл е преименуван",

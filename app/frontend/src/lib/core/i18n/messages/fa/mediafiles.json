@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "انتخاب",
 	"mediafiles.releaseSheet.neverPick": "هرگز {name} را انتخاب نکن",
 	"mediafiles.releaseSheet.neverPickThis": "هرگز این را انتخاب نکن",
+	"mediafiles.releaseSheet.pointsBreakdown": "امتیاز بر اساس ویژگی",
 	"mediafiles.releaseSheet.noMatches": "تطابق خوبی نیست.",
 	"mediafiles.releaseSheet.showHidden": "نمایش {n} موردی که رد نشدند",
 	"mediafiles.rename.renamedOne": "1 فایل تغییر نام یافت",

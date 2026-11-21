@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "বাছুন",
 	"mediafiles.releaseSheet.neverPick": "{name} আর কখনো বাছবেন না",
 	"mediafiles.releaseSheet.neverPickThis": "এটি আর কখনো বাছবেন না",
+	"mediafiles.releaseSheet.pointsBreakdown": "বৈশিষ্ট্য অনুযায়ী পয়েন্ট",
 	"mediafiles.releaseSheet.noMatches": "কোনো ভালো মিল নেই।",
 	"mediafiles.releaseSheet.showHidden": "যে {n}টি পাস করেনি সেগুলো দেখান",
 	"mediafiles.rename.renamedOne": "১টি ফাইলের নাম বদলেছে",

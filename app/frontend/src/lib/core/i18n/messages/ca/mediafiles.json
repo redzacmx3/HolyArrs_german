@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Tria",
 	"mediafiles.releaseSheet.neverPick": "No triïs mai {name}",
 	"mediafiles.releaseSheet.neverPickThis": "No triïs mai aquest",
+	"mediafiles.releaseSheet.pointsBreakdown": "Punts per tret",
 	"mediafiles.releaseSheet.noMatches": "Cap bona coincidència.",
 	"mediafiles.releaseSheet.showHidden": "Mostra els {n} que no han passat",
 	"mediafiles.rename.renamedOne": "1 fitxer reanomenat",

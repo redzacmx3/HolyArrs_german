@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Izvēlēties",
 	"mediafiles.releaseSheet.neverPick": "Nekad neizvēlēties: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Nekad neizvēlēties šo",
+	"mediafiles.releaseSheet.pointsBreakdown": "Punkti pēc pazīmes",
 	"mediafiles.releaseSheet.noMatches": "Nav labu atbilstību.",
 	"mediafiles.releaseSheet.showHidden": "Rādīt {n}, kas neizturēja pārbaudi",
 	"mediafiles.rename.renamedOne": "Pārdēvēts 1 fails",

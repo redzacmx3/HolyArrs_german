@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Piliin",
 	"mediafiles.releaseSheet.neverPick": "Huwag kailanman piliin ang {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Huwag kailanman piliin ito",
+	"mediafiles.releaseSheet.pointsBreakdown": "Puntos bawat katangian",
 	"mediafiles.releaseSheet.noMatches": "Walang magagandang tugma.",
 	"mediafiles.releaseSheet.showHidden": "Ipakita ang {n} na hindi pumasa",
 	"mediafiles.rename.renamedOne": "1 file ang napalitan ng pangalan",

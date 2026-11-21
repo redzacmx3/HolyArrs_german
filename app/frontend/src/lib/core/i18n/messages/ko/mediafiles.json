@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "선택",
 	"mediafiles.releaseSheet.neverPick": "{name} 선택 안 함",
 	"mediafiles.releaseSheet.neverPickThis": "이 릴리스는 선택 안 함",
+	"mediafiles.releaseSheet.pointsBreakdown": "특성별 점수",
 	"mediafiles.releaseSheet.noMatches": "잘 맞는 항목이 없습니다.",
 	"mediafiles.releaseSheet.showHidden": "통과하지 못한 {n}개 보기",
 	"mediafiles.rename.renamedOne": "파일 1개 이름 변경됨",

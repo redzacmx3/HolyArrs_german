@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Välj",
 	"mediafiles.releaseSheet.neverPick": "Välj aldrig {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Välj aldrig den här",
+	"mediafiles.releaseSheet.pointsBreakdown": "Poäng per egenskap",
 	"mediafiles.releaseSheet.noMatches": "Inga bra träffar.",
 	"mediafiles.releaseSheet.showHidden": "Visa de {n} som inte klarade sig",
 	"mediafiles.rename.renamedOne": "1 fil bytte namn",

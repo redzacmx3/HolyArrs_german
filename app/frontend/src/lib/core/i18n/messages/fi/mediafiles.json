@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Valitse",
 	"mediafiles.releaseSheet.neverPick": "Älä koskaan valitse: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Älä koskaan valitse tätä",
+	"mediafiles.releaseSheet.pointsBreakdown": "Pisteet ominaisuuksittain",
 	"mediafiles.releaseSheet.noMatches": "Ei hyviä osumia.",
 	"mediafiles.releaseSheet.showHidden": "Näytä {n}, jotka eivät läpäisseet",
 	"mediafiles.rename.renamedOne": "1 tiedosto nimetty uudelleen",

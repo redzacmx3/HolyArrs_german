@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Odaberi",
 	"mediafiles.releaseSheet.neverPick": "Nikad ne biraj: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Nikad ne biraj ovo",
+	"mediafiles.releaseSheet.pointsBreakdown": "Bodovi po osobini",
 	"mediafiles.releaseSheet.noMatches": "Nema dobrih podudaranja.",
 	"mediafiles.releaseSheet.showHidden": "Prikaži one koji nisu prošli: {n}",
 	"mediafiles.rename.renamedOne": "1 datoteka je preimenovana",

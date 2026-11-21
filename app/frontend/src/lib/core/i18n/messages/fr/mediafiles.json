@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "Choisir",
 	"mediafiles.releaseSheet.neverPick": "Ne jamais choisir {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Ne jamais choisir celle-ci",
+	"mediafiles.releaseSheet.pointsBreakdown": "Points par critère",
 	"mediafiles.releaseSheet.noMatches": "Aucune bonne correspondance.",
 	"mediafiles.releaseSheet.showHidden": "Afficher les {n} qui n'ont pas passé",
 	"mediafiles.rename.renamedOne": "1 fichier renommé",

@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "चुनें",
 	"mediafiles.releaseSheet.neverPick": "{name} कभी न चुनें",
 	"mediafiles.releaseSheet.neverPickThis": "इसे कभी न चुनें",
+	"mediafiles.releaseSheet.pointsBreakdown": "गुण के अनुसार पॉइंट",
 	"mediafiles.releaseSheet.noMatches": "कोई अच्छा मेल नहीं।",
 	"mediafiles.releaseSheet.showHidden": "जो पास नहीं हुईं वे {n} दिखाएं",
 	"mediafiles.rename.renamedOne": "1 फ़ाइल का नाम बदला गया",

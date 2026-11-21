@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "選ぶ",
 	"mediafiles.releaseSheet.neverPick": "{name} は選ばない",
 	"mediafiles.releaseSheet.neverPickThis": "これは選ばない",
+	"mediafiles.releaseSheet.pointsBreakdown": "特徴ごとのポイント",
 	"mediafiles.releaseSheet.noMatches": "良い一致はありません。",
 	"mediafiles.releaseSheet.showHidden": "合格しなかった {n} 件を表示",
 	"mediafiles.rename.renamedOne": "1 件のファイル名を変更しました",

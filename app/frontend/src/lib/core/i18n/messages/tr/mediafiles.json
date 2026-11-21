@@ -434,6 +434,7 @@
 	"mediafiles.releaseSheet.pick": "Seç",
 	"mediafiles.releaseSheet.neverPick": "{name} bir daha seçilmesin",
 	"mediafiles.releaseSheet.neverPickThis": "Bunu bir daha seçme",
+	"mediafiles.releaseSheet.pointsBreakdown": "Özelliğe göre puan",
 	"mediafiles.releaseSheet.noMatches": "İyi eşleşme yok.",
 	"mediafiles.releaseSheet.showHidden": "Geçemeyen {n} tanesini göster",
 	"mediafiles.rename.renamedOne": "1 dosya yeniden adlandırıldı",

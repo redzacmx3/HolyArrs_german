@@ -433,6 +433,7 @@
 	"mediafiles.releaseSheet.pick": "Kiválasztás",
 	"mediafiles.releaseSheet.neverPick": "Soha ne válassza ezt: {name}",
 	"mediafiles.releaseSheet.neverPickThis": "Soha ne válassza ezt",
+	"mediafiles.releaseSheet.pointsBreakdown": "Pontok jellemzőnként",
 	"mediafiles.releaseSheet.noMatches": "Nincs jó egyezés.",
 	"mediafiles.releaseSheet.showHidden": "A {n} meg nem felelő megjelenítése",
 	"mediafiles.rename.renamedOne": "1 fájl átnevezve",
