@@ -214,8 +214,14 @@ var safetyTraits = map[string]bool{"sample": true, "executable": true, "password
 // traitMatches says whether a named Trait matches. Points Traits need a sure
 // field (a "likely" web_dl from a bare "WEB" earns nothing).
 func traitMatches(trait string, p releasename.Result) (bool, string) {
+	return traitMatchesAt(trait, p, 0)
+}
+
+// traitMatchesAt is traitMatches knowing the runtime in minutes the Release
+// covers (0: not known), for size per minute traits.
+func traitMatchesAt(trait string, p releasename.Result, runtime int) (bool, string) {
 	if id, ok := OwnTraitID(trait); ok {
-		return ownMatches(id, p)
+		return ownMatchesAt(id, p, runtime)
 	}
 	if p.Music != nil {
 		return musicTrait(trait, p)
@@ -393,7 +399,7 @@ func Judge(rel ReleaseFacts, set SlotSet, rules PickRulesBody) Verdict {
 		if safetyTraits[tr] {
 			continue
 		}
-		if ok, why := traitMatches(tr, p); ok {
+		if ok, why := traitMatchesAt(tr, p, set.RuntimeMinutes); ok {
 			v.add("hard", "never:"+tr, "fail", why, 0)
 		}
 	}
@@ -401,7 +407,7 @@ func Judge(rel ReleaseFacts, set SlotSet, rules PickRulesBody) Verdict {
 		v.add("hard", "never", "pass", "nothing from the never list", 0)
 	}
 	for _, tr := range rules.MustHave {
-		if ok, why := traitMatches(tr, p); !ok {
+		if ok, why := traitMatchesAt(tr, p, set.RuntimeMinutes); !ok {
 			v.add("hard", "must_have:"+tr, "fail", "must have: "+why, 0)
 		}
 	}
@@ -458,9 +464,9 @@ func Judge(rel ReleaseFacts, set SlotSet, rules PickRulesBody) Verdict {
 	}
 
 	// 4. Better than what we have.
-	points, hits := scoreTraits(p, rules)
+	points, hits := scoreTraitsAt(p, rules, set.RuntimeMinutes)
 	if set.Current != nil && v.Step != nil {
-		set.Current = currentWithTitle(set.Current, p, rules)
+		set.Current = currentWithTitle(set.Current, p, rules, set.RuntimeMinutes)
 		v.better(rel, rules, set.Current, idx, points)
 	}
 	if v.failed() {

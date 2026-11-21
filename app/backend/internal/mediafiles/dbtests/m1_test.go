@@ -321,11 +321,13 @@ func TestM1MigrationsAreAddOnly(t *testing.T) {
 		// The fork's own_trait_language rebuilds own_traits to add the language
 		// kind (named, as an upstream update can give it a new number);
 		// TestOwnTraitsKeptByLanguageMigration proves no trait or id is lost.
+		// The fork's own_trait_per_minute does the same for size_per_minute;
+		// TestOwnTraitsKeptByPerMinuteMigration proves no trait or id is lost.
 		// 0123 rebuilds outside_lists to add the mdblist_list kind;
 		// TestMDBListListsMigration proves no list or column is lost.
 		if m.Version < 7 || m.Version == 8 || m.Version == 19 || m.Version == 21 || m.Version == 23 || m.Version == 25 || m.Version == 42 || m.Version == 82 ||
 			m.Version == 84 || m.Version == 95 || m.Version == 102 || m.Version == 103 || m.Version == 106 || m.Version == 109 || m.Version == 121 || m.Version == 123 ||
-			strings.HasSuffix(m.Name, "_own_trait_language.sql") {
+			strings.HasSuffix(m.Name, "_own_trait_language.sql") || strings.HasSuffix(m.Name, "_own_trait_per_minute.sql") {
 			continue
 		}
 		up := strings.ToUpper(m.SQL)

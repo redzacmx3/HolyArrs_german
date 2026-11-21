@@ -38,6 +38,7 @@
 		{ value: 'name', label: t('downloads.ot.words') },
 		{ value: 'group', label: t('downloads.ot.group') },
 		{ value: 'size', label: t('downloads.ot.size') },
+		{ value: 'size_per_minute', label: t('downloads.ot.perMinute') },
 		{ value: 'language', label: t('downloads.ot.languages') }
 	]);
 	// Traits synced from TRaSH Guides sit apart: there can be dozens, and only a sync changes them.
@@ -48,12 +49,14 @@
 	const specWord = (k: string) =>
 		({ name: t('downloads.ot.kindName'), group: t('downloads.ot.kindGroup'), source: t('downloads.ot.kindSource'), modifier: t('downloads.ot.kindSource'), resolution: t('downloads.ot.kindResolution'), size: t('downloads.ot.kindSize'), edition: t('downloads.ot.kindEdition'), language: t('downloads.ot.kindLanguage'), release_type: t('downloads.ot.kindReleaseType'), year: t('downloads.ot.kindYear') })[k] ?? k;
 	const specSummary = (o: OwnTrait) => (o.specs ?? []).map((s) => t(s.negate ? 'downloads.ot.specNot' : 'downloads.ot.spec', { name: s.name, kind: specWord(s.kind) })).join(', ');
-	const sizeWords = (term: string) => {
+	const sizeWords = (term: string, mb = false) => {
 		const { over, upTo } = sizeParts(term);
-		return [over && t('downloads.ot.sizeOver', { n: over }), upTo && t('downloads.ot.sizeUpTo', { n: upTo })].filter(Boolean).join(', ');
+		return [over && t(mb ? 'downloads.ot.mbOver' : 'downloads.ot.sizeOver', { n: over }), upTo && t(mb ? 'downloads.ot.mbUpTo' : 'downloads.ot.sizeUpTo', { n: upTo })].filter(Boolean).join(', ');
 	};
+	// Fork: a size per minute trait gives its range in MB a minute of runtime.
+	const sized = (m: string) => m === 'size' || m === 'size_per_minute';
 	const summary = (o: OwnTrait) =>
-		o.match === 'size' ? t('downloads.ot.sumSize', { range: sizeWords(o.terms[0] ?? '') }) : t(o.match === 'group' ? 'downloads.ot.sumGroup' : o.match === 'language' ? 'downloads.ot.sumLanguage' : 'downloads.ot.sumName', { terms: o.terms.join(', ') });
+		o.match === 'size_per_minute' ? t('downloads.ot.sumPerMinute', { range: sizeWords(o.terms[0] ?? '', true) }) : o.match === 'size' ? t('downloads.ot.sumSize', { range: sizeWords(o.terms[0] ?? '') }) : t(o.match === 'group' ? 'downloads.ot.sumGroup' : o.match === 'language' ? 'downloads.ot.sumLanguage' : 'downloads.ot.sumName', { terms: o.terms.join(', ') });
 
 	// The sheet that makes or changes one trait.
 	let editing = $state<OwnTrait | null>(null);
@@ -67,15 +70,15 @@
 	let busy = $state(false);
 	let serverErrors = $state<Record<string, string>>({});
 	let formError = $state('');
-	const checked = $derived(match === 'size' ? checkSizeTrait(name, over, upTo) : match === 'language' ? checkLanguageTrait(name, ownTerms(termsText)) : checkOwnTrait(name, ownTerms(termsText)));
+	const checked = $derived(sized(match) ? checkSizeTrait(name, over, upTo) : match === 'language' ? checkLanguageTrait(name, ownTerms(termsText)) : checkOwnTrait(name, ownTerms(termsText)));
 	const errors = $derived<Record<string, string>>({ ...(tried ? checked : {}), ...serverErrors });
 
 	function openSheet(o: OwnTrait | null) {
 		editing = o;
 		name = o?.name ?? '';
 		match = o?.match ?? 'name';
-		termsText = o?.match === 'size' ? '' : (o?.terms.join('\n') ?? '');
-		({ over, upTo } = sizeParts(o?.match === 'size' ? o.terms[0] : ''));
+		termsText = o && sized(o.match) ? '' : (o?.terms.join('\n') ?? '');
+		({ over, upTo } = sizeParts(o && sized(o.match) ? o.terms[0] : ''));
 		tried = false;
 		serverErrors = {};
 		formError = '';
@@ -88,11 +91,11 @@
 		serverErrors = {};
 		formError = '';
 		if (Object.keys(checked).length) {
-			document.getElementById(checked.name ? 'ot-name' : match === 'size' ? 'ot-over' : 'ot-terms')?.focus();
+			document.getElementById(checked.name ? 'ot-name' : sized(match) ? 'ot-over' : 'ot-terms')?.focus();
 			return;
 		}
 		busy = true;
-		const body = { name: name.trim(), match, terms: match === 'size' ? [sizeTerm(over, upTo)] : ownTerms(termsText) };
+		const body = { name: name.trim(), match, terms: sized(match) ? [sizeTerm(over, upTo)] : ownTerms(termsText) };
 		try {
 			const saved = editing ? await api.put<OwnTrait>(`/own-traits/${editing.id}`, body) : await api.post<OwnTrait>('/own-traits', body);
 			const rest = (list ?? []).filter((x) => x.id !== saved.id);
@@ -208,14 +211,14 @@
 		<div class="field">
 			<span class="label" id="ot-match-label">{t('downloads.ot.lookAt')}</span>
 			<SegmentedControl options={matchChoices} bind:value={match} label={t('downloads.ot.lookAt')} testid="ot-match" />
-			<span class="hint">{match === 'size' ? t('downloads.ot.hintSize') : match === 'group' ? t('downloads.ot.hintGroup') : match === 'language' ? t('downloads.ot.hintLanguage') : t('downloads.ot.hintName')}</span>
+			<span class="hint">{match === 'size_per_minute' ? t('downloads.ot.hintPerMinute') : match === 'size' ? t('downloads.ot.hintSize') : match === 'group' ? t('downloads.ot.hintGroup') : match === 'language' ? t('downloads.ot.hintLanguage') : t('downloads.ot.hintName')}</span>
 		</div>
-		{#if match === 'size'}
+		{#if sized(match)}
 			<div class="pair">
-				<Field id="ot-over" label={t('downloads.ot.over')} error={errors.terms}>
+				<Field id="ot-over" label={match === 'size_per_minute' ? t('downloads.ot.overMb') : t('downloads.ot.over')} error={errors.terms}>
 					<input id="ot-over" class="input" inputmode="decimal" autocomplete="off" bind:value={over} aria-invalid={errors.terms ? 'true' : undefined} aria-describedby={errors.terms ? 'ot-over-error' : undefined} />
 				</Field>
-				<Field id="ot-upto" label={t('downloads.ot.upTo')}>
+				<Field id="ot-upto" label={match === 'size_per_minute' ? t('downloads.ot.upToMb') : t('downloads.ot.upTo')}>
 					<input id="ot-upto" class="input" inputmode="decimal" autocomplete="off" bind:value={upTo} />
 				</Field>
 			</div>
