@@ -39,6 +39,12 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Upstream:** ask first. If HolyArrs does not want it, it stays a small rule of its own in the fork.
 - **Problem:** TRaSH's fixed size limit hits 12-minute kids' episodes (377 MB, 1080p x265) with −35000. Judge by MB per minute of runtime instead.
 
+### 13. WebHD fix: compare with upstream 1.2.1 before removing ours
+- **Status:** open (noted 2026-11-21), only once upstream 1.2.1 arrives through the weekly upstream sync
+- **Upstream:** already there. [HolyArrs issue #497](https://github.com/HolyArrs/HolyArrs/issues/497) (WebHD/Web-HD not read as a source): the maintainer confirmed a fix in 1.2.1, together with a review of how release names are read for source and quality.
+- **Ours:** [PR #16](https://github.com/redzacmx3/HolyArrs_german/pull/16) reads WebHD/Web-HD as a web download (`releasename/parse.go`, test `TestWebHDIsWebDownload` in `languages_test.go`).
+- **To do when 1.2.1 comes:** before removing our fix, run both against the same release names, for example `PAW.Patrol.S02E31.German.1080p.WebHD.x264-FuN`, `PAW.Patrol.S02E31.German.AC3.DL.1080p.WebHD.x265-FuN` and `PAW.Patrol.S02E31.German.DL.1080p.Web-HD.x265-FuN`. Check source, quality and ladder step, see which one reads more names right, then decide: drop ours, keep ours, or offer the missing cases upstream. Keep our test either way.
+
 ## Done
 
 ### 1. Filter list in "Release auswählen"
