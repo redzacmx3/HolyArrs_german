@@ -10,7 +10,10 @@ const isPath = (s: string) => /^(\/|[A-Za-z]:[\\/])\S/.test(s);
 const lists: Record<string, string> = {
 	'server.sources.no-source-takes-this-title-s': 'failures',
 	'server.downloads.no-downloader-can-take-it-now': 'skipped',
-	'server.sources.this-folder-only-takes-sources-tagged': 'sources'
+	'server.sources.this-folder-only-takes-sources-tagged': 'sources',
+	// Fork: a season pack's episodes that would not gain ("S01E02 already has a copy as good; …").
+	'server.sources.not-every-episode-would-gain': 'list',
+	'server.sources.not-every-episode-would-gain-settings': 'list'
 };
 const items = new Set([
 	'server.sources.it-is-paused',
@@ -93,7 +96,8 @@ export function listItem(text: string): string {
 		tp.slots.forEach((s, i) => (vars[s] = m[i + 1]));
 		return t(tp.key, vars);
 	}
-	return exact.has(text) ? t(exact.get(text)!) : text;
+	// Fork: a list line that is no item line of its own reads like any other line.
+	return look(text, 1);
 }
 
 // A list line: its list is shown line by line, its other gaps (tags, a protocol) as typed.

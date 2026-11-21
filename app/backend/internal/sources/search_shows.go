@@ -391,7 +391,7 @@ func (set showSet) lines(ss *mediafiles.SlotSet, rel mediafiles.ReleaseFacts, re
 	ss.MatchReasons = append(ss.MatchReasons, mediafiles.Reason{Step: "match", Rule: "episode", Effect: "pass", Detail: "holds " + coverLabel(covered)})
 	pack := mediafiles.IsPack(p)
 	if (p.Kind.Value == releasename.KindMultiSeason || p.Kind.Value == releasename.KindComplete) && !rules.multiSeason {
-		ss.MatchReasons = append(ss.MatchReasons, matchFail("several_seasons", "holds more than one season; Releases with several seasons are not taken (Settings > Search)"))
+		ss.MatchReasons = append(ss.MatchReasons, matchFail("several_seasons", "holds more than one season; Releases with several seasons are not taken (Settings > Search > Season packs: Take Releases with several seasons)"))
 		return
 	}
 	partial := pack && set.window > 0 && rel.Protocol == "torrent"
@@ -492,7 +492,7 @@ func (set showSet) lines(ss *mediafiles.SlotSet, rel mediafiles.ReleaseFacts, re
 		r := mediafiles.Reason{Step: "match", Rule: "pack_share", Effect: "warn", Detail: "not every episode would gain: " + strings.Join(noGain, "; ")}
 		if !rules.packAny {
 			r.Effect = "fail"
-			r.Detail += " (Settings > Search: every episode must gain)"
+			r.Detail += " (Settings > Search > Season packs: A season pack is taken when every episode in it would be new or better)"
 		}
 		ss.MatchReasons = append(ss.MatchReasons, r)
 	}
