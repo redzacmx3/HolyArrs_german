@@ -198,12 +198,13 @@ func freeTraitName(tx *sql.Tx, name, app string, self int64) (string, error) {
 // trashShape takes a profile's qualities, language and ranking into the
 // rules, as far as the profile gives them: its allowed qualities become the
 // allowed steps and its cutoff Good enough at; a group that holds qualities
-// of different steps (the German profiles' "Merged QPs") ranks them as one,
-// so points decide before the step; its language becomes the languages to
+// of different steps (the German profiles' "Merged QPs") ranks those steps
+// equal, so points decide between them, as the import from the old apps
+// does; its language becomes the languages to
 // take. A profile that gives none of these leaves the rules as they are.
 func trashShape(b *mediafiles.PickRulesBody, p TrashProfile) {
 	var allowed, cutoff []string
-	merged := false
+	var groups [][]string
 	for _, it := range p.Items {
 		names := it.Items
 		if len(names) == 0 {
@@ -216,16 +217,23 @@ func trashShape(b *mediafiles.PickRulesBody, p TrashProfile) {
 			continue
 		}
 		allowed = append(allowed, names...)
-		merged = merged || MergesSteps(names)
+		if len(it.Items) > 0 {
+			groups = append(groups, names)
+		}
 	}
+	// TRaSH lists a profile best first; profileSteps reads the old apps'
+	// order, low to high.
+	slices.Reverse(allowed)
+	cutoff = slices.Clone(cutoff)
+	slices.Reverse(cutoff)
 	if steps, good := profileSteps(allowed, cutoff); len(steps) > 0 && !mediafiles.IsMusicRules(*b) {
 		for i := range b.Steps {
 			b.Steps[i].Allowed = slices.Contains(steps, b.Steps[i].Quality)
 		}
 		b.GoodEnoughAt = good
 	}
-	if merged {
-		b.Order = "points_then_quality"
+	if eq := groupSteps(groups); len(eq) > 0 {
+		b.EqualSteps = eq
 	}
 	switch lang := strings.ToLower(strings.TrimSpace(p.Language)); lang {
 	case "":

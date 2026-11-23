@@ -16,7 +16,7 @@ describe('Release reasons in German', () => {
 		lang.value = 'de';
 		lang.words = { ...(en as Record<string, string>), ...(de as Record<string, string>) };
 		for (const [line, want] of [
-			['-23300 points, needs at least 11000', '-23300 Punkte, braucht mindestens 11000'],
+			['-23300 points, needs at least 11000', '-23300 Punkte, mindestens 11000 nötig'],
 			['no ladder step: the source is unknown', 'keine Stufe: die Quelle ist unbekannt'],
 			['WEBDL-480p is not allowed in these Pick rules', 'WEBDL-480p ist in diesen Auswahlregeln nicht erlaubt'],
 			['below good enough (Bluray-1080p)', 'unter „Gut genug“ (Bluray-1080p)'],
