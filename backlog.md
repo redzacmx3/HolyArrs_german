@@ -41,7 +41,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Found:** TRaSH's "German Microsized" tests no size at all. It is a list of release groups (FuN, w00t, GTF, PaTroL, JellyfinPlex, BB, 266ers), so every FuN release gets −35000 whatever its size. A trait that reads MB per minute of runtime judges the file itself.
 
 ### 13. WebHD fix: compare with upstream 1.2.1 before removing ours
-- **Status:** open (noted 2026-11-21), only once upstream 1.2.1 arrives through the weekly upstream sync
+- **Status:** done (2026-11-23, upstream 1.3.0 sync). Upstream reads WebHD/Web-HD as a web download itself (`releasename/quality.go`, test `issue497_test.go` with the FuN name). Our `TestWebHDIsWebDownload` passes on upstream's code for all three names, so our parser change is gone and our test stays.
 - **Upstream:** already there. [HolyArrs issue #497](https://github.com/HolyArrs/HolyArrs/issues/497) (WebHD/Web-HD not read as a source): the maintainer confirmed a fix in 1.2.1, together with a review of how release names are read for source and quality.
 - **Ours:** [PR #16](https://github.com/redzacmx3/HolyArrs_german/pull/16) reads WebHD/Web-HD as a web download (`releasename/parse.go`, test `TestWebHDIsWebDownload` in `languages_test.go`).
 - **To do when 1.2.1 comes:** before removing our fix, run both against the same release names, for example `PAW.Patrol.S02E31.German.1080p.WebHD.x264-FuN`, `PAW.Patrol.S02E31.German.AC3.DL.1080p.WebHD.x265-FuN` and `PAW.Patrol.S02E31.German.DL.1080p.Web-HD.x265-FuN`. Check source, quality and ladder step, see which one reads more names right, then decide: drop ours, keep ours, or offer the missing cases upstream. Keep our test either way.
@@ -49,7 +49,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 ## Done
 
 ### 1. Filter list in "Release auswählen"
-- **Status:** done, [PR #18](https://github.com/redzacmx3/HolyArrs_german/pull/18) (2026-11-18)
+- **Status:** done, [PR #18](https://github.com/redzacmx3/HolyArrs_german/pull/18) (2026-11-18). Since the upstream 1.3.0 sync (2026-11-23) the sheet uses upstream's own filters (resolution, Source, language, name text, sort); our HDR, codec and sound drop-downs are gone. The DE / DL / Sub chips stay (`readTags` in `mediafiles/releases.ts`).
 - **Done:** drop-downs above the list for Sprache, Auflösung, Quelle, HDR, Codec and Ton, each with how many Releases fit. They combine with each other and with Gute Treffer / Alle, and the browser keeps the picks for the next title. The server now sends what each name says (language, German DL, subtitles, picture, sound) as read by the parser, and the rows show DE / DL chips. The sheet loads up to 300 Releases instead of 60.
 - **Problem:** The dialog lists many releases (for example "Alle 92"). Only "Gute Treffer / Alle" narrows them, so finding the right one takes long.
 - **Wish:** Drop-down filters above the list for language (German, German DL, English …), picture (720p/1080p/2160p, HDR/DV, x264/x265, WEB/BluRay) and sound (DDP5.1, Atmos, TrueHD …). The filters could combine and use the facts the parser already reads, which the dialog shows as chips.
