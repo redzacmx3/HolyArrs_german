@@ -6,7 +6,7 @@
 	import Button from '#lib/ui/Button.svelte';
 	import Menu, { type MenuItem } from '#lib/ui/Menu.svelte';
 	import { decisionName, groupDecisions, manyWords, whyWords, type DecisionGroup } from './downloaders.ts';
-	import { canImportAgain, decisionFix, packImportAgain, noMatchKind, reasonKind, reasonWords, refusedLine, type Fix } from './decision-fix.ts';
+	import { importAgainBeside, retryMinutes, decisionFix, packImportAgain, noMatchKind, reasonKind, reasonWords, refusedLine, type Fix } from './decision-fix.ts';
 	import { refreshDecisions } from './decisions.svelte.ts';
 	import { editionDecisionBody, ReleaseSheet } from '../mediafiles/index.ts';
 	import { to } from '../core/paths.ts';
@@ -18,12 +18,19 @@
 	import { plainReason } from '../core/plain.ts';
 
 	// `compact` hides the title, which the Download details header already shows.
-	let { items, ondone, compact = false }: { items: Decision[]; ondone?: () => void; compact?: boolean } = $props();
+	// `onsearch` hears a slot's new search before its decision leaves the list, so its details can stay open meanwhile.
+	let { items, ondone, onsearch, compact = false }: { items: Decision[]; ondone?: () => void; onsearch?: (slotID: number) => void; compact?: boolean } = $props();
 	const groups = $derived(groupDecisions(items));
 	const admin = $derived(session.can('settings'));
 
 	type Action = 'search' | 'turn_down' | 'stop';
 	let busy = $state('');
+	// The clock the Trying again line counts down on, moved each half minute.
+	let now = $state(Date.now());
+	$effect(() => {
+		const id = setInterval(() => (now = Date.now()), 30_000);
+		return () => clearInterval(id);
+	});
 	async function act(d: Decision, action: Action, pack = false, key = `slot-${d.slot_id}`) {
 		const name = decisionName(d);
 		const w = manyWords(d.kind);
@@ -44,6 +51,7 @@
 		busy = key;
 		try {
 			await api.post(`/needs-decision/${d.slot_id}/decide`, pack ? { action, pack: true } : { action });
+			if (action !== 'stop') onsearch?.(d.slot_id);
 			toasts.push({ search: t('downloads.dp.searchingAgain', { episodes }), turn_down: t('downloads.dp.searchingAgain', { episodes }), stop: t('downloads.dp.stopped', { episodes }) }[action], 'ok', action === 'turn_down' ? { body: t('downloads.dp.turnedDown') } : {});
 			await refreshDecisions();
 			ondone?.();
@@ -137,8 +145,7 @@
 	const versionLabel = (d: Decision) => (d.versions > 1 ? t('downloads.dp.anotherVersion') : t('downloads.dp.addVersion'));
 	function more(d: Decision, key: string, fix: Fix): MenuItem[] {
 		const out: MenuItem[] = [];
-		if (canImportAgain(d) && fix !== 'again') out.push({ label: t('downloads.act.importAgain'), disabled: !!d.reading, onselect: () => importAgain(d, key) });
-		if (d.import_file && fix !== 'import') out.push({ label: t('downloads.dp.importFile'), onselect: () => importFile(d, key) });
+				if (d.import_file && fix !== 'import') out.push({ label: t('downloads.dp.importFile'), onselect: () => importFile(d, key) });
 		if (d.import_folder && fix !== 'match') out.push({ label: t('downloads.dp.importByHand'), href: byHandHref(d) });
 		if (fix !== 'search') out.push({ label: t('downloads.dp.searchAgain'), onselect: () => act(d, 'search', false, key) });
 		out.push({ label: t('downloads.dp.byHandPage'), href: to(`/library/${d.title_id}?tab=library&pick=1#h-rel`) });
@@ -207,11 +214,13 @@
 
 {#snippet one(d: Decision, key: string, showName: boolean)}
 	{@const fix = primary(d)}
+	{@const mins = retryMinutes(d.retry_at, now)}
 	<div class="dec" data-testid="decision">
 		<p class="line">
 			{#if showName}<span class="one">{decisionName(d)}</span>{/if}
 			<span class="why" data-testid="decision-reason">{reasonLine(d)}</span>
 			<span class="sub">· {d.version} · {ago(d.since)}</span>
+			{#if mins !== null}<span class="sub" data-testid="decision-retry">· {t('downloads.dp.retryIn', { count: mins })}</span>{/if}
 		</p>
 		{#if done[key]}
 			<p class="state" role="status" data-testid="decision-done">{done[key]}</p>
@@ -238,6 +247,9 @@
 				{#if fix !== 'hand'}<Button size="sm" onclick={() => openPick(d)} data-testid="decision-pick">{t('downloads.dp.byHand')}</Button>{/if}
 				{#if d.release_id}<Button size="sm" onclick={() => act(d, 'turn_down', false, key)} disabled={busy === key} data-testid="decision-turn-down">{t('downloads.bulkFix.turnDown')}</Button>{/if}
 				{#if d.has_copy}<Button size="sm" onclick={() => keepCopy(d, key)} disabled={busy === key} title={t('downloads.bulkFix.keepHint')} data-testid="decision-keep">{t('downloads.dp.keepCopy')}</Button>{/if}
+				{#if importAgainBeside(d, fix)}
+					<Button size="sm" onclick={() => importAgain(d, key)} disabled={busy === key || !!d.reading} busy={busy === key} data-testid="decision-again">{t('downloads.act.importAgain')}</Button>
+				{/if}
 				<Menu label={t('downloads.dp.moreChoices')} variant="button" text={t('downloads.dp.more')} icon="chevronDown" items={more(d, key, fix)} width={240} align="start" />
 				{@render whyBtn(key)}
 			</div>
