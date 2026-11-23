@@ -440,8 +440,7 @@ export interface ReleaseView {
 	tags?: ReleaseTags; // what the name says about its languages (sources/release_tags.go)
 }
 
-/** German names: audio languages, DL (the original too) and subtitle languages; the rest of NameTags is unused here. */
-export interface ReleaseTags { languages?: string[]; dual?: boolean; subs?: string[] }
+export interface ReleaseTags { languages?: string[]; dual?: boolean; subs?: string[] } // German names: audio languages, DL (the original too), subtitles
 
 export interface ReleasePage {
 	releases: ReleaseView[];
