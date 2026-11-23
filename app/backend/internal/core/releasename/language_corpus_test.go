@@ -108,7 +108,9 @@ var languageCorpus = []struct {
 	{"Movie.Title.2019.1080p.BluRay.x264.FRA.ENG-GRP", "fr en", ""},
 	{"Movie.Title.2019.1080p.BluRay.x264.ENG.SUB.ITA-GRP", "it", ""},
 	{"Movie.Title.2019.1080p.BluRay.x264.Rus.Eng.Subs-GRP", "", ""},
-	{"Show.Name.S02E03.1080p.WEB.h264.GER.SUBBED-GRP", "de", ""},
+	// The old apps read German audio here, but German names write Subbed
+	// for German subtitles over the original audio.
+	{"Show.Name.S02E03.1080p.WEB.h264.GER.SUBBED-GRP", "", ""},
 	{"Show.Name.S01E01.1080p.WEB.h264.Thai.Sub-GRP", "", ""},
 	{"Show.Name.S01E01.1080p.WEB.h264.English.Subs-GRP", "", ""},
 	{"Movie Title (2020) [1080p] [WEBRip] [YTS.MX] [Hindi]", "hi", ""},

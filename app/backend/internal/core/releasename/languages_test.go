@@ -90,6 +90,28 @@ func TestDualLanguage_NotWebDL(t *testing.T) {
 	}
 }
 
+// German names write Subbed or Subtitled after the subtitle language and
+// OmU for the original audio with German subtitles: German is no audio
+// language there. German alone and German DL stay German audio.
+func TestGermanSubtitleWords(t *testing.T) {
+	for name, want := range map[string]string{
+		"Quiet.Harbour.2019.German.Subbed.1080p.WEB.H264-GRP":    "",
+		"Quiet.Harbour.2019.GERMAN.SUBTITLED.1080p.WEB.H264-GRP": "",
+		"Quiet.Harbour.2019.OmU.1080p.WEB.H264-GRP":              "",
+		"Quiet.Harbour.2019.German.OmU.1080p.WEB.H264-GRP":       "",
+		"Quiet.Harbour.2019.German.1080p.WEB.H264-GRP":           "de",
+		"Quiet.Harbour.2019.German.DL.1080p.BluRay.x264-GRP":     "de",
+	} {
+		r := Parse(name, Hints{})
+		if got := strings.Join(r.Languages, " "); got != want {
+			t.Errorf("%s: languages %q, want %q", name, got, want)
+		}
+		if r.Title.Value != "Quiet Harbour" {
+			t.Errorf("%s: title %q", name, r.Title.Value)
+		}
+	}
+}
+
 func TestMoreLanguageWords_BeforeAJoinedSubTag(t *testing.T) {
 	for name, want := range map[string]string{
 		"Movie.Title.2019.HUN.SWESUB.1080p-GRP":         "hu",

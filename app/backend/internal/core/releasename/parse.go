@@ -602,7 +602,9 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 	}
 	isSub := func(t string) bool {
 		t = strings.ToLower(t)
-		return t == "sub" || t == "subs" || t == "subtitle" || t == "subtitles"
+		// German names write "German.Subbed" for the original audio with
+		// German subtitles, so subbed and subtitled name subtitles too.
+		return t == "sub" || t == "subs" || t == "subtitle" || t == "subtitles" || t == "subbed" || t == "subtitled"
 	}
 	var langToks []string // original case: upper-case-only codes need it
 	for i, t := range words {
@@ -671,6 +673,11 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 				flags["original"] = true
 			}
 		}
+	}
+	// OmU (Original mit Untertiteln) is the original audio with German
+	// subtitles, so German there is no audio language.
+	if has("omu") {
+		r.Languages = slices.DeleteFunc(r.Languages, func(l string) bool { return l == "de" })
 	}
 	if has("multi", "multi-audio", "multi-subs") {
 		flags["multi"] = true
