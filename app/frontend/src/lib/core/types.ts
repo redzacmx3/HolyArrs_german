@@ -382,8 +382,7 @@ export interface Reason {
 	code: string;
 	effect: string;
 	text: string;
-	// What a trait added or took away (effect add or subtract).
-	points?: number;
+	points?: number; // what a trait added or took away (effect add or subtract)
 }
 
 // What the server read from a Release name: the same reading the judge used.
