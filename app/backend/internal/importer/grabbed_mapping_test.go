@@ -84,3 +84,33 @@ func TestPlanReadsJobNameForHiddenFileName(t *testing.T) {
 		t.Fatalf("named file overridden: %+v", s[0])
 	}
 }
+
+// A double episode picked by hand for one episode, whose numbers name other
+// episodes here (the release counts by another episode order), fills the
+// episode it was picked for.
+func TestPlanGrabbedDoubleForOneEpisode(t *testing.T) {
+	ns := mediafiles.NamingDefaults()
+	ns.RenameOnImport = true
+	eps := []Episode{
+		{Ref: mediafiles.EpisodeRef{ItemID: 40, Season: 2, Episode: 40}, Name: "The Lighthouse", SlotID: 140},
+		{Ref: mediafiles.EpisodeRef{ItemID: 41, Season: 2, Episode: 41}, Name: "The Train", SlotID: 141},
+		{Ref: mediafiles.EpisodeRef{ItemID: 147, Season: 3, Episode: 47}, Name: "The Eagle", SlotID: 247, Wanted: true},
+	}
+	rel := "Quiet.Harbour.S02E40-E41.1080p.WEB.H264-GRP"
+	tgt := ShowTarget{LibraryPath: "/lib", FolderName: "Quiet Harbour (2013)", Show: mediafiles.TitleRef{Name: "Quiet Harbour", Year: 2013},
+		Order: mediafiles.OrderAired, Naming: &ns, Episodes: eps, ReleaseName: rel}
+	steps := PlanEpisodes([]Candidate{{Path: "/dl/" + rel + "/" + rel + ".mkv", Size: 1}}, tgt)
+	if steps[0].Method != "hardlink" || len(steps[0].TargetSlotIDs) != 1 || steps[0].TargetSlotIDs[0] != 247 || !strings.Contains(steps[0].TargetPath, "S03E47") {
+		t.Fatalf("double for one episode: %+v", steps[0])
+	}
+
+	// Three picked episodes never fit a name that holds two.
+	three := append([]Episode{}, eps...)
+	for i := range three {
+		three[i].Wanted = true
+	}
+	tgt.Episodes = three
+	if s := PlanEpisodes([]Candidate{{Path: "/dl/" + rel + "/" + rel + ".mkv", Size: 1}}, tgt); len(s[0].TargetSlotIDs) == 3 {
+		t.Fatalf("three episodes for a double: %+v", s[0])
+	}
+}
