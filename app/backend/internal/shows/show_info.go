@@ -12,11 +12,12 @@ import (
 
 // Info is what a show's page needs besides the shared Title fields.
 type Info struct {
-	DetailsSource string `json:"details_source"`
-	EpisodeOrder  string `json:"episode_order"`
-	SeasonChoice  string `json:"season_choice,omitempty"`
-	NewSeasons    string `json:"new_seasons"`
-	PackWindow    int    `json:"pack_window"`
+	Issues        []StatusIssue `json:"issues,omitempty"`
+	DetailsSource string        `json:"details_source"`
+	EpisodeOrder  string        `json:"episode_order"`
+	SeasonChoice  string        `json:"season_choice,omitempty"`
+	NewSeasons    string        `json:"new_seasons"`
+	PackWindow    int           `json:"pack_window"`
 	// ReleaseNumbers is "" (release names follow the episode order), tmdb or tvmaze.
 	ReleaseNumbers string          `json:"release_numbers"`
 	Status         string          `json:"status"`
@@ -90,6 +91,9 @@ func InfoOf(ctx context.Context, db database.Lister, t mediafiles.Title) (*Info,
 		si.BetterWanted += s.BetterWanted
 		si.Downloading += s.Downloading
 		si.Failed += s.Failed
+		for _, issue := range s.Issues {
+			si.Issues = addStatusIssue(si.Issues, issue.State, issue.Reason)
+		}
 		if s.NextAirDate != nil && (si.NextAirDate == nil || s.NextAirDate.Before(*si.NextAirDate)) {
 			si.NextAirDate = s.NextAirDate
 		}
