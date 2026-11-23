@@ -1,25 +1,39 @@
 package migrate
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
 
-func TestOpenQualitiesSeesMergedGroups(t *testing.T) {
-	quality := map[int64]string{3: "WEBDL-1080p", 7: "Bluray-1080p", 5: "WEBDL-720p"}
-	group := func(id int64, allowed bool, qs ...int64) map[string]any {
-		var sub []any
-		for _, q := range qs {
-			sub = append(sub, map[string]any{"quality": q, "allowed": allowed})
-		}
-		return map[string]any{"id": id, "name": "Merged QPs", "allowed": allowed, "items": sub}
+	"github.com/HolyArrs/holyarrs/app/backend/internal/library"
+)
+
+// A TRaSH "Merged QPs" profile as Radarr's API sends it: one allowed group
+// holding WEB and Blu-ray at 720p and 1080p, Remux on its own above it.
+const mergedProfileJSON = `{"id":9,"name":"German HD","upgradeAllowed":true,"cutoff":1001,
+"minFormatScore":0,"cutoffFormatScore":10000,"minUpgradeFormatScore":1,
+"items":[
+ {"quality":{"id":1,"name":"SDTV"},"items":[],"allowed":false},
+ {"id":1001,"name":"Merged QPs","allowed":true,"items":[
+  {"quality":{"id":14,"name":"WEBRip-720p"},"items":[],"allowed":true},
+  {"quality":{"id":5,"name":"WEBDL-720p"},"items":[],"allowed":true},
+  {"quality":{"id":6,"name":"Bluray-720p"},"items":[],"allowed":true},
+  {"quality":{"id":15,"name":"WEBRip-1080p"},"items":[],"allowed":true},
+  {"quality":{"id":3,"name":"WEBDL-1080p"},"items":[],"allowed":true},
+  {"quality":{"id":7,"name":"Bluray-1080p"},"items":[],"allowed":true}]},
+ {"quality":{"id":30,"name":"Remux-1080p"},"items":[],"allowed":true}]}`
+
+func TestProfileKeepsMergedGroups(t *testing.T) {
+	var m map[string]any
+	if err := json.Unmarshal([]byte(mergedProfileJSON), &m); err != nil {
+		t.Fatal(err)
 	}
-	single := func(q int64, allowed bool) map[string]any {
-		return map[string]any{"quality": q, "allowed": allowed, "items": []any{}}
+	p := profile(lower(m), nil, nil)
+	if len(p.Groups) != 1 || len(p.Groups[0]) != 6 {
+		t.Fatalf("groups %v", p.Groups)
 	}
-	allowed, cut, merged := openQualities([]any{group(1001, true, 5, 3, 7)}, quality, 1001)
-	if !merged || len(allowed) != 3 || len(cut) != 3 {
-		t.Fatalf("merged group: allowed %v cut %v merged %v", allowed, cut, merged)
-	}
-	_, _, merged = openQualities([]any{single(3, true), single(7, true), group(1001, false, 5, 3)}, quality, 7)
-	if merged {
-		t.Fatal("separate qualities and a refused group are not merged")
+	body, _ := library.OldProfileRules(library.OldProfile{Qualities: p.Qualities, CutoffQualities: p.CutoffQualities,
+		Groups: p.Groups, UpgradeAllowed: p.UpgradeAllowed})
+	if body.Order != "quality_then_points" || len(body.EqualSteps) != 1 || len(body.EqualSteps[0]) != 4 {
+		t.Fatalf("order %q, equal steps %v", body.Order, body.EqualSteps)
 	}
 }
