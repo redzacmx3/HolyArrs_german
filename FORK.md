@@ -23,6 +23,10 @@ Bei einem Merge-Konflikt bricht der Lauf ab; die Zusammenfassung des Laufs nennt
 
 Damit der Lauf auch geänderte Upstream-Workflows pushen kann und die Checks auf dem PR laufen, braucht er ein Repository-Secret `SYNC_TOKEN`: ein Fine-grained Token nur für dieses Repository mit *Contents*, *Pull requests* und *Workflows* (Lesen und Schreiben). Ohne das Secret klappt es, solange Upstream nichts unter `.github/workflows` ändert.
 
+## Deutsch fest eingebaut
+
+Ab HolyArrs 1.3.0 ist nur Englisch im Programm, alle anderen Sprachen lädt der Server als signierte Pakete vom Upstream. Ein Paket passt nur zu genau der Schlüsselliste, aus der es gebaut wurde; der Fork hat eigene Texte, also würde das deutsche Paket nie passen und alles bliebe Englisch. Darum ist Deutsch im Fork fest eingebaut: `app/frontend/src/lib/core/i18n/built-in.ts` (Frontend) und `app/backend/internal/plugins/languages_fork.go` (der Server meldet Deutsch als eingebaut und lädt dafür nie ein Paket). Neue Texte also wie bisher in `messages/de/*.json` pflegen.
+
 ## Migrationen
 
 HolyArrs führt jede noch nicht gelaufene Migration aus, auch eine mit kleinerer Nummer als die neueste schon gelaufene. Eine umnummerierte Fork-Migration wird über ihren Namen wiedererkannt und nicht doppelt ausgeführt (`app/backend/internal/core/database/migrate.go`, Test `TestForkMigrationRenumberedBehindUpstream`). So kann ein NAS mit dem Fork-Image jederzeit auf einen neueren Stand gehen.

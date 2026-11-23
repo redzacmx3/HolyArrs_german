@@ -30,6 +30,12 @@ func nameTags(name string) *NameTags {
 	if p.Source.Conf == releasename.Unknown {
 		t.Source = ""
 	}
+	if len(t.HDR) == 0 {
+		t.HDR = nil
+	}
+	if len(t.Languages) == 0 {
+		t.Languages = nil
+	}
 	if len(t.Languages) == 0 && !t.Dual && len(t.Subs) == 0 && t.Resolution == 0 && t.Source == "" && t.Codec == "" && len(t.HDR) == 0 && t.Audio == "" && t.Channels == "" && !t.Atmos {
 		return nil
 	}

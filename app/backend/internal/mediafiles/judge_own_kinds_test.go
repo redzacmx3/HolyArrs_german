@@ -244,29 +244,18 @@ func TestCurrentFileKnowsItsTitle(t *testing.T) {
 }
 
 // TestImportedLanguageReadsTheOriginal: under rules brought from an old
-// app, or rules that name the languages they want, a Release with no
-// language word is in the title's original language, so wanting another
-// language refuses it, as there. Rules naming no language, or a title with
-// no known original language, still only warn.
+// app a Release with no language word is in the title's original
+// language, so wanting another language refuses it, as there.
 func TestImportedLanguageReadsTheOriginal(t *testing.T) {
 	b := GoodEveryday()
-	b.Language = LanguageRule{Wanted: []string{"de"}}
+	b.Language = LanguageRule{Wanted: []string{"de"}, OriginalOK: true}
 	p := releasename.Parse("Film.2020.1080p.WEB-DL-X", releasename.Hints{})
 	var v Verdict
 	v.language(p, b, &TitleRef{OriginalLanguage: "en"})
-	if !v.failed() {
-		t.Fatal("rules made here wanting German took an English film's plain Release")
-	}
-	v = Verdict{}
-	v.language(p, b, &TitleRef{})
 	if v.failed() {
-		t.Fatal("a plain Release of a title with no known original language was refused")
+		t.Fatal("rules made here refused a Release with no language word")
 	}
-	v = Verdict{}
-	v.language(p, GoodEveryday(), &TitleRef{OriginalLanguage: "en"})
-	if v.failed() {
-		t.Fatal("rules naming no language refused a plain Release")
-	}
+	b.Language.OriginalOK = false
 	b.Synced = &SyncedProfile{From: "import", App: "radarr"}
 	v = Verdict{}
 	v.language(p, b, &TitleRef{OriginalLanguage: "en"})

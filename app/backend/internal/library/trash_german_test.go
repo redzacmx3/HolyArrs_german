@@ -94,7 +94,7 @@ func TestTrashGermanFormats(t *testing.T) {
 
 // TestTrashGermanProfileRanksGermanFirst applies the shape of TRaSH's
 // "[German] HD Bluray + WEB" (testdata/trash_german_profile, MIT): its merged
-// 720p/1080p group ranks on points first and it takes any language, so a
+// 720p/1080p group ranks its steps equal (points decide) and it takes any language, so a
 // German DL WEB-DL beats an English Blu-ray of the same film, as in Radarr.
 func TestTrashGermanProfileRanksGermanFirst(t *testing.T) {
 	body, err := os.ReadFile(filepath.Join("testdata", "trash_german_profile", "german-hd-bluray-web.json"))
@@ -117,8 +117,8 @@ func TestTrashGermanProfileRanksGermanFirst(t *testing.T) {
 	if !slices.Equal(allowed, []string{"720p_web", "720p_bluray", "1080p_web", "1080p_bluray"}) || rules.GoodEnoughAt != "1080p_bluray" {
 		t.Fatalf("steps %v good enough at %s", allowed, rules.GoodEnoughAt)
 	}
-	if rules.Order != "points_then_quality" || !slices.Contains(rules.Language.Wanted, "de") || !rules.Language.OriginalOK {
-		t.Fatalf("order %s language %+v", rules.Order, rules.Language)
+	if len(rules.EqualSteps) != 1 || len(rules.EqualSteps[0]) != 4 || !slices.Contains(rules.Language.Wanted, "de") || !rules.Language.OriginalOK {
+		t.Fatalf("equal steps %v language %+v", rules.EqualSteps, rules.Language)
 	}
 	// A sync keeps the languages the owner already chose.
 	mine := mediafiles.GoodEveryday()
