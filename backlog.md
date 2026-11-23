@@ -26,8 +26,8 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Problem:** reasons such as "not every episode would gain … (Settings > Search: every episode must gain)" are English and name a setting the German UI calls "Einstellungen › Suche › Staffelpakete › Jede Folge darin neu oder besser wäre".
 
 ### 10. Points breakdown per release in "Release auswählen"
-- **Status:** open (noted 2026-11-18)
-- **Upstream:** offer it. Build in the fork, then propose it to HolyArrs (issue first).
+- **Status:** done by upstream HolyArrs 1.3.0 (#539: the reasons list each trait with its points). Our [PR #25](https://github.com/redzacmx3/HolyArrs_german/pull/25) was closed unmerged (Thomas, 2026-11-23).
+- **Upstream:** already there.
 - **Problem:** a release shows only the sum ("−23300 points, needs at least 11000"); which trait cost −35000 is not visible at a glance.
 
 ### 11. Episode search finds double-episode releases
