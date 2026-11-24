@@ -21,7 +21,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Wish:** see per episode which number releases use (TVmaze, TMDB or the chosen order), so a wrong match can be spotted.
 
 ### 9. Rejection reasons in German, with the setting's UI name
-- **Status:** open (noted 2026-11-18)
+- **Status:** done, [PR #24](https://github.com/redzacmx3/HolyArrs_german/pull/24) (2026-11-21). The reasons a Release is turned down or held are known server lines now (German translated, other languages English), and the season pack reasons name the setting by its UI name. Text passed through as it is (trait names, title match details) stays as the server sends it.
 - **Upstream:** offer it. Wording in German is a locale fix; naming the setting by its UI name helps every language.
 - **Problem:** reasons such as "not every episode would gain … (Settings > Search: every episode must gain)" are English and name a setting the German UI calls "Einstellungen › Suche › Staffelpakete › Jede Folge darin neu oder besser wäre".
 

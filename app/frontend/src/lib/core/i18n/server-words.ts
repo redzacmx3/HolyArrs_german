@@ -13,7 +13,10 @@ const lists: Record<string, string> = {
 	'server.downloads.no-downloader-can-take-it-now': 'skipped',
 	'server.sources.this-folder-only-takes-sources-tagged': 'sources',
 	// An imported Alert's settings HolyArrs has no place for (migrate alertLeft).
-	'server.migrate.holyarrs-has-no-place-for': 'left'
+	'server.migrate.holyarrs-has-no-place-for': 'left',
+	// Fork: a season pack's episodes that would not gain ("S01E02 already has a copy as good; …").
+	'server.sources.not-every-episode-would-gain': 'list',
+	'server.sources.not-every-episode-would-gain-settings': 'list'
 };
 const items = new Set([
 	'server.sources.it-is-paused',
@@ -49,7 +52,7 @@ const inCountry = Object.entries(en as Record<string, string>).find(([k, v]) => 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const shortDate = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})$/;
-const number = /^\d+$/;
+const number = /^-?\d+$/; // fork: points can be below zero ("-23300 points, needs at least 11000")
 
 type Template = { key: string; re: RegExp; slots: string[] };
 const exact = new Map<string, string>();
@@ -110,7 +113,8 @@ export function listItem(text: string): string {
 		tp.slots.forEach((s, i) => (vars[s] = m[i + 1]));
 		return t(tp.key, vars);
 	}
-	return exact.has(text) ? t(exact.get(text)!) : text;
+	// Fork: a list line that is no item line of its own reads like any other line.
+	return look(text, 1);
 }
 
 // A list line: its list is shown line by line, its other gaps (tags, a protocol) as typed.
