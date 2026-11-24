@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Pēc TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Kā laidienu nosaukumi numurē sērijas. Faili saglabā šīs secības numurus.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Pēc TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Izlaiduma nosaukums: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "TVmaze nav atrasts"
 }

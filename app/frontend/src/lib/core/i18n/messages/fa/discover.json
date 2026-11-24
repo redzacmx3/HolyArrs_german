@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "طبق TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "نام انتشارها قسمت‌ها را چگونه شماره می‌زنند. فایل‌ها شماره‌های این ترتیب را نگه می‌دارند.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "طبق TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "نام انتشار: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "در TVmaze پیدا نشد"
 }

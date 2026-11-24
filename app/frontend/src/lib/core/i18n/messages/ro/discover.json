@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "După TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Cum numerotează numele lansărilor episoadele. Fișierele păstrează numerele acestei ordini.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "După TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Numele lansării: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Nu a fost găsit pe TVmaze"
 }

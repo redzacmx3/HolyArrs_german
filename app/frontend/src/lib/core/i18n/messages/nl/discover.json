@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Volgens TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Hoe releasenamen de afleveringen nummeren. Bestanden houden de nummers van deze volgorde.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Volgens TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Releasenaam: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Niet gevonden op TVmaze"
 }

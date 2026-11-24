@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Pelo TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Como os nomes das releases numeram os episódios. Os ficheiros mantêm os números desta ordem.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Pelo TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Nome do lançamento: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Não encontrado no TVmaze"
 }

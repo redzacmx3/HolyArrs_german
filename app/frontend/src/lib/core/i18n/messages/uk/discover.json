@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "За TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Як назви релізів нумерують серії. Файли зберігають номери цього порядку.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "За TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Назва релізу: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Не знайдено на TVmaze"
 }

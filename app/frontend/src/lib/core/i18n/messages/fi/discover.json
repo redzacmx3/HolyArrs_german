@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB:n mukaan",
 	"discover.titleLibrary.releaseNumbersHint": "Miten julkaisunimet numeroivat jaksot. Tiedostot pitävät tämän järjestyksen numerot.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB):n mukaan",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Julkaisun nimi: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Ei löytynyt TVmazesta"
 }

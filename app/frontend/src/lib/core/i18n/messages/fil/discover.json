@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Ayon sa TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Kung paano binibilang ng mga pangalan ng release ang mga episode. Mananatili sa mga file ang numero ng ayos na ito.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Ayon sa TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Pangalan ng release: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Hindi nakita sa TVmaze"
 }

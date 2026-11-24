@@ -28,6 +28,10 @@
 		still?: string;
 		keep_up_to_date?: boolean;
 		outside_order?: boolean;
+		tmdb_season?: number;
+		tmdb_episode?: number;
+		tvmaze_season?: number;
+		tvmaze_episode?: number;
 		slots: { id: number; state: string; state_label: string; reason?: string; file?: Record<string, any> | null; good_enough?: boolean; points?: number; good_enough_points?: number }[];
 	};
 

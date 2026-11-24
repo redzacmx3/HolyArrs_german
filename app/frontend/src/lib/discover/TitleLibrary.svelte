@@ -24,7 +24,7 @@
 	import { bytes, ago, date } from '#lib/core/format.ts';
 	import { orderLabel, splitOutside } from './episode-groups.ts';
 	import { EpisodeOrder } from './episode-order.svelte.ts';
-	import { belowGoodEnough, pointsOf, shownEpisodes } from './episode-points.ts';
+	import { releaseNumberLine } from './release-number.ts'; import { belowGoodEnough, pointsOf, shownEpisodes } from './episode-points.ts';
 
 	let { own, folders, rules }: { own: OwnedTitle; folders: LibraryFolder[]; rules: PickRulesView[] } = $props();
 	const manage = $derived(own.manage);
@@ -456,7 +456,7 @@
 											<span class="lib-ep-still">{#if e.still}<img src={e.still.replace('/w780/', '/w300/')} alt="" loading="lazy" decoding="async" />{/if}<span class="lib-ep-n">{e.episode}</span></span>
 											<button type="button" class="lib-ep-text" aria-label={t('discover.titleLibrary.episodeNamed', { episode: e.episode, name: e.name ?? '' })} onclick={() => { epPicked = e; epOpen = true; }}>
 												<b>{e.name ?? t('discover.titleLibrary.episodeN', { episode: e.episode })}{#if e.episode === (seasonEps[se.number]?.length ?? 0) && se.episodes > 1}<span class="lib-tag">{t('discover.titleLibrary.finale')}</span>{/if}</b>
-												<small>{[airWords(e.air_day, e.air_date), e.runtime_minutes ? t('discover.titleLibrary.runtimeMin', { n: e.runtime_minutes }) : '', epFile(e)].filter(Boolean).join(' · ')}{#if pts?.text}<span class="lib-ep-ptm" title={pts.label}> · {t('shows.list.points')} {pts.text}</span>{/if}</small>
+												<small>{[airWords(e.air_day, e.air_date), e.runtime_minutes ? t('discover.titleLibrary.runtimeMin', { n: e.runtime_minutes }) : '', manage ? releaseNumberLine(e, o.show.release_numbers, se.number) : '', epFile(e)].filter(Boolean).join(' · ')}{#if pts?.text}<span class="lib-ep-ptm" title={pts.label}> · {t('shows.list.points')} {pts.text}</span>{/if}</small>
 												{#if manage && chosenWhy(st)}<small class="lib-ep-why" data-testid="episode-chosen-why">{serverWords(chosenWhy(st))}</small>{/if}
 											</button>
 											{#if pts}<span class="lib-ep-pts" data-testid="episode-points" title={pts.label}>{#if pts.text}<small>{t('shows.list.points')}</small>{pts.text}{/if}</span>{/if}

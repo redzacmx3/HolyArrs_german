@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "לפי TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "איך שמות הגרסאות ממספרים את הפרקים. הקבצים שומרים על המספרים של סדר זה.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "לפי TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "שם הגרסה: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "לא נמצא ב-TVmaze"
 }

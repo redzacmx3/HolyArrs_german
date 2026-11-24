@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "TMDB से",
 	"discover.titleLibrary.releaseNumbersHint": "रिलीज़ नाम एपिसोड को कैसे क्रमांकित करते हैं। फ़ाइलें इसी क्रम के नंबर रखती हैं।",
 	"discover.titleLibrary.releaseNumbersTvmaze": "TVmaze (TVDB) से",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "रिलीज़ नाम: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "TVmaze पर नहीं मिला"
 }

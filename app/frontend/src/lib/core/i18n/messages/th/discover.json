@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "ตาม TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "ชื่อรีลีสนับเลขตอนอย่างไร ไฟล์ยังคงใช้เลขของลำดับนี้",
 	"discover.titleLibrary.releaseNumbersTvmaze": "ตาม TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "ชื่อรีลีส: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "ไม่พบใน TVmaze"
 }

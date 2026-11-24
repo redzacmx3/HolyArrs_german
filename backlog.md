@@ -16,7 +16,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Plan:** [docs/ui-seerr-plan.md](docs/ui-seerr-plan.md)
 
 ### 8. Show each episode's release-name number
-- **Status:** open (noted 2026-11-18). The episodes API lists `tvmaze_season`/`tvmaze_episode` since [PR #15](https://github.com/redzacmx3/HolyArrs_german/pull/15); the episode list in the UI does not show them yet.
+- **Status:** done, [PR #23](https://github.com/redzacmx3/HolyArrs_german/pull/23) (2026-11-21). For people who manage the Library, each episode row on a show's Library tab says "Im Release-Namen: S02E41" when the show reads release names by TMDB or TVmaze, or "Bei TVmaze nicht gefunden" when TVmaze has no match. Nothing shows for "Nach dieser Reihenfolge" and for specials.
 - **Upstream:** offer it. Build in the fork, then propose it to HolyArrs (issue first).
 - **Wish:** see per episode which number releases use (TVmaze, TMDB or the chosen order), so a wrong match can be spotted.
 

@@ -809,5 +809,7 @@
 	"discover.titleLibrary.releaseNumbersTmdb": "Eftir TMDB",
 	"discover.titleLibrary.releaseNumbersHint": "Hvernig útgáfuheiti tölusetja þættina. Skrár halda númerum þessarar raðar.",
 	"discover.titleLibrary.releaseNumbersTvmaze": "Eftir TVmaze (TVDB)",
-	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read"
+	"discover.titleLibrary.releaseNumbersTvmazeFailed": "Saved, but TVmaze could not be read",
+	"discover.titleLibrary.releaseNumberIs": "Heiti útgáfu: {code}",
+	"discover.titleLibrary.releaseNumberMissing": "Fannst ekki á TVmaze"
 }
