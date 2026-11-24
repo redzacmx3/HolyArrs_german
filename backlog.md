@@ -6,6 +6,13 @@ Status: **open** (noted, not started), **in progress**, **done**.
 
 **Upstream** says whether an item should also go to HolyArrs as an issue and pull request, so the fork stays small (see [docs/plattform-basis.md](docs/plattform-basis.md)): **offer it**, **ask first** or **keep in the fork**. New code goes into files of its own; upstream files get only small changes.
 
+**Plugin first** (Thomas, 2026-11-24): the goal is to go back to the official HolyArrs step by step and do as much as possible as plugins. For each new item, in this order:
+1. **Plugin**, if the plugin interface already offers what it needs.
+2. **Extend the plugin interface**, if it lacks a small piece (a hook, a permission, who may see a page). That change goes to HolyArrs as an issue and pull request; the fork carries it only until HolyArrs ships it.
+3. **Change the fork's source**, only when neither fits (for example how release names are read, points, import matching). Offer it to HolyArrs afterwards where it helps others.
+
+Plugins are published only through HolyArrs' signed list: a public GitHub repo, a pull request to `HolyArrs/HolyArrs-Plugins`, HolyArrs reviews and signs.
+
 ## Open
 
 ### 7. Quicker requests, modelled on Seerr
@@ -32,6 +39,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 
 ### 11. Episode search finds double-episode releases
 - **Status:** done, [PR #15](https://github.com/redzacmx3/HolyArrs_german/pull/15) (2026-11-18), for shows that read release names by TVmaze: an episode search without an answer also asks the release-name season. Open: whether all shows should do this.
+- **Proposal (2026-11-24, not decided):** always for shows that read release names by TVmaze **or TMDB**; for all other shows only when searching by hand in "Release auswählen". Every other empty scheduled search would cost one more call per indexer, and small Usenet indexer plans have a daily limit. Fork source (search flow has no plugin hook), small change.
 - **Upstream:** offer it, together with the TVmaze numbering (item 6).
 
 ### 12. "German Microsized" by size per minute for short episodes
@@ -61,6 +69,41 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **To check:**
   - how fast the NAS runs a small model;
   - the plugin reaches its own server by name only, so the model server needs a host name.
+
+### 15. Plugin interface: let other roles see plugin pages
+- **Status:** open (2026-11-24)
+- **Upstream:** extend the plugin interface (issue first at HolyArrs). Needed before items 7, 14 and 19 can reach the family.
+- **Problem:** plugin pages are owner-only (`/api/v1/plugin-pages` needs the owner). Home cards and title sections reach everyone but show only text and links, no buttons.
+- **Wish:** the owner chooses per plugin page which roles see it (for example members, kids). Calls from the page already check the person's own permissions, so nobody gets more than their rights.
+
+### 16. AI: "Warum lädt das nicht?" (plugin)
+- **Status:** open (2026-11-24)
+- **Upstream:** plugin (owner page; owner-only pages are fine here).
+- **Wish:** a page that reads blocked downloads, empty searches and turned-down releases and explains each in plain German, with the fitting action (search again, pick by hand, change a Pick rules value). Same model as item 14 (local or cloud).
+
+### 17. AI: age check before approving a kid's wish (plugin)
+- **Status:** open (2026-11-24)
+- **Upstream:** plugin (title section; later together with item 19).
+- **Wish:** a short section on the title page: what the title is about, age rating, and whether it fits the kid's age, so a parent can decide a wish quickly.
+
+### 18. "Das könnte euch gefallen" on the home page (plugin)
+- **Status:** open (2026-11-24)
+- **Upstream:** plugin (home card).
+- **Wish:** suggestions from what the family watches in Jellyfin and what is in the Library, with links to the title pages. Works with or without a language model.
+- **Limit:** the home card is the same for everyone (no per-person view yet).
+
+### 19. Parents approve kids' wishes by phone (plugin)
+- **Status:** open (2026-11-24)
+- **Upstream:** plugin. Part of item 7 (B4 "Freigabe durch die Eltern").
+- **Wish:** a message (ntfy or Telegram) for each new wish with Genehmigen and Ablehnen right in it; the answer approves or turns down the request in HolyArrs.
+
+### 20. Library upkeep as a plugin
+- **Status:** open (2026-11-24)
+- **Upstream:** move fork code into a plugin (owner page), so the fork gets smaller. Compare first with HolyArrs #142 (lists watched titles only).
+
+### 21. Profile check as a plugin
+- **Status:** open (2026-11-24)
+- **Upstream:** move fork code into a plugin (owner page with the advice and a Fix button that changes the Pick rules through `downloads.rules.change`), so the fork gets smaller.
 
 ## Done
 
