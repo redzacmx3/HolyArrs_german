@@ -1,7 +1,63 @@
 # Plan: Schneller anfragen nach Seerr-Vorbild
 
-Status: **offen**, erst nach der Stabilisierung der laufenden Features (Backlog-Punkte 1 bis 3). Noch keine Implementierung.
-Stand: 2026-11-18. Backlog-Eintrag: Punkt 7 in [backlog.md](../backlog.md).
+Status: **offen**, zurückgestellt (Thomas, 2026-11-21). Noch keine Implementierung.
+Stand: 2026-11-18, umgestellt auf Plugin am 2026-11-24. Backlog-Eintrag: Punkt 7 in [backlog.md](../backlog.md).
+
+## Umstellung auf Plugin (2026-11-24)
+
+Thomas, 2026-11-24: Punkt 7 wird als Plugin gebaut statt als Fork-Code. Seit HolyArrs 1.3.0 gibt es Plugins ([holyarrs.com/plugins](https://holyarrs.com/plugins/), Code in `app/backend/internal/plugins/`). Ein Plugin ist ein kleines Go-Programm in einer Sandbox, das über die HolyArrs-API arbeitet. Es berührt keine Upstream-Datei, der Montags-Sync bleibt also frei davon.
+
+### Was ein Plugin kann (geprüft im Code von 1.3.0)
+
+- **Ereignisse** (`alerts.events.subscribe`): unter anderem `ask_made` (neue Anfrage) und `title_added`, nur mit IDs.
+- **Anfragen** (`requests.read`, `requests.change`, `requests.approve.change`): Anfragen lesen, anlegen und genehmigen. Beim Genehmigen nimmt `POST /api/v1/asks/{id}/approve` `library_folder_id`, `pick_rules_id`, `quality`, `audio_languages` und `seasons` an.
+- **Titel ändern und suchen** (`library.change`): `PUT /api/v1/titles/{id}`, `POST /api/v1/titles/{id}/search`.
+- **Suche nach Titeln** (`library.metadata.read`, `discover.explore.read`): `GET /api/v1/metadata/search`, `GET /api/v1/discover`.
+- **Für eine Person handeln:** Nach der Verknüpfung schickt das Plugin `X-Holyarrs-For-User` und handelt mit deren Rechten und Limits.
+- **Oberfläche:**
+  - eigene Seiten unter Plugins (`pages.add`, in einem abgeschotteten Rahmen),
+  - eine Karte auf der Startseite (`pages.home-widget`),
+  - ein Abschnitt auf der Titelseite (`pages.title-section`),
+  - Werkzeuge für KI-Apps über MCP (`assistant.tools`).
+
+### Grenzen
+
+- **Plugin-Seiten sieht nur der Owner** (`/api/v1/plugin-pages` braucht `NeedOwner`). Familie und Kinder kommen an eine Plugin-Seite nicht heran.
+- **Karten und Abschnitte zeigen nur Text und Links,** keine Knöpfe. Startseiten-Karten und Titel-Abschnitte sehen alle Angemeldeten, aber für alle gleich, ohne Wissen, wer schaut.
+- **Kein Eingriff in HolyArrs' eigene Seiten:** keine Knöpfe in den Suchvorschlägen, keine Badges auf Karten, kein anderer Anfrage-Dialog.
+- **Verteilung nur über HolyArrs' signierte Liste:**
+  - Das Plugin liegt öffentlich auf GitHub.
+  - Ein PR an `HolyArrs/HolyArrs-Plugins` meldet es an.
+  - HolyArrs prüft den Code und signiert ihn.
+  - Private Plugins gibt es nicht.
+
+### Was aus dem Plan wohin geht
+
+| Teil | Wohin | Wie |
+|---|---|---|
+| C1 Zuordnungsregeln | **Plugin** (Kern) | Hört auf `ask_made` und `title_added` und liest Genre, Originalsprache und Altersfreigabe. Bei Anfragen: genehmigt mit passendem Ordner und passenden Pick rules. Bei Titeln, die der Owner hinzufügt: setzt die Pick rules und "Release-Namen zählen" per `PUT /titles/{id}`. Die Regeln pflegt der Owner auf einer Plugin-Seite. Reihenfolge wie entschieden: Kinderserien, Anime, deutsche Originale. |
+| A2 Serien sofort suchen | **Plugin** | Nach `title_added` startet es die Suche (`POST /titles/{id}/search`), wenn die Regel das sagt. |
+| A1 kurzer Weg für Admins | **Plugin-Seite** "Schnell anfragen" für den Owner | Suchen, Film bestätigen oder Staffeln ankreuzen. Den Rest wählen die Regeln. |
+| Regel-Anzeige | **Plugin**, Abschnitt auf der Titelseite | Zum Beispiel "Regel Kinderserien: Kinder-Ordner, German DL". |
+| B4 Eltern-Freigabe per Handy | **Plugin**, eigenes kleines Plugin | Nachricht mit Genehmigen/Ablehnen (zum Beispiel ntfy oder Telegram). Die Antwort genehmigt über `requests.approve.change`. |
+| A3 Knopf in den Suchvorschlägen, A4 Badges, B1 Staffel-Dialog, B2 | **Hauptprojekt** (Issue/PR) | Nützt allen und lässt sich per Plugin nicht machen. |
+| B4 TV-Ansicht `/tv`, QR-Anmeldung, Profil-PIN, "Wünschen" für Kinder | **Hauptprojekt** (Issue/PR) | Ändert HolyArrs' eigene Seiten und Konten. |
+| B4 Stufe 2 TV-App (Android-WebView) | **eigenes Projekt** | War schon getrennt vom Fork geplant. |
+| B3 deutsche Reihen beim Entdecken | **Plugin**, Startseiten-Karte, oder **Hauptprojekt** | Karte "Deutsche Produktionen" mit Links auf die Titelseiten. Echte Reihen mit Postern gehen nur im Hauptprojekt. |
+
+### Wunsch ans Hauptprojekt
+
+Damit die Familie eine Plugin-Seite nutzen kann (etwa "Schnell anfragen" oder die KI-Suche aus Punkt 14 am Fernseher), müsste der Owner eine Plugin-Seite auch für andere Rollen freigeben können. Jeder Aufruf aus der Seite prüft ohnehin schon die Rechte der Person. Das ist ein guter erster Issue-Vorschlag beim Hauptprojekt, bevor wir die Plugins bauen.
+
+### Reihenfolge
+
+1. Issue beim Hauptprojekt: Plugin-Seiten für andere Rollen.
+2. Plugin "Anfrage-Regeln" (C1 und A2) mit Owner-Seite für die Regeln.
+3. Abschnitt auf der Titelseite und Seite "Schnell anfragen".
+4. Plugin "Eltern-Freigabe".
+5. A3, A4, B1 und die TV-Ansicht als Issues/PRs beim Hauptprojekt.
+
+Die Abschnitte unten sind der ursprüngliche Plan vom 2026-11-18. Sie gelten weiter als Beschreibung, *was* gebaut wird. *Wo* es gebaut wird, sagt die Tabelle oben.
 
 ## Kurzfassung
 

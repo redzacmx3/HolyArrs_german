@@ -9,8 +9,8 @@ Status: **open** (noted, not started), **in progress**, **done**.
 ## Open
 
 ### 7. Quicker requests, modelled on Seerr
-- **Status:** on hold (Thomas, 2026-11-21: zunächst zurückstellen)
-- **Upstream:** keep in the fork. Build it as own pages and modules and touch upstream files only with small hooks, because upstream changes these pages a lot.
+- **Status:** on hold (Thomas, 2026-11-21: zunächst zurückstellen). Plan switched to a plugin on 2026-11-24 (Thomas: "punkt 7 auf plug-in umstellen"); see "Umstellung auf Plugin" in the plan.
+- **Upstream:** plugin, not fork code. The rules (C1), searching right after adding (A2), a quick request page for the owner and the parents' approval by message become plugins. The parts plugins cannot reach (buttons in search suggestions, badges, season dialog, TV view) go to HolyArrs as issues. First issue: let the owner show a plugin page to other roles, because plugin pages are owner-only today.
 - **Problem:** Requesting a new title takes many steps. People who manage the Library always get "Zur Library hinzufügen" with up to ten fields (folder, Pick rules, seasons, order, search …), and a new show does not search by default.
 - **Wish:** A short request like in Seerr: confirm a movie, tick seasons for a show, the rest comes from the request settings and sits under "Erweitert". Request button right in the search suggestions and on the cards, status badges on posters, and rules that pick folder and Pick rules by language or genre (German titles, kids' shows, anime).
 - **Plan:** [docs/ui-seerr-plan.md](docs/ui-seerr-plan.md)
@@ -45,6 +45,22 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Upstream:** already there. [HolyArrs issue #497](https://github.com/HolyArrs/HolyArrs/issues/497) (WebHD/Web-HD not read as a source): the maintainer confirmed a fix in 1.2.1, together with a review of how release names are read for source and quality.
 - **Ours:** [PR #16](https://github.com/redzacmx3/HolyArrs_german/pull/16) reads WebHD/Web-HD as a web download (`releasename/parse.go`, test `TestWebHDIsWebDownload` in `languages_test.go`).
 - **To do when 1.2.1 comes:** before removing our fix, run both against the same release names, for example `PAW.Patrol.S02E31.German.1080p.WebHD.x264-FuN`, `PAW.Patrol.S02E31.German.AC3.DL.1080p.WebHD.x265-FuN` and `PAW.Patrol.S02E31.German.DL.1080p.Web-HD.x265-FuN`. Check source, quality and ladder step, see which one reads more names right, then decide: drop ours, keep ours, or offer the missing cases upstream. Keep our test either way.
+
+### 14. AI search: find a title from a description (plugin)
+- **Status:** open (Thomas' idea, 2026-11-24)
+- **Upstream:** plugin, published through HolyArrs' signed plugin list.
+- **Wish:** Sometimes you look for a film without knowing its name. A description ("Film, wo ein Astronaut allein auf dem Mars Kartoffeln anbaut") should find it directly. Typed, and above all spoken on Android TV.
+- **Idea:**
+  1. A language model turns the description into up to five guesses with title and year. It runs locally, for example llama.cpp with Qwen on the NAS, or optionally as a cloud model.
+  2. The plugin checks each guess through HolyArrs' metadata search. Only real hits are shown, so made-up titles never appear.
+  3. For each hit the plugin shows whether it is in the Library, and offers to request it as the person.
+- **Where people use it:**
+  - as a tool in AI apps over MCP (`assistant.tools`), for everyone with their own rights;
+  - as a plugin page, for the owner only until HolyArrs lets other roles see plugin pages (see item 7);
+  - on the TV: through the planned TV app with Android voice input, or through the microphone key of the TV keyboard in a normal search field.
+- **To check:**
+  - how fast the NAS runs a small model;
+  - the plugin reaches its own server by name only, so the model server needs a host name.
 
 ## Done
 
