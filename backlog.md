@@ -9,7 +9,7 @@ Status: **open** (noted, not started), **in progress**, **done**.
 ## Open
 
 ### 7. Quicker requests, modelled on Seerr
-- **Status:** open (noted 2026-11-18), after the running features are stable
+- **Status:** on hold (Thomas, 2026-11-21: zunächst zurückstellen)
 - **Upstream:** keep in the fork. Build it as own pages and modules and touch upstream files only with small hooks, because upstream changes these pages a lot.
 - **Problem:** Requesting a new title takes many steps. People who manage the Library always get "Zur Library hinzufügen" with up to ten fields (folder, Pick rules, seasons, order, search …), and a new show does not search by default.
 - **Wish:** A short request like in Seerr: confirm a movie, tick seasons for a show, the rest comes from the request settings and sits under "Erweitert". Request button right in the search suggestions and on the cards, status badges on posters, and rules that pick folder and Pick rules by language or genre (German titles, kids' shows, anime).
@@ -35,9 +35,10 @@ Status: **open** (noted, not started), **in progress**, **done**.
 - **Upstream:** offer it, together with the TVmaze numbering (item 6).
 
 ### 12. "German Microsized" by size per minute for short episodes
-- **Status:** open (noted 2026-11-18)
-- **Upstream:** ask first. If HolyArrs does not want it, it stays a small rule of its own in the fork.
-- **Problem:** TRaSH's fixed size limit hits 12-minute kids' episodes (377 MB, 1080p x265) with −35000. Judge by MB per minute of runtime instead.
+- **Status:** done, [PR #26](https://github.com/redzacmx3/HolyArrs_german/pull/26) (2026-11-21). New own trait kind "Pro Minute" (size per minute of runtime in MB). **To do on the NAS:** set "German Microsized" to 0 in the series Pick rules and give the new trait (for example "bis 10 MB/Min." = −35000) instead.
+- **Upstream:** offer it (Thomas, 2026-11-21): build in the fork, then propose it to HolyArrs as a fix.
+- **Problem:** 12-minute kids' episodes (377 MB, 1080p x265, FuN) get −35000.
+- **Found:** TRaSH's "German Microsized" tests no size at all. It is a list of release groups (FuN, w00t, GTF, PaTroL, JellyfinPlex, BB, 266ers), so every FuN release gets −35000 whatever its size. A trait that reads MB per minute of runtime judges the file itself.
 
 ### 13. WebHD fix: compare with upstream 1.2.1 before removing ours
 - **Status:** done (2026-11-23, upstream 1.3.0 sync). Upstream reads WebHD/Web-HD as a web download itself (`releasename/quality.go`, test `issue497_test.go` with the FuN name). Our `TestWebHDIsWebDownload` passes on upstream's code for all three names, so our parser change is gone and our test stays.

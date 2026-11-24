@@ -20,7 +20,7 @@ import (
 type OwnTrait struct {
 	database.Meta
 	Name  string   `db:"name"`
-	Match string   `db:"match"` // name, group, size, language
+	Match string   `db:"match"` // name, group, size, language, size_per_minute (fork)
 	Terms []string `db:"terms,json"`
 	// Source and SourceID say where a synced trait came from ("trash",
 	// "sonarr:<trash id>"; "import", "<app>:<address>:<format id>" for one
@@ -105,6 +105,13 @@ func CheckOwnTrait(t *OwnTrait) error {
 			return fieldErr("terms", "Give an over or an up to size in GB, and up to above over.")
 		}
 		t.Terms = []string{SizeRangeValue(over, upTo)}
+		return nil
+	case MatchSizePerMinute:
+		terms, err := checkPerMinuteTerms(t.Terms)
+		if err != nil {
+			return err
+		}
+		t.Terms = terms
 		return nil
 	case "language":
 		terms, err := CheckLanguageTerms(t.Terms)

@@ -17,9 +17,11 @@ type ownTrait struct {
 	name  string
 	group bool
 	// size is set for a size trait (its one term).
-	size  *sizeRange
-	plain []string // lowercased words
-	pats  []*regexp.Regexp
+	size *sizeRange
+	// perMin is set for a size per minute trait (fork): bytes a minute of runtime.
+	perMin *sizeRange
+	plain  []string // lowercased words
+	pats   []*regexp.Regexp
 	// specs is set for a synced trait (and then decides alone); bad says a
 	// synced trait had a test that could not be read.
 	specs []ownSpec
@@ -52,6 +54,11 @@ func SetOwnTraits(ts []OwnTrait) {
 			m[t.ID] = o
 			continue
 		}
+		if t.Match == MatchSizePerMinute {
+			o.perMin, o.bad = perMinuteRange(t.Terms)
+			m[t.ID] = o
+			continue
+		}
 		if t.Match == "size" {
 			r := sizeRange{}
 			ok := len(t.Terms) == 1
@@ -81,7 +88,11 @@ func SetOwnTraits(ts []OwnTrait) {
 // ownMatches is traitMatches for an own trait: the name test finds any term
 // in the Release name, the group test needs the release group to be one of
 // the words or fit one of the patterns.
-func ownMatches(id int64, p releasename.Result) (bool, string) {
+func ownMatches(id int64, p releasename.Result) (bool, string) { return ownMatchesAt(id, p, 0) }
+
+// ownMatchesAt is ownMatches knowing the runtime in minutes (0: not known)
+// the Release covers, which a size per minute trait needs.
+func ownMatchesAt(id int64, p releasename.Result, runtime int) (bool, string) {
 	all := ownTraits.Load()
 	if all == nil {
 		return false, "unknown trait"
@@ -95,6 +106,9 @@ func ownMatches(id int64, p releasename.Result) (bool, string) {
 	}
 	if t.specs != nil {
 		return formatMatches(t.name, t.specs, p)
+	}
+	if t.perMin != nil {
+		return perMinuteMatches(t.name, *t.perMin, p.Size, runtime)
 	}
 	if t.size != nil {
 		if p.Size <= 0 {

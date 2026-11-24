@@ -206,15 +206,18 @@ func CurrentOfFile(releaseName string, size int64, importedAt time.Time, audio [
 // currentWithTitle scores the current file again with what the Release's
 // match says of the title (original language, year) when the file's own
 // name lacks them, so language and year trait tests read the file as they
-// read a Release. Without those tests the points are the same.
-func currentWithTitle(cur *Current, rel releasename.Result, rules PickRulesBody) *Current {
+// read a Release. Without those tests the points are the same. The fork
+// also scores it with the runtime (minutes) the Release is judged for, so a
+// size per minute trait reads the file as it reads the Release.
+func currentWithTitle(cur *Current, rel releasename.Result, rules PickRulesBody, runtime int) *Current {
 	if cur.parse == nil {
 		return cur
 	}
 	p := *cur.parse
 	lang := p.OriginalLanguage == "" && rel.OriginalLanguage != ""
 	year := p.Year.Value <= 0 && p.TitleYear == 0 && rel.TitleYear > 0
-	if !lang && !year {
+	per := runtime > 0 && hasPerMinute(rules)
+	if !lang && !year && !per {
 		return cur
 	}
 	if p.OriginalLanguage == "" {
@@ -224,7 +227,7 @@ func currentWithTitle(cur *Current, rel releasename.Result, rules PickRulesBody)
 		p.TitleYear = rel.TitleYear
 	}
 	c := *cur
-	c.Points = sumPoints(p, rules)
+	c.Points, _ = scoreTraitsAt(p, rules, runtime)
 	return &c
 }
 

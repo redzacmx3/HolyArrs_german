@@ -40,10 +40,15 @@ type traitHit struct {
 // scoreTraits tests every points Trait once; it returns the total (see
 // sumPoints) and each Trait's answer, in the order of rules.Traits.
 func scoreTraits(p releasename.Result, rules PickRulesBody) (int, []traitHit) {
+	return scoreTraitsAt(p, rules, 0)
+}
+
+// scoreTraitsAt is scoreTraits knowing the runtime the Release covers.
+func scoreTraitsAt(p releasename.Result, rules PickRulesBody, runtime int) (int, []traitHit) {
 	var n int64
 	hits := make([]traitHit, len(rules.Traits))
 	for i, tp := range rules.Traits {
-		ok, why := traitMatches(tp.Trait, p)
+		ok, why := traitMatchesAt(tp.Trait, p, runtime)
 		hits[i] = traitHit{ok, why}
 		if ok {
 			n += int64(tp.Points)
