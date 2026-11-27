@@ -23,7 +23,7 @@
 <p align="center"><a href="https://holyarrs.com/sponsor"><img src="https://holyarrs.com/sponsors/banner.gif" alt="Sponsors"></a></p>
 
 > [!NOTE]
-> **HolyArrs 1.3.0: 101명이 함께한 150개가 넘는 수정과 기능.** 플러그인 시스템, 새 설정 마법사, 그리고 파일에 절대 손대지 않는 핸즈오프 모드. [새로운 기능](https://holyarrs.com/whats-new/)
+> **HolyArrs 1.3.2: 라이브러리에서 파일을 직접 가져오기.** 영화 파일은 가져오기 전에 길이, 영상, 오디오를 확인하며, 많은 수정도 함께 들어갔습니다. [새로운 기능](https://holyarrs.com/whats-new/)
 
 > HolyArrs의 모든 포스터, 예고편, 평점은 제가 직접 운영하고 비용을 내는 서버에서 와요. 그래서 모두에게 무료로 유지돼요. HolyArrs 덕분에 영화 보는 밤이 조금 더 즐거워졌다면, 후원으로 우리 모두의 불을 계속 밝혀 주세요 💛
 >

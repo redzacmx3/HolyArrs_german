@@ -10,12 +10,14 @@ import (
 // RouteScopes names routes whose scope is not the one the method and
 // RoutePerms give them (see RouteScope).
 var RouteScopes = map[string]string{
+	"GET /api/v1/plugin-hooks/botcheck":                          webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/metadata":                          webserver.ScopeAdmin,
 	"GET /api/v1/plugins/{id}/activity":                          webserver.ScopeAdmin,
 	"GET /api/v1/plugins/{id}/remote/status":                     webserver.ScopeAdmin,
 	"GET /api/v1/my/plugin-links":                                webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/downloader":                        webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/events":                            webserver.ScopeAdmin,
+	"GET /api/v1/plugin-hooks/links":                             webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/pages":                             webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/releases":                          webserver.ScopeAdmin,
 	"GET /api/v1/plugin-hooks/sections":                          webserver.ScopeAdmin,
@@ -90,6 +92,10 @@ var RouteScopes = map[string]string{
 	"POST /radarr/":                                              webserver.ScopeCompat,
 	"PUT /radarr/":                                               webserver.ScopeCompat,
 	"DELETE /radarr/":                                            webserver.ScopeCompat,
+	"GET /lidarr/":                                               webserver.ScopeCompat,
+	"POST /lidarr/":                                              webserver.ScopeCompat,
+	"PUT /lidarr/":                                               webserver.ScopeCompat,
+	"DELETE /lidarr/":                                            webserver.ScopeCompat,
 	"GET /api/v1/settings/old-app-api":                           webserver.ScopeAdmin,
 	"POST /api/v1/settings/old-app-api/keys/{side}":              webserver.ScopeAdmin,
 	"DELETE /api/v1/settings/old-app-api/keys/{side}":            webserver.ScopeAdmin,

@@ -173,6 +173,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 		}
 		plan = PlanTracks(cands, at)
 	} else {
+		t.oneVideo = videoFiles(cands) == 1
 		plan = PlanEpisodes(cands, t)
 	}
 	plan = append(plan, bad...)
@@ -201,6 +202,16 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 	mismatch := fakes.claimMismatch(claimed, claimSet(d, cands))
 	for i := range plan {
 		if plan[i].Method != "hardlink" {
+			continue
+		}
+		if sourceNotPresent(root, cands, plan[i].SourceFile) {
+			plan[i].Method, plan[i].TargetPath = "refuse", ""
+			plan[i].Why = append(plan[i].Why, NotPresentYetWhy)
+			continue
+		}
+		if copyInProgress(cands, plan[i].SourceFile) {
+			plan[i].Method, plan[i].TargetPath = "refuse", ""
+			plan[i].Why = append(plan[i].Why, CopyingWhy)
 			continue
 		}
 		seen := map[int64]bool{}
@@ -506,7 +517,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 				}
 			}
 		default:
-			ss.outcome, ss.reason = "stuck", im.nothingMatchedIn(dr, files, music, root, rootOK, plan, len(cands) == 0)
+			ss.outcome, ss.reason = "stuck", waitForFiles(d, im.nothingMatchedIn(dr, files, music, root, rootOK, plan, len(cands) == 0), time.Now())
 			if unpackWhy != "" {
 				ss.reason = unpackWhy
 			}
@@ -581,6 +592,9 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 			name := strings.TrimSuffix(filepath.Base(step.SourceFile), filepath.Ext(step.SourceFile))
 			if music && relName != "" {
 				name = relName
+			} else if !music {
+				name, p = t.episodeName(step.SourceFile, p)
+				p = withInspectedResolution(p, inspected[step.SourceFile])
 			}
 			f := &mediafiles.File{SlotIDs: step.TargetSlotIDs, VersionID: ver.ID, RelativePath: filepath.ToSlash(rel), Size: size, AddedAt: now,
 				Quality:   mediafiles.Quality{Resolution: p.Resolution.Value, Source: p.Source.Value, Codec: p.Codec.Value, HDR: p.HDR.Value},
@@ -617,7 +631,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 			}
 			for _, sid := range step.TargetSlotIDs {
 				ss := slots[sid]
-				ge := mediafiles.ReachesGoodEnough(name, mediafiles.RulesFor(ctx, tx, pr, ss.sl.ItemID).Body)
+				ge := mediafiles.ReachesGoodEnoughFor(mediafiles.JudgeName(name, f.MediaInfo), ti, mediafiles.RulesFor(ctx, tx, pr, ss.sl.ItemID).Body)
 				if _, err := tx.Exec("UPDATE slots SET file_id = ?, active_download_id = NULL, good_enough = ? WHERE id = ?", id, ge, sid); err != nil {
 					return err
 				}
@@ -733,6 +747,7 @@ func (im *Importer) importShow(ctx context.Context, d domain.Download, dr domain
 	if imp.State == "partly_done" {
 		im.noteCleanupWait(ctx, d, slots, e)
 	}
+	im.markShowUpgrade(ctx, e.Data, newFiles, len(placedIDs))
 	if im.Store.AddEvent(ctx, e) == nil {
 		im.publish("event", e)
 	}

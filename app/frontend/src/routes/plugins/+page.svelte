@@ -18,9 +18,9 @@
 	import { to } from '#lib/core/paths.ts';
 	import '../(frame)/settings-content.css';
 	import { date } from '#lib/core/format.ts';
-	import { PluginInfo, PluginSettings, AddSheet, NoLockCard, NoNetLockCard, ApproveAccess, wheelSideways, fitChips, tagRoom, arrowKeys, tint, LanguagesSection, languageCard, LANGUAGE_PACKS_VERSION, LANGUAGE_PACKS_ICON } from '#lib/plugins/index.ts';
+	import { PluginInfo, PluginSettings, AddSheet, DevActions, NoLockCard, NoNetLockCard, ApproveAccess, wheelSideways, fitChips, tagRoom, arrowKeys, tint, LanguagesSection, languageCard, LANGUAGE_PACKS_VERSION, LANGUAGE_PACKS_ICON } from '#lib/plugins/index.ts';
 	import { listLanguages, packList } from '#lib/core/i18n/language-packs.svelte.ts';
-	import { abilities, newAbilities, categories, categoryLabel, categoryOf, developers, findPlugins, hasUpdate, inTab, notices, pluginAbout, pluginState, showsNoLockCard, showsNoNetLockCard, showsNoLockTag, shownName, shownVersion, sortPlugins, stateLabel, foldersMissing, isNew, freshUpdate, trendingIds, shortCount, shortDate as shortDay, numDate as numDay, pluginIcon, devPicture, isProject, brokenPics as broken, forwards, type Plugin, type PluginOverview, type PluginSort, type PluginTab } from '#lib/plugins/index.ts';
+	import { abilities, newAbilities, noLockNotice, categories, categoryLabel, categoryOf, developers, findPlugins, hasUpdate, inTab, notices, pluginAbout, pluginState, pluginBadge as badge, showsNoLockCard, showsNoNetLockCard, showsNoLockTag, shownName, shownVersion, sortPlugins, stateLabel, foldersMissing, isNew, freshUpdate, trendingIds, shortCount, shortDate as shortDay, numDate as numDay, pluginIcon, devPicture, isProject, brokenPics as broken, settingsPage, type Plugin, type PluginOverview, type PluginSort, type PluginTab } from '#lib/plugins/index.ts';
 	import Avatar from '#lib/ui/Avatar.svelte';
 	import { DlFind } from '#lib/downloads/index.ts';
 	import { barTools, barLead, pluginScope } from '#lib/core/search-field.svelte.ts';
@@ -92,7 +92,7 @@
 	let showOnly = $state<'all' | 'installed' | 'updates'>('all');
 	const lang = $derived(languageCard(packList.installed, q, tab, showOnly, t('plugins.tabLanguagePacks')));
 	// Language Packs opens the same window as a plugin: its own logo, About, what it can reach, then the languages.
-	const langPlugin = $derived({ id: 'language-packs', version: LANGUAGE_PACKS_VERSION, installed: !!lang?.installed, running: false, enabled: true, name: t('plugins.tabLanguagePacks'), author: 'HolyArrs', category: t('plugins.languages'), description: t('plugins.languagesIntro'), icon: LANGUAGE_PACKS_ICON, access: { hosts: ['plugins.holyarrs.com'], folders: [], actions: [] } } as Plugin);
+	const langPlugin = $derived({ id: 'language-packs', version: LANGUAGE_PACKS_VERSION, installed: !!lang?.installed, running: false, enabled: true, name: t('plugins.tabLanguagePacks'), author: 'HolyArrs', category: t('plugins.languages'), description: t('plugins.languagesIntro'), icon: LANGUAGE_PACKS_ICON, stats: ov?.language_packs, access: { hosts: ['plugins.holyarrs.com'], folders: [], actions: [] } } as Plugin);
 	const trending = $derived(trendingIds(ov?.plugins ?? []));
 	const updates = $derived((ov?.plugins ?? []).filter((p) => p.installed && hasUpdate(p) && !p.needs_app));
 	const filterItems = $derived<MenuItem[]>([
@@ -135,6 +135,7 @@
 	const noLockCard = $derived(!!ov && showsNoLockCard(ov));
 	const noNetCard = $derived(!!ov && showsNoNetLockCard(ov));
 	const noLockTag = $derived(!!ov && showsNoLockTag(ov));
+	const noLockWhy = $derived(ov ? `${noLockNotice(ov.file_lock_reason)} ${t('plugins.noLockRisk')}` : ''); // the tag explains itself
 	const asking = $derived(noLockCard && (askLock || !ov?.no_file_lock_asked));
 
 	let linked = false;
@@ -178,7 +179,6 @@
 			pluginScope.term = '';
 		};
 	});
-
 	// From 768px the tools sit beside the top bar's search box; below that (bar hidden) beside the page's own box.
 	$effect(() => {
 		barTools.snippet = vw >= 768 ? pageTools : null;
@@ -233,9 +233,7 @@
 	// A plugin turned off for the missing file lock can start again once the owner allowed it to run without.
 	const startable = (p: Plugin) =>
 		!p.disabled_reason || p.disabled_reason === 'stopped by the owner' || p.disabled_reason === 'signed out by the owner' || (!!ov?.allow_no_file_lock && p.disabled_reason.includes('(Landlock)')) || (!!ov?.allow_no_net_lock && p.disabled_reason.includes('(seccomp user-notify)'));
-
 	const path = (p: Plugin) => `/plugins/${encodeURIComponent(p.id)}`;
-
 	// Install or update with the steps on the button: the list is read again while the engine works.
 	// An update that asks for more than the installed version asks first.
 	function install(p: Plugin) {
@@ -250,7 +248,8 @@
 		const poll = setInterval(() => void load(), 500);
 		let ok = false;
 		try {
-			await api.post(`${path(p)}/install`);
+			// A developer plugin is not on the signed list; it installs from the developer folder.
+			await api.post(`${path(p)}/${p.dev ? 'dev-install' : 'install'}`);
 			ok = true;
 			toasts.push(t(p.installed ? 'plugins.updated' : 'plugins.installed', { name }), 'ok');
 		} catch (e) {
@@ -295,24 +294,11 @@
 		removeOpen = false;
 		if (p) void act(p, () => api.del(path(p)), 'plugins.removed', 'plugins.removeFailed');
 	}
-
-	// A plugin whose settings live on an app page is listed here; its manifest's own fields, when it declares any, open in the dialog instead.
-	// Forwarding plugins (network.forward) open Remote access.
-	const settingsPage = (p: Plugin) => (p.settings?.length ? '' : forwards(p) ? `/settings/remote-access?plugin=${encodeURIComponent(p.id)}` : '');
-
-	/** The tile's small badge: only for installed plugins, so the directory stays calm. */
-	function badge(p: Plugin): string {
-		if (!p.installed) return '';
-		if (hasUpdate(p)) return t('plugins.stateUpdate');
-		return pluginState(p) === 'off' ? t('plugins.stateOff') : stateLabel(p);
-	}
 </script>
 
 <svelte:window bind:innerWidth={vw} onhashchange={onHash} />
 <svelte:head><title>{t('plugins.title')} · HolyArrs</title></svelte:head>
-
 <h1 class="sr-only">{t('plugins.title')}</h1>
-
 {#snippet logo(p: Plugin, size: number)}
 	{@const src = pluginIcon(p, size)}{#if src && !broken.has(src)}<img class="pic" {src} alt="" width={size} height={size} style:--pic={size + 'px'} onerror={() => broken.add(src)} />{:else}<span class="pic none" aria-hidden="true" style:--pic={size + 'px'}>{shownName(p).slice(0, 1)}</span>{/if}
 {/snippet}
@@ -332,7 +318,7 @@
 		<div class="ft" data-testid="plugin-card-foot">{@render footChips(p)}<span class="st">{@render cardAct(p, name)}</span></div>
 		{#if p.install_error && !p.install_step}<p class="xs ierr" data-testid="plugin-install-error"><Icon name="alert" size={13} /><span>{p.install_error}</span></p>{/if}
 		{#if p.installed && p.needs_app && hasUpdate(p)}<p class="xs need full" data-testid="plugin-update-needs-app">{t('plugins.needsApp', { version: p.needs_app })}</p>{/if}
-		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock"><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
+		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock" title={noLockWhy}><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
 	</li>
 {/snippet}
 
@@ -348,19 +334,19 @@
 			{#if kind === 'big'}
 				<div class="bhead"><h2 class="pname" dir="auto">{name}</h2><span class="by xs"><Avatar name="HolyArrs" src={devPicture('HolyArrs')} bare size={16} /><span class="bn">HolyArrs</span></span><span class="cat">{t('plugins.languages')}</span></div>
 				<p class="full small" dir="auto">{about}</p>
-				<div class="bfoot" data-testid="language-packs-foot"><span class="chips"><span class="chip xs mono vchip">{LANG_VERSION}</span></span><span class="st">{@render langAct(name)}</span></div>
+				<div class="bfoot" data-testid="language-packs-foot"><span class="chips" use:fitChips><span class="chip xs mono vchip">{LANG_VERSION}</span>{@render dlChip(langPlugin)}</span><span class="st">{@render langAct(name)}</span></div>
 			{:else if kind === 'card'}
 				<h2 class="pname" dir="auto">{name}</h2>
 				<span class="cat">{t('plugins.languages')}</span>
 				<p class="one small" dir="auto"><span class="otext">{about}</span></p>
 				<span class="by xs"><Avatar name="HolyArrs" src={devPicture('HolyArrs')} bare size={16} /><span class="bn">HolyArrs</span></span>
-				<div class="ft" data-testid="language-packs-foot"><span class="chips"><span class="chip xs mono vchip">{LANG_VERSION}</span></span><span class="st">{@render langAct(name)}</span></div>
+				<div class="ft" data-testid="language-packs-foot"><span class="chips" use:fitChips><span class="chip xs mono vchip">{LANG_VERSION}</span>{@render dlChip(langPlugin)}</span><span class="st">{@render langAct(name)}</span></div>
 			{:else}
 				<h2 class="pname" dir="auto">{name}</h2>
 				<p class="one small" dir="auto">{about}</p>
 				<span class="cat">{t('plugins.languages')}</span>
 				<span class="by xs"><Avatar name="HolyArrs" src={devPicture('HolyArrs')} bare size={16} /><span class="bn">HolyArrs</span></span>
-				<span class="ver xs"><span class="mono">{LANG_VERSION}</span></span>
+				<span class="ver xs"><span class="mono">{LANG_VERSION}</span>{@render dls(langPlugin)}</span>
 				<span class="stt xs"></span>
 				<span class="st">{@render langAct(name)}</span>
 			{/if}
@@ -381,12 +367,16 @@
 	{#if p.stats?.downloads != null}<span class="dls" data-testid="plugin-downloads">{t('plugins.downloads', { n: shortCount(p.stats.downloads, appLocale()) })}</span>{/if}
 {/snippet}
 
+{#snippet dlChip(p: Plugin)}
+	{@const dl = p.stats?.downloads != null ? shortCount(p.stats.downloads, appLocale()) : ''}
+	{#if dl}<span class="chip xs dlc" data-drop="1" title={t('plugins.downloads', { n: dl })} data-testid="plugin-downloads"><span class="sr-only">{t('plugins.downloads', { n: dl })}</span><span class="dnum" aria-hidden="true"><Icon name="download" size={11} />{dl}</span></span>{/if}
+{/snippet}
+
 {#snippet footChips(p: Plugin)}
 	<!-- One line of chips: the version always shows whole; downloads drop first, then the date goes numeric, then chips tighten. -->
-	{@const dl = p.stats?.downloads != null ? shortCount(p.stats.downloads, appLocale()) : ''}
 	<span class="chips" use:fitChips>
 		<span class="chip xs mono vchip" title={shownVersion(p)}>{shownVersion(p)}</span>
-		{#if dl}<span class="chip xs dlc" data-drop="1" title={t('plugins.downloads', { n: dl })} data-testid="plugin-downloads"><span class="sr-only">{t('plugins.downloads', { n: dl })}</span><span class="dnum" aria-hidden="true"><Icon name="download" size={11} />{dl}</span></span>{/if}
+		{@render dlChip(p)}
 		{#if p.updated}<span class="chip xs dchip" class:fresh={freshUpdate(p)} title="{t('plugins.factUpdated')} {date(p.updated + 'T12:00:00Z')}" data-testid="plugin-card-updated"><span class="dlong">{shortDay(p.updated, appLocale())}</span><span class="dshort">{numDay(p.updated, appLocale())}</span></span>{/if}
 	</span>
 {/snippet}
@@ -397,7 +387,7 @@
 	{#if step}<span class="get step" role="status" data-testid="plugin-step">{#if p.install_step || installing === p.id}<span class="spin" aria-hidden="true"></span>{:else}<Icon name="owned" size={14} />{/if}{step}</span>
 	{:else if p.needs_app && !p.installed}<span class="xs muted need nchip" title={t('plugins.needsApp', { version: p.needs_app })} data-testid="plugin-card-needs-app"><span class="sr-only">{t('plugins.needsApp', { version: p.needs_app })}</span><span aria-hidden="true">{t('plugins.needsAppShort', { version: p.needs_app })}</span></span>
 	{:else if p.install_error && !p.installed}<button type="button" class="get" aria-label={t('plugins.retryName', { name })} disabled={!canInstall || !!busy} onclick={() => install(p)} data-testid="plugin-card-retry"><Icon name="refresh" size={14} />{t('plugins.retry')}</button>
-	{:else if !p.installed}<button type="button" class="get" aria-label={t('plugins.installName', { name })} disabled={!canInstall || !!busy} onclick={() => install(p)} data-testid="plugin-card-install"><Icon name="plus" size={14} />{t('plugins.install')}</button>
+	{:else if !p.installed}<button type="button" class="get" aria-label={t('plugins.installName', { name })} disabled={!canInstall || !!busy || (!!p.dev && (!ov?.dev_mode || !!p.dev_error))} onclick={() => install(p)} data-testid="plugin-card-install"><Icon name="plus" size={14} />{t('plugins.install')}</button>
 	{:else if hasUpdate(p) && !p.needs_app}<button type="button" class="get" aria-label={t('plugins.updateName', { name })} disabled={!canInstall || !!busy} onclick={() => install(p)} data-testid="plugin-card-update"><Icon name="download" size={14} />{t('plugins.update')}</button>
 	{:else if s === 'running'}<button type="button" class="get" aria-label={t('plugins.stopName', { name })} disabled={!!busy} onclick={() => act(p, () => api.post(`${path(p)}/stop`), 'plugins.stopped', 'plugins.stopFailed')} data-testid="plugin-card-stop">{#if busy === p.id}<span class="spin" aria-hidden="true"></span>{:else}<Icon name="pause" size={14} />{/if}{t('plugins.stop')}</button>
 	{:else}<button type="button" class="get" aria-label={t('plugins.startName', { name })} title={foldersMissing(p) ? t('plugins.chooseFolders') : s === 'off' && !startable(p) ? stateLabel(p) : undefined} disabled={!ov?.can_run || !!busy || foldersMissing(p) || (s === 'off' && !startable(p))} onclick={() => act(p, () => api.post(`${path(p)}/start`), 'plugins.started', 'plugins.startFailed')} data-testid="plugin-card-start">{#if busy === p.id}<span class="spin" aria-hidden="true"></span>{:else}<Icon name="play" size={14} />{/if}{t('plugins.start')}</button>{/if}
@@ -425,7 +415,7 @@
 			{#if hasUpdate(p) && p.installed}<span class="udot inl" role="img" aria-label={t('plugins.stateUpdate')} title={t('plugins.stateUpdate')} data-testid="plugin-update-dot"></span>{/if}
 			<span class="st">{@render cardAct(p, name)}</span>
 		</div>
-		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock"><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
+		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock" title={noLockWhy}><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
 	</li>
 {/snippet}
 
@@ -443,22 +433,30 @@
 		<span class="ver xs"><span class="mono">{shownVersion(p)}</span>{@render dls(p)}{#if hasUpdate(p) && p.installed}<span class="udot inl" role="img" aria-label={t('plugins.stateUpdate')} title={t('plugins.stateUpdate')} data-testid="plugin-update-dot"></span>{/if}</span>
 		<span class="stt xs">{p.installed ? badge(p) : stateLabel(p)}</span>
 		<span class="st">{@render cardAct(p, name)}</span>
-		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock"><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
+		{#if noLockTag}<p class="xs nolock" data-testid="plugin-nolock" title={noLockWhy}><Icon name="info" size={13} />{t('plugins.noLockTag')}</p>{/if}
 	</li>
 {/snippet}
 
 {#snippet info(p: Plugin)}
 	{#if editing === p.id}<PluginSettings {p} onback={() => (editing = '')} />{:else}
-	<PluginInfo {p} badge={badge(p)} {noLockTag} onclose={close}>
+	<PluginInfo {p} badge={badge(p)} {noLockTag} noLockReason={ov?.file_lock_reason} onclose={close}>
 		{#snippet actions()}{@render acts(p)}{/snippet}
 		{#snippet extra()}<ApproveAccess {p} reload={load} />{/snippet}
 	</PluginInfo>{/if}
 {/snippet}
 
+{#snippet settingsBtn(sel: Plugin)}
+	{@const name = shownName(sel)}
+	{#if settingsPage(sel)}<Button href={to(settingsPage(sel))} icon="sliders" aria-label={t('plugins.settingsName', { name })} data-testid="plugin-settings">{t('plugins.settings')}</Button>
+	{:else if sel.settings?.length}<Button icon="sliders" aria-label={t('plugins.settingsName', { name })} onclick={() => (editing = sel.id)} data-testid="plugin-settings">{t('plugins.settings')}</Button>{/if}
+{/snippet}
+
 {#snippet acts(sel: Plugin)}
 	{@const s = pluginState(sel)}
 	{@const name = shownName(sel)}
-	{#if s === 'not_installed'}
+	{#if sel.dev}
+		<DevActions {sel} {ov} {busy} {removing} {act} {askRemove} part="dev">{#snippet settings()}{#if sel.installed}{@render settingsBtn(sel)}{/if}{/snippet}</DevActions>
+	{:else if s === 'not_installed'}
 		{#if sel.needs_app}<span class="xs muted need" data-testid="plugin-needs-app">{t('plugins.needsApp', { version: sel.needs_app })}</span>
 		{:else}<Button variant="primary" aria-label={t('plugins.installName', { name })} disabled={!canInstall || !!busy || !!sel.install_step} busy={busy === sel.id || !!sel.install_step} onclick={() => install(sel)} data-testid="plugin-main-install">{stepLabel(sel) || (sel.install_error ? t('plugins.retry') : t('plugins.install'))}</Button>{/if}
 		<span class="signed xs" title={t('plugins.signedHint')} data-testid="plugin-signed"><Icon name="shield" size={13} />{t('plugins.signed')}</span>
@@ -470,8 +468,7 @@
 		{:else}
 			<Button variant="primary" aria-label={t('plugins.startName', { name })} title={foldersMissing(sel) ? t('plugins.chooseFolders') : s === 'off' && !startable(sel) ? stateLabel(sel) : undefined} disabled={!ov?.can_run || !!busy || foldersMissing(sel) || (s === 'off' && !startable(sel))} busy={busy === sel.id && !removing} onclick={() => act(sel, () => api.post(`${path(sel)}/start`), 'plugins.started', 'plugins.startFailed')} data-testid="plugin-main-start">{t('plugins.start')}</Button>
 		{/if}
-		{#if settingsPage(sel)}<Button href={to(settingsPage(sel))} icon="sliders" aria-label={t('plugins.settingsName', { name })} data-testid="plugin-settings">{t('plugins.settings')}</Button>
-		{:else if sel.settings?.length}<Button icon="sliders" aria-label={t('plugins.settingsName', { name })} onclick={() => (editing = sel.id)} data-testid="plugin-settings">{t('plugins.settings')}</Button>{/if}
+		{@render settingsBtn(sel)}
 		{#if hasUpdate(sel) && !sel.needs_app && s === 'running'}
 			<Button aria-label={t('plugins.stopName', { name })} disabled={!!busy} busy={busy === sel.id && !removing} onclick={() => act(sel, () => api.post(`${path(sel)}/stop`), 'plugins.stopped', 'plugins.stopFailed')} data-testid="plugin-stop">{t('plugins.stop')}</Button>
 		{:else if hasUpdate(sel) && !sel.needs_app}
@@ -480,6 +477,7 @@
 		<Button aria-label={t('plugins.removeName', { name })} disabled={!!busy} busy={busy === sel.id && removing?.id === sel.id} onclick={() => askRemove(sel)}>{t('plugins.remove')}</Button>
 		{#if sel.needs_app && hasUpdate(sel)}<span class="xs muted need" data-testid="plugin-needs-app">{t('plugins.needsApp', { version: sel.needs_app })}</span>{/if}
 	{/if}
+	<DevActions {sel} {ov} {busy} {removing} {act} {askRemove} part="test" />
 	{#if sel.install_error && !sel.install_step && sel.installed}<p class="xs ierr dlg" data-testid="plugin-install-error"><Icon name="alert" size={13} /><span>{sel.install_error}</span></p>{/if}
 {/snippet}
 
@@ -498,6 +496,7 @@
 	{/each}
 
 	<div class="settings-content" bind:clientWidth={pageWidth}>
+		{#if ov?.dev_mode}<p class="notice warn devon" role="status" data-testid="plugins-dev-banner"><Icon name="info" size={18} /><span dir="auto">{t('plugins.devBanner', { dir: ov.dev_dir ?? '' })}</span><Button size="sm" onclick={() => (addOpen = true)} data-testid="plugins-dev-banner-open">{t('plugins.devTitle')}</Button></p>{/if}
 		{#if noLockCard}<NoLockCard {ov} reload={load} />{/if}
 		{#if noNetCard}<NoNetLockCard {ov} reload={load} />{/if}
 		{#if all.length > 0 || lang}
@@ -583,7 +582,7 @@
 	{#if updates.length}<span class="cap" data-testid="plugins-update-all">{#if phone}<IconButton icon="download" label={t('plugins.updateN', { n: updates.length })} disabled={!canInstall || !!busy} onclick={updateAll} />{:else}<Button icon="download" disabled={!canInstall || !!busy} onclick={updateAll}>{t('plugins.updateN', { n: updates.length })}</Button>{/if}</span>{/if}
 {/snippet}
 
-<AddSheet bind:open={addOpen} />
+<AddSheet bind:open={addOpen} {ov} reload={load} />
 
 <style>
 	/* The toolbar row: the same search well and glass capsule as the Library's toolbar. */

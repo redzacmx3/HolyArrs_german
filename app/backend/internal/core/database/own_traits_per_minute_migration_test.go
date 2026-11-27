@@ -9,8 +9,10 @@ import (
 	"testing/fstest"
 )
 
-// Fork: the migrations before own_trait_per_minute, found by name, as an
-// upstream update can give it a new number.
+// Fork: every migration but own_trait_per_minute, found by name, as an
+// upstream update can give it a new number. Since the 1.3.6 sync the fork's
+// own_trait_language runs after it on a new database; a database from
+// before already has it, so it stays in.
 func beforePerMinute(t *testing.T) fs.FS {
 	t.Helper()
 	src, _ := fs.Sub(embedded, "migrations/main")
@@ -29,7 +31,7 @@ func beforePerMinute(t *testing.T) fs.FS {
 	}
 	out := fstest.MapFS{}
 	for _, m := range ms {
-		if m.version < stop {
+		if m.version != stop {
 			out[m.name] = &fstest.MapFile{Data: []byte(m.sql)}
 		}
 	}

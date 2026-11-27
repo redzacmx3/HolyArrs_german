@@ -60,6 +60,7 @@ var Sites = []Site{
 	{ID: "knaben", Name: "Knaben", URL: "https://api.knaben.org", Kinds: []string{"movie", "tv", "music"}, GapMS: 2000, PerHour: 100, TimeoutMS: 20000},
 	{ID: "torrentscsv", Name: "TorrentsCSV", URL: "https://torrents-csv.com", Kinds: []string{"movie", "tv", "music"}, GapMS: 2000, PerHour: 100, TimeoutMS: 20000},
 	{ID: "subsplease", Name: "SubsPlease", URL: "https://subsplease.org", Kinds: []string{"tv"}, GapMS: 2000, PerHour: 100, TimeoutMS: 20000},
+	{ID: "yts", Name: "YTS", URL: "https://movies-api.accel.li", Kinds: []string{"movie"}, GapMS: 2500, PerHour: 100, TimeoutMS: 20000},
 	{ID: "iptorrents", Name: "IPTorrents", URL: "https://iptorrents.com", Private: true, Kinds: []string{"movie", "tv", "music"}, GapMS: 3000, PerHour: 60, TimeoutMS: 30000},
 }
 
@@ -80,6 +81,9 @@ func (c *Client) siteCaps() (Caps, error) {
 	}
 	caps := Caps{Search: true, TVSearch: slices.Contains(s.Kinds, "tv"), MovieSearch: slices.Contains(s.Kinds, "movie"),
 		MusicSearch: slices.Contains(s.Kinds, "music"), Params: map[string][]string{"search": {"q"}}}
+	if s.ID == "yts" {
+		caps.Params["movie"] = []string{"q", "imdbid"}
+	}
 	for _, k := range s.Kinds {
 		caps.Categories = append(caps.Categories, DefaultCategories[k]...)
 	}
@@ -139,6 +143,8 @@ func (c *Client) siteSearch(ctx context.Context, q Query, observer func(string, 
 
 func (c *Client) siteCall(ctx context.Context, base, text string, q Query) ([]Item, error) {
 	switch c.cfg.Site {
+	case "yts":
+		return c.ytsSearch(ctx, base, q)
 	case "knaben":
 		body := map[string]any{"search_type": "100%", "search_field": "title", "query": text, "size": 100,
 			"hide_unsafe": true, "hide_xxx": true, "order_by": "seeders", "order_direction": "desc"}
@@ -238,7 +244,25 @@ func (c *Client) siteCall(ctx context.Context, base, text string, q Query) ([]It
 func knabenCategories(q Query) []int {
 	switch {
 	case q.feed:
-		return nil
+		// A feed read asks only for the kinds it wants; with no
+		// categories Knaben's 100 newest are mostly games and music.
+		var out []int
+		add := func(c int) {
+			if !slices.Contains(out, c) {
+				out = append(out, c)
+			}
+		}
+		for _, n := range q.Categories {
+			switch n / 1000 {
+			case 2:
+				add(3000000)
+			case 5:
+				add(2000000)
+			case 3:
+				add(1000000)
+			}
+		}
+		return out
 	case q.Music:
 		return []int{1000000}
 	case q.TV:
@@ -570,6 +594,9 @@ func cellText(s string) string {
 
 // parseSize reads "1.4 GB" style sizes.
 func parseSize(s string) int64 {
+	// HTML sizes can separate the value and unit with &nbsp; (or a narrow
+	// nonbreaking space), which regexp's ASCII-only \s does not match.
+	s = strings.Join(strings.Fields(cellText(s)), " ")
 	m := iptSizeRe.FindStringSubmatch(s)
 	if m == nil {
 		return 0

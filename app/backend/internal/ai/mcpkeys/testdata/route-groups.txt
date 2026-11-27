@@ -29,6 +29,7 @@ DELETE /api/v1/never-add/{id} delete
 DELETE /api/v1/outside-lists/{id} delete
 DELETE /api/v1/own-traits/{id} delete
 DELETE /api/v1/pick-rules/{id} delete
+DELETE /api/v1/plugin-hooks/links/{user} delete
 DELETE /api/v1/plugins/{id} admin
 DELETE /api/v1/settings/old-app-api/keys/{side} admin
 DELETE /api/v1/settings/trakt-signin delete
@@ -47,6 +48,7 @@ DELETE /blocklist/{id} delete
 DELETE /customformat/{id} delete
 DELETE /delayprofile/{id} delete
 DELETE /indexer/{id} delete
+DELETE /lidarr/ delete
 DELETE /movie/editor delete
 DELETE /movie/{id} delete
 DELETE /notification/{id} delete
@@ -214,8 +216,10 @@ GET /api/v1/people/shelves/{id} see
 GET /api/v1/people/{id} see
 GET /api/v1/pick-rules see
 GET /api/v1/pick-rules/{id} see
+GET /api/v1/plugin-hooks/botcheck see
 GET /api/v1/plugin-hooks/downloader see
 GET /api/v1/plugin-hooks/events see
+GET /api/v1/plugin-hooks/links see
 GET /api/v1/plugin-hooks/metadata see
 GET /api/v1/plugin-hooks/pages see
 GET /api/v1/plugin-hooks/releases see
@@ -345,6 +349,7 @@ GET /indexer see
 GET /indexer/schema see
 GET /indexer/{id} see
 GET /languageprofile see
+GET /lidarr/ see
 GET /live see
 GET /log see
 GET /login admin
@@ -544,6 +549,7 @@ POST /api/v1/people/{id}/movies/review add
 POST /api/v1/pick-rules settings
 POST /api/v1/pick-rules/{id}/trash delete
 POST /api/v1/plugin-hooks/artwork add
+POST /api/v1/plugin-hooks/botcheck add
 POST /api/v1/plugin-hooks/downloader add
 POST /api/v1/plugin-hooks/link add
 POST /api/v1/plugin-hooks/metadata add
@@ -557,11 +563,13 @@ POST /api/v1/plugin-pages/{plugin}/call plugins
 POST /api/v1/plugin-pages/{plugin}/play plugins
 POST /api/v1/plugin-pages/{plugin}/{page}/open plugins
 POST /api/v1/plugins/{id}/approve admin
+POST /api/v1/plugins/{id}/dev-install admin
 POST /api/v1/plugins/{id}/install admin
 POST /api/v1/plugins/{id}/remote/name admin
 POST /api/v1/plugins/{id}/remote/signout admin
 POST /api/v1/plugins/{id}/start admin
 POST /api/v1/plugins/{id}/stop admin
+POST /api/v1/plugins/{id}/test-event admin
 POST /api/v1/releases/check control
 POST /api/v1/releases/check/{id}/pick control
 POST /api/v1/releases/name-check control
@@ -631,6 +639,7 @@ POST /customformat settings
 POST /delayprofile settings
 POST /indexer settings
 POST /indexer/test settings
+POST /lidarr/ add
 POST /mcp see
 POST /movie add
 POST /movie/import add
@@ -681,10 +690,12 @@ PUT /api/v1/pick-rules/{id} settings
 PUT /api/v1/plugin-hooks/home-widget add
 PUT /api/v1/plugin-hooks/pages add
 PUT /api/v1/plugin-hooks/tools add
+PUT /api/v1/plugins/dev-mode admin
 PUT /api/v1/plugins/file-lock admin
 PUT /api/v1/plugins/net-lock admin
 PUT /api/v1/plugins/{id}/owner-hosts admin
 PUT /api/v1/plugins/{id}/settings admin
+PUT /api/v1/plugins/{id}/test-versions admin
 PUT /api/v1/schedules/{kind} settings
 PUT /api/v1/settings/ai settings
 PUT /api/v1/settings/alerts settings
@@ -739,6 +750,7 @@ PUT /delayprofile/{id} settings
 PUT /episode/monitor add
 PUT /episode/{id} add
 PUT /indexer/{id} settings
+PUT /lidarr/ add
 PUT /movie add
 PUT /movie/editor add
 PUT /movie/{id} add

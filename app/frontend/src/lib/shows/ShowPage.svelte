@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PersonText from '#lib/ui/PersonText.svelte';
 	import { serverWords } from '#lib/core/i18n/server-words.ts';
+	import { episodeNamed } from '#lib/core/episodes.ts';
 	// Show detail page: episodes by season, staff tools, requests and history.
 	import Button from '#lib/ui/Button.svelte';
 	import AskedByLine from '#lib/ui/AskedByLine.svelte';
@@ -246,7 +247,8 @@
 		void loadHistory();
 	}
 
-	async function startSearch(key: string, body: Record<string, unknown>, done: string, list?: ReleaseScope, onStarted?: () => void) {
+	// `more` is the toast's second line and the season it opens on: a search toast names the show and opens its page, also later from the alerts list.
+	async function startSearch(key: string, body: Record<string, unknown>, done: string, list?: ReleaseScope, onStarted?: () => void, more: { body?: string; season?: number } = {}) {
 		searching = key;
 		try {
 			if (list) body.choose = false;
@@ -259,7 +261,8 @@
 				scrollToStart(document.querySelector('[data-testid="show-releases"]'));
 			}
 			if (r.job_ids.length) onStarted?.();
-			toasts.push(r.job_ids.length ? done : t('shows.page.nothingToSearch'), r.job_ids.length ? 'info' : 'ok');
+			if (r.job_ids.length) toasts.push(done, 'info', { body: more.body, href: `/library/${title.id}${more.season != null ? `?season=${more.season}` : ''}` });
+			else toasts.push(t('shows.page.nothingToSearch'), 'ok');
 		} catch (e) {
 			toasts.push(t('shows.sheet.startSearchFailed'), 'fail', { body: message(e) });
 		} finally {
@@ -269,7 +272,7 @@
 	}
 
 	function searchShow() {
-		void startSearch('show', {}, t('shows.page.searchingAll'));
+		void startSearch('show', {}, t('shows.page.searchingNamed', { name: title.name }), undefined, undefined, { body: t('shows.page.searchingAll') });
 	}
 
 	function searchSeason(n: number, list = false) {
@@ -277,8 +280,10 @@
 		void startSearch(
 			`s${n}${list ? 'l' : ''}`,
 			{ season: n },
-			t('shows.page.searchingNamed', { name }),
-			list ? { label: name, query: `season=${n}` } : undefined
+			t('shows.page.searchingNamed', { name: title.name }),
+			list ? { label: name, query: `season=${n}` } : undefined,
+			undefined,
+			{ body: name, season: n }
 		);
 	}
 
@@ -290,9 +295,10 @@
 			`e${ep.id}${list ? 'l' : ''}`,
 			// A release list is only for the main Version.
 			!list && ep.slots.length > 1 ? { item_id: ep.id } : { slot_id: sl.id },
-			t('shows.page.searchingNamed', { name: code }),
+			t('shows.page.searchingNamed', { name: title.name }),
 			list ? { label: code, query: `item_id=${ep.id}`, slotId: sl.id, slotState: sl.state } : undefined,
-			list ? undefined : () => notSent.watch(ep.slots.length > 1 ? ep.slots.map((x) => x.id) : [sl.id], code)
+			list ? undefined : () => notSent.watch(ep.slots.length > 1 ? ep.slots.map((x) => x.id) : [sl.id], code),
+			{ body: episodeNamed(code, ep.name), season: ep.season }
 		);
 	}
 

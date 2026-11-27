@@ -35,6 +35,10 @@ type listServer struct {
 	file     []byte
 	version  string
 	redirect string // when set, plugins.json redirects here
+	// testList is plugins-test.json (nil: 404); extra serves other
+	// versions' manifest and file, by version.
+	testList []byte
+	extra    map[string][2][]byte
 }
 
 var pluginFile = []byte("plugin program bytes")
@@ -67,7 +71,23 @@ func newListServer(t *testing.T) (*listServer, ed25519.PublicKey) {
 		ls.mu.Lock()
 		defer ls.mu.Unlock()
 		base := "/list/plugins/tailscale/" + ls.version
+		for v, mf := range ls.extra {
+			switch r.URL.Path {
+			case "/list/plugins/tailscale/" + v + "/manifest.json":
+				w.Write(mf[0])
+				return
+			case "/list/plugins/tailscale/" + v + "/plugin":
+				w.Write(mf[1])
+				return
+			}
+		}
 		switch r.URL.Path {
+		case "/list/plugins-test.json":
+			if ls.testList == nil {
+				http.NotFound(w, r)
+				return
+			}
+			w.Write(ls.testList)
 		case "/list/plugins.json":
 			if ls.redirect != "" {
 				http.Redirect(w, r, ls.redirect, http.StatusFound)
@@ -77,7 +97,7 @@ func newListServer(t *testing.T) (*listServer, ed25519.PublicKey) {
 		case "/list/blocklist.json":
 			w.Write(ls.block)
 		case "/list/stats.json":
-			w.Write([]byte(`{"tailscale":{"downloads":1234,"week":40,"stars":9,"listed":"2026-11-01T05:18:53Z"}}`))
+			w.Write([]byte(`{"tailscale":{"downloads":1234,"week":40,"stars":9,"listed":"2026-11-01T05:18:53Z"},"language-packs":{"downloads":291}}`))
 		case base + "/manifest.json":
 			w.Write(ls.manifest)
 		case base + "/plugin":
@@ -939,6 +959,32 @@ func TestListShowsStats(t *testing.T) {
 	}
 }
 
+// The numbers are fetched when the engine starts, so the very first list
+// after a start already shows them.
+func TestFirstListAfterStartHasStats(t *testing.T) {
+	ls, pub := newListServer(t)
+	e, _ := newEngine(t, ls, pub)
+	e.StartEnabled()
+	p := row(t, call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "tailscale")
+	st, _ := p["stats"].(map[string]any)
+	if st == nil || st["downloads"] != float64(1234) {
+		t.Fatalf("first list stats = %v", p["stats"])
+	}
+}
+
+// The language packs are not a listed plugin, so their numbers come on the
+// list itself.
+func TestFirstListHasLanguagePackStats(t *testing.T) {
+	ls, pub := newListServer(t)
+	e, _ := newEngine(t, ls, pub)
+	e.StartEnabled()
+	ov := call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK)
+	st, _ := ov["language_packs"].(map[string]any)
+	if st == nil || st["downloads"] != float64(291) {
+		t.Fatalf("language_packs = %v", ov["language_packs"])
+	}
+}
+
 // A plugin disabled by the blocklist can be started again once the signed
 // blocklist no longer holds it; it is not started on its own.
 func TestStartWorksAfterBlocklistLifted(t *testing.T) {
@@ -968,4 +1014,65 @@ func TestStartWorksAfterBlocklistLifted(t *testing.T) {
 	if p := row(t, call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "tailscale"); p["running"] != true {
 		t.Fatalf("not running after the blocklist lifted: %v", p)
 	}
+}
+
+// with nothing installed the periodic check still refreshes the cached
+// plugin list, so newly published plugins show, and never puts back an older one.
+func TestBlocklistCheckRefreshesListWithNothingInstalled(t *testing.T) {
+	ls, pub := newListServer(t)
+	e, _ := newEngine(t, ls, pub)
+	if err := os.MkdirAll(e.Dir, 0o700); err != nil { // the data volume's plugins folder
+		t.Fatal(err)
+	}
+	call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK) // caches counter 1
+	zero := uint64(0)
+	sha := hashOf(pluginFile)
+	ls.mu.Lock()
+	old := ls.list
+	ls.list = ls.sign(plugins.List{Kind: plugins.KindPlugins, Counter: 2, MinBlocklistCounter: &zero,
+		Entries: []plugins.Entry{{ID: "tailscale", Version: "1.0.0", SHA256: sha, ManifestSHA256: hashOf(ls.manifest)},
+			{ID: "language-checker", Version: "1.0.1", SHA256: sha, ManifestSHA256: hashOf(ls.manifest)}}})
+	ls.mu.Unlock()
+	if listed(call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "language-checker") {
+		t.Fatal("listed before the check")
+	}
+	if err := e.CheckBlocklist(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	row(t, call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "language-checker")
+
+	ls.mu.Lock()
+	ls.list = old
+	ls.mu.Unlock()
+	if err := e.CheckBlocklist(context.Background()); err == nil {
+		t.Fatal("older plugin list accepted")
+	}
+	row(t, call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "language-checker")
+}
+
+func listed(ov map[string]any, id string) bool {
+	ps, _ := ov["plugins"].([]any)
+	for _, p := range ps {
+		if m, _ := p.(map[string]any); m["id"] == id {
+			return true
+		}
+	}
+	return false
+}
+
+// a bad list with nothing installed changes nothing on the page.
+func TestBlocklistCheckBadListNothingInstalled(t *testing.T) {
+	ls, pub := newListServer(t)
+	e, _ := newEngine(t, ls, pub)
+	if err := os.MkdirAll(e.Dir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK)
+	ls.mu.Lock()
+	ls.list = []byte("not a list")
+	ls.mu.Unlock()
+	if err := e.CheckBlocklist(context.Background()); err == nil {
+		t.Fatal("bad plugin list accepted")
+	}
+	row(t, call(t, mux(e), "GET", "/api/v1/plugins", http.StatusOK), "tailscale")
 }

@@ -21,13 +21,14 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ISSUES = "https://github.com/HolyArrs/HolyArrs/issues/"
 RELEASES = "https://github.com/HolyArrs/HolyArrs/releases/tag/"
 KNOWN = {"version", "theme", "image", "images", "docs_url", "highlights", "groups",
-         "security", "known_issues", "credits", "stats"}
+         "security", "known_issues", "credits", "stats", "community_plugins"}
 # Old map format kinds -> the prefix the list format uses ("" = new).
 KINDS = {"added": "", "fixed": "Fixed: ", "changed": "Changed: ", "docs": "Docs: "}
 PREFIXES = ("Fixed: ", "Changed: ", "Docs: ")
 # Places in the order users touch them most; any other place follows in file order.
 PLACE_ORDER = ("Requests", "Library", "Downloads", "Indexers", "Accounts", "Health", "Setup", "Install")
 DM_LIMIT = 1000
+SPONSOR_LINK = "https://github.com/sponsors/CoderLuii"
 EMBED_LIMIT = 4096
 BANNED = re.compile(r"\b(seamless\w*|robust\w*|enhanced|leverag\w*|excited|refactor\w*|modules?|"
                     r"clean room|sessions?|agents?|worktrees?)\b|\bv\d+\.\d+(\.\d+)?\b", re.I)
@@ -127,7 +128,13 @@ def credit_line(c, cmap):
     if empty(c.get("name")):
         name = "@" + str(c["github"])
         return "[%s](%s)" % (name, c["link"]) if c.get("link") else name
-    name = "u/" + bare(c["name"])
+    # Discord and forum members keep their plain name; everyone else is a Reddit u/.
+    if c.get("discord"):
+        name = bare(c["name"]) + " (Discord)"
+    elif c.get("forum"):
+        name = bare(c["name"]) + " (forum)"
+    else:
+        name = "u/" + bare(c["name"])
     text = "[%s](%s)" % (name, c["link"]) if c.get("link") else name
     return text + (" (@%s)" % login if login else "")
 
@@ -135,6 +142,12 @@ def credit_line(c, cmap):
 def sorted_credits(n):
     cs = items(n.get("credits"))
     return sorted(cs, key=lambda c: (-len(c.get("issues") or []), credit_key(c).lstrip("@").lower()))
+
+
+def plugin_lines(n):
+    """Community plugins: the plugin linked to its repo, the author to their GitHub."""
+    return ["[%s](%s) by [@%s](https://github.com/%s)" % (p["name"], p["repo"], p["github"], p["github"])
+            for p in items(n.get("community_plugins"))]
 
 
 def bullets(lines):
@@ -157,6 +170,8 @@ def render_changelog(n, today):
     for kind, lines in buckets.items():
         if lines:
             out += ["### " + kind, bullets(lines)]
+    if plugin_lines(n):
+        out += ["### Community plugins", bullets(plugin_lines(n))]
     return "\n".join(out) + "\n"
 
 
@@ -188,6 +203,8 @@ def render_github(n, cmap):
             also += lines
     if also:
         blocks.append("## Also new\n" + bullets(also))
+    if plugin_lines(n):
+        blocks.append("## Community plugins\n" + bullets(plugin_lines(n)))
     for key, title in (("security", "Security"), ("known_issues", "Known issues")):
         lines = items(n.get(key))
         if lines:
@@ -247,6 +264,10 @@ def render_discord(n, bold=False):
         # The first release has nothing to compare with, so its posts say what it has.
         label = "What's in it: " if n["version"] == "1.0.0" else "What changed: "
         out.append(label + release_link(n))
+        # The channel post ends with a sponsor ask; the DM stays short.
+        if bold:
+            ask = n.get("sponsor_line") or "HolyArrs stays free because sponsors keep the servers running."
+            out += ["", ask + " " + SPONSOR_LINK]
         return "\n".join(out) + "\n"
     for theme in (True, False):
         text = build(theme)
@@ -294,11 +315,16 @@ def check(n, cmap):
     if not images(n):
         errors.append("images is missing (registry + name)")
     hl = items(n.get("highlights"))
-    if len(hl) != 3:
+    plugins = items(n.get("community_plugins"))
+    # A small release that announces community plugins may skip highlights and groups.
+    if len(hl) != 3 and not (plugins and not hl):
         errors.append("need exactly 3 highlights, found %d" % len(hl))
     glines = all_group_lines(n)
-    if not glines:
+    if not glines and not plugins:
         errors.append("groups has no lines")
+    for p in plugins:
+        if empty(p.get("name")) or not str(p.get("repo", "")).startswith("https://") or not LOGIN.match(str(p.get("github", ""))):
+            errors.append("community plugin needs name, https repo and github login: %r" % p)
     group_refs = {i for l in glines for i in refs(l)}
     for h in hl:
         iss = hl_issues(h)

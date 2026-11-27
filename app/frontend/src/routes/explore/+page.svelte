@@ -29,7 +29,7 @@
 	import Icon from '#lib/ui/Icon.svelte';
 	import { artistSheets } from '#lib/requests/index.ts';
 	import { libraryTitles, ownedLibrary, partOff, partOn } from '#lib/mediafiles/index.ts';
-	import { anchorDelta, canReturn, putOffsets, readAnchor, readOffsets, type ExploreReturn, headPath, serverRow, tailPath, type HeadAnswer, type TailAnswer, markTransitions, dedupeTop, filterRows, parseType, typeHref, enoughCards, genreRowPath, genreCardHref, genreRowAfter, GENRE_ROW_MAX, ROW_MIN, type GenreRowCard, type ExploreType, TopServicesRow, ExploreHero, heroFallback, CategoryStrip, GenreBanner, leaveOut, newHref, newServicesPath, type NewServicesAnswer, whyShown } from '#lib/discover/index.ts';
+	import { anchorDelta, canReturn, putOffsets, readAnchor, readOffsets, type ExploreReturn, headPath, serverRow, tailPath, type HeadAnswer, type TailAnswer, markTransitions, dedupeTop, filterRows, parseType, searchAddress, typeHref, enoughCards, genreRowPath, genreCardHref, genreRowAfter, GENRE_ROW_MAX, ROW_MIN, type GenreRowCard, type ExploreType, TopServicesRow, ExploreHero, heroFallback, CategoryStrip, GenreBanner, leaveOut, newHref, newServicesPath, type NewServicesAnswer, whyShown } from '#lib/discover/index.ts';
 	import { detailPath, remember, MetadataNotice } from '#lib/metadata/index.ts';
 	import { QuickAsk } from '#lib/requests/index.ts';
 	import { MusicTrendingRows, musicCardHref, MusicGenreTiles } from '#lib/music/index.ts';
@@ -81,7 +81,9 @@
 	// The tab waits for the parts answer; a saved Music pick is kept until Music is known off.
 	const musicOn = $derived(partOn('music'));
 	const musicKept = $derived(!partOff('music'));
-	let type = $state<ExploreType>(parseType(page.url.searchParams.get('type')));
+	// Back can restore a shallow address with the tab or genre picked after Explore opened.
+	const here = () => searchAddress(page.url, page.shallow?.url, typeof location === 'undefined' ? undefined : location.href);
+	let type = $state<ExploreType>(parseType(here().searchParams.get('type')));
 	const typeOptions = $derived(
 		([
 			{ value: 'all', label: t('discover.explore.all'), icon: 'grid' },
@@ -102,7 +104,7 @@
 		} catch {
 			/* The choice is a convenience. */
 		}
-		const url = new URL((page.shallow?.url ?? page.url).href);
+		const url = new URL(here().href);
 		if (t === 'all') url.searchParams.delete('type');
 		else url.searchParams.set('type', t);
 		url.searchParams.delete('genre');
@@ -481,7 +483,8 @@
 	const servicesView = createExploreServices(servicesViewCtx);
 	const gone = new AbortController();
 	onMount(() => {
-		if (!page.url.searchParams.has('type')) {
+		const current = here();
+		if (!current.searchParams.has('type') && !current.searchParams.has('genre')) {
 			try {
 				const saved = parseType(localStorage.getItem(TYPE_KEY), musicKept);
 				if (saved !== 'all') setType(saved);
@@ -742,7 +745,13 @@
 	@media (max-width: 767px) { .types :global(.ui-seg) { display: grid; width: 100%; } .types :global(.ui-seg button) { padding: 0 8px; } .music-banner { margin-top: 28px; } }
 	/* Phones: the pills share the row with Genres (never wider than the screen); a long genre name ends in an ellipsis. */
 	@media (max-width: 767px) { .types { max-width: 100%; } .types :global(.ui-seg) { flex: 1 1 auto; width: auto; min-width: 0; } .genre-pick { flex: none; min-width: 0; } .genre-pick :global(.trigger) { max-width: 36vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
-	@media (max-width: 479px) { .types :global(.ui-seg button) { padding: 0 6px; font-size: 13px; min-width: 0; } .genre-pick { margin-left: 6px; } .genre-pick :global(.trigger) { padding: 0 12px; font-size: 13px; } }
+	@media (max-width: 479px) { .types :global(.ui-seg button) { padding: 0 6px; font-size: 13px; min-width: max-content; white-space: nowrap; } .genre-pick { flex: 0 1 auto; margin-left: 6px; } .genre-pick :global(.trigger) { padding: 0 12px; font-size: 13px; } }
+	/* Small phones: each pill is as wide as its name so none breaks onto two lines; the picked one carries the fill, as an equal-width thumb would miss. */
+	@media (max-width: 479px) {
+		.types :global(.ui-seg) { grid-auto-columns: auto; }
+		.types :global(.ui-seg .thumb) { display: none; }
+		.types :global(.ui-seg button[aria-checked='true']) { background: var(--seg-thumb); box-shadow: 0 1px 2px rgb(0 0 0 / 12%), 0 0 0 .5px rgb(0 0 0 / 4%); }
+	}
 	/* Phones: the words win, the glyphs step aside, so no label is clipped. */
 	@media (min-width: 360px) and (max-width: 479px) { .types :global(.ui-seg button svg) { display: none; } }
 	@media (max-width: 359px) {

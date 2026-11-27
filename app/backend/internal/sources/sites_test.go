@@ -304,7 +304,7 @@ func TestSiteSourceAdd(t *testing.T) {
 		Sites []Site `json:"sites"`
 	}
 	_ = json.Unmarshal(do(t, "GET", srv.URL+"/api/v1/sources/sites", "", 200), &sites)
-	if len(sites.Sites) != 4 {
+	if len(sites.Sites) != 5 {
 		t.Fatalf("sites %+v", sites)
 	}
 	var x SourceView
@@ -320,6 +320,10 @@ func TestSiteSourceAdd(t *testing.T) {
 	_ = json.Unmarshal(do(t, "POST", srv.URL+"/api/v1/sources", `{"name":"TCSV","format":"site","site":"torrentscsv"}`, 201), &x)
 	if x.UseFor.Feed || !x.UseFor.AutoSearch || !x.UseFor.HandSearch {
 		t.Fatalf("torrentscsv use_for %+v", x.UseFor)
+	}
+	_ = json.Unmarshal(do(t, "POST", srv.URL+"/api/v1/sources", `{"name":"YTS","format":"site","site":"yts"}`, 201), &x)
+	if x.Site != "yts" || x.URL != "https://movies-api.accel.li" || len(x.Kinds) != 1 || x.Kinds[0] != "movie" || x.Limits.GapMS != 2500 || !x.UseFor.Feed || !x.UseFor.AutoSearch || !x.UseFor.HandSearch {
+		t.Fatalf("yts defaults %+v", x)
 	}
 	do(t, "POST", srv.URL+"/api/v1/sources", `{"name":"Nope","format":"site","site":"other"}`, 400)
 	do(t, "POST", srv.URL+"/api/v1/sources", `{"name":"Nope","format":"site","site":"knaben","protocol":"usenet"}`, 400)
@@ -370,5 +374,30 @@ func TestFileHeaderIPTorrentsCookie(t *testing.T) {
 	knaben := domain.Source{URL: "https://knaben.org", Format: "site", Extra: map[string]string{"site": "knaben"}, SecretRef: &ref}
 	if h, _ := FileHeader(context.Background(), knaben, oneSecret("uid=1; pass=x")); h != nil {
 		t.Fatalf("knaben: %v", h)
+	}
+}
+
+// A feed read asks Knaben only for the kinds the feed wants, so its
+// 100 newest items are not mostly games and music.
+func TestKnabenFeedCategories(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		q    Query
+		want []int
+	}{
+		{Query{feed: true, Categories: []int{2000}}, []int{3000000}},
+		{Query{feed: true, Categories: []int{2000, 2040, 5000, 5040}}, []int{3000000, 2000000}},
+		{Query{feed: true, Categories: []int{2000, 5000, 3000, 3040}}, []int{3000000, 2000000, 1000000}},
+		{Query{feed: true, Categories: []int{3000}}, []int{1000000}},
+		{Query{feed: true}, nil},
+		{Query{feed: true, Categories: []int{7000}}, nil},
+		{Query{TV: true}, []int{2000000}},
+		{Query{Music: true}, []int{1000000}},
+		{Query{}, []int{3000000}},
+	}
+	for _, c := range cases {
+		if got := knabenCategories(c.q); !slices.Equal(got, c.want) {
+			t.Errorf("%+v: got %v want %v", c.q, got, c.want)
+		}
 	}
 }
