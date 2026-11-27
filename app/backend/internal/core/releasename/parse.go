@@ -72,7 +72,7 @@ var tagWords = setOf(
 	"directors", "extended", "theatrical", "remastered", "imax", "unrated", "anniversary",
 	"3d", "sbs", "hsbs", "ou", "hou",
 	"proper", "repack", "rerip", "real", "internal", "sample", "featurette", "featurettes", "extras", "trailer",
-	"upscaled", "upscale", "dubbed", "hc", "hardsub", "hardcoded", "korsub", "passworded", "password",
+	"upscaled", "upscale", "aius", "uprez", "upsuhd", "upscaleduhd", "regrade", "regraded", "re-graded", "ai-enhanced", "ai-upscaled", "dubbed", "hc", "hardsub", "hardcoded", "korsub", "passworded", "password",
 	"multi", "dl", "dual",
 	// Source, size, codec and audio words that are never title words.
 	"uhdbd", "uhd-bd", "uhdbdrip", "bdlight", "hddvd", "hd-dvd", "hddvdrip", "bdmux", "brdisk", "bd25", "bd50", "bd66", "bd100",
@@ -172,9 +172,13 @@ type Hints struct {
 
 // Result is a parsed Release name.
 type Result struct {
-	Original   string          `json:"original"`
-	Kind       Field[string]   `json:"kind"`
-	Title      Field[string]   `json:"title"`
+	Original string        `json:"original"`
+	Kind     Field[string] `json:"kind"`
+	Title    Field[string] `json:"title"`
+	// KanaTitle is the title read a second way, with the kana of words that
+	// mix Latin letters and kana spelled out ("Re:ゼロ" as "Re:zero"). Empty
+	// when no word is like that.
+	KanaTitle  string          `json:"-"`
 	Year       Field[int]      `json:"year"`
 	Resolution Field[int]      `json:"resolution"`
 	Source     Field[string]   `json:"source"`
@@ -388,13 +392,23 @@ func Parse(name string, h Hints) Result {
 	if lead != "" && !strings.Contains(strings.TrimSpace(body), " ") {
 		body = strings.ReplaceAll(body, ".", " ")
 	}
-	if sh, start, end, ok := findShow(body, lead != "", h.Show); ok {
+	sh, pre, kana, post, isShow, backwards := bracketTitleShow(body, lead != "", h.Show)
+	if !isShow && !backwards {
+		var start, end int
+		if sh, start, end, isShow = findShow(body, lead != "", h.Show); isShow {
+			pre, post = body[:start], body[end:]
+		}
+	}
+	if isShow {
 		// An anime name puts its group first; a last bracket such as
 		// "[Batch]" or "[Multi-Sub]" is then not the group.
 		if lead != "" && (r.Group.Conf == Unknown || bracketGroup) {
 			r.Group = sure(lead)
 		}
-		parseShow(&r, sh, body[:start], body[end:], trailing, lead != "", flags, h)
+		parseShow(&r, sh, pre, post, trailing, lead != "", flags, h)
+		if kana != "" {
+			r.KanaTitle = kana
+		}
 		for f := range flags {
 			r.Flags = append(r.Flags, f)
 		}
@@ -444,7 +458,8 @@ func Parse(name string, h Hints) Result {
 	} else {
 		r.Year.Conf = Unknown
 	}
-	title := strings.Join(toks[:end], " ")
+	r.KanaTitle = kanaReading(toks[:end])
+	title := strings.Join(latinRun(toks[:end]), " ")
 	if m := reArticle.FindStringSubmatch(title); m != nil {
 		title = m[2] + " " + m[1]
 	}
@@ -688,6 +703,10 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 		for _, code := range h.MultiLanguages {
 			addLang(code)
 		}
+		// The Source's list says what this MULTi holds, so its languages are known, not open.
+		if len(h.MultiLanguages) > 0 {
+			flags["multi_known"] = true
+		}
 	}
 	// A name that shows no language carries what its Source says every
 	// release there has (before the original-language fallback).
@@ -737,7 +756,18 @@ func readTags(r *Result, tags []string, flags map[string]bool, h Hints) {
 	set("sample", "sample")
 	set("password_hint", "passworded", "password")
 	set("extras", "featurette", "featurettes", "extras", "trailer")
-	set("upscaled", "upscaled", "upscale")
+	set("upscaled", "upscaled", "upscale", "aius", "uprez", "upsuhd", "upscaleduhd", "regrade", "regraded", "re-graded",
+		"aienhanced", "aienhance", "aiupscaled", "aiupscale", "ai-enhanced", "ai-enhance", "ai-upscaled", "ai-upscale", "theupscaler")
+	// Two-word tags, and a bare "AI" after the title on an HEVC encode:
+	// AI upscalers tag their 4K work that way.
+	for _, w := range []string{" ai enhanced ", " ai enhance ", " ai upscaled ", " ai upscale ", " the upscaler "} {
+		if strings.Contains(line, w) {
+			flags["upscaled"] = true
+		}
+	}
+	if has("ai") && has("hevc", "x265", "h265") {
+		flags["upscaled"] = true
+	}
 	set("dubbed", "dubbed")
 	set("internal", "internal")
 	set("hybrid", "hybrid")

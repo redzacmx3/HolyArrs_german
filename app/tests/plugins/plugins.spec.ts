@@ -513,6 +513,79 @@ test('plugins: settings save, restart failure and own fields', async ({ browser 
 	await page.context().close();
 });
 
+// A developer plugin that declares settings gets the same Settings button once it is installed;
+// before Install from folder there is nothing to set yet, so the button stays away.
+for (const width of [1366, 390]) {
+	test(`plugins: developer plugin settings at ${width}`, async ({ browser }) => {
+		const page = await (await browser.newContext({ viewport: { width, height: width > 500 ? 768 : 844 } })).newPage();
+		await signIn(page, owner());
+		const ov = structuredClone(fake) as typeof fake & { dev_mode?: boolean; plugins: Record<string, unknown>[] };
+		ov.dev_mode = true;
+		const fields = [{ key: 'greeting', label: 'Greeting', type: 'text', default: 'hi' }];
+		ov.plugins.push({ id: 'my-dev', version: '0.0.1', dev: true, installed: true, running: true, enabled: true, name: 'My dev plugin', access: { hosts: [], folders: [], actions: [] }, settings: fields });
+		ov.plugins.push({ id: 'new-dev', version: '0.0.1', dev: true, installed: false, running: false, enabled: false, name: 'New dev plugin', access: { hosts: [], folders: [], actions: [] }, settings: fields });
+		const puts: string[] = [];
+		await page.route('**/api/v1/plugins**', async (route) => {
+			const r = route.request();
+			if (r.url().endsWith('/my-dev/settings')) {
+				if (r.method() === 'PUT') puts.push(r.postData() ?? '');
+				return route.fulfill({ json: { fields, values: { greeting: 'hi' }, secrets_set: {} } });
+			}
+			return route.fulfill({ json: ov });
+		});
+		await page.goto('/plugins#new-dev');
+		await expect(page.getByTestId('plugin-dev-install')).toBeVisible();
+		await expect(page.getByTestId('plugin-detail').getByTestId('plugin-settings')).toHaveCount(0);
+		await page.goto('/plugins#my-dev');
+		const panel = page.getByTestId('plugin-detail');
+		await expect(panel.getByTestId('plugin-dev-install')).toBeVisible();
+		await panel.getByTestId('plugin-settings').click();
+		const form = page.getByTestId('plugin-settings-form');
+		await form.getByLabel('Greeting').fill('hello');
+		await form.getByTestId('plugin-settings-save').click();
+		await expect.poll(() => puts.length).toBe(1);
+		expect(JSON.parse(puts[0]).values).toEqual({ greeting: 'hello' });
+		await noSidewaysScroll(page);
+		await page.context().close();
+	});
+}
+
+// an empty number box turns Save off and says why; a whole number turns it back on.
+for (const width of [1366, 390]) {
+	test(`plugins: empty number setting blocks Save at ${width}`, async ({ browser }) => {
+		const page = await (await browser.newContext({ viewport: { width, height: width > 500 ? 768 : 844 } })).newPage();
+		await signIn(page, owner());
+		const ov = structuredClone(fake) as typeof fake & { plugins: Record<string, unknown>[] };
+		const fields = [{ key: 'port', label: 'Listen port', type: 'number', default: '8765' }];
+		Object.assign(ov.plugins[0], { installed: true, installed_version: '1.2.0', running: true, enabled: true, settings: fields });
+		const puts: string[] = [];
+		await page.route('**/api/v1/plugins**', async (route) => {
+			const r = route.request();
+			if (r.url().endsWith('/settings')) {
+				if (r.method() === 'PUT') puts.push(r.postData() ?? '');
+				return route.fulfill({ json: { fields, values: { port: '8765' }, secrets_set: {} } });
+			}
+			return route.fulfill({ json: ov });
+		});
+		await page.goto('/plugins#tailscale');
+		await page.getByTestId('plugin-detail').getByTestId('plugin-settings').click();
+		const form = page.getByTestId('plugin-settings-form');
+		const save = form.getByTestId('plugin-settings-save');
+		const box = form.getByLabel('Listen port');
+		await box.fill('');
+		await expect(save).toBeDisabled();
+		await expect(box).toHaveAttribute('aria-invalid', 'true');
+		await expect(form.getByRole('alert')).toBeVisible();
+		await noSidewaysScroll(page);
+		await box.fill('0');
+		await expect(save).toBeEnabled();
+		await save.click();
+		await expect.poll(() => puts.length).toBe(1);
+		expect(JSON.parse(puts[0]).values).toEqual({ port: '0' });
+		await page.context().close();
+	});
+}
+
 // A link to /plugins#<id> opens that plugin; Esc closes it, clears the address and puts focus back on its tile.
 // Update all updates every plugin with an update, after the same access question.
 test('plugins: logos and developer pictures never load from github.com', async ({ browser }) => {
@@ -589,6 +662,15 @@ test('plugins: one file lock choice for the install', async ({ browser }) => {
 	await expect.poll(() => calls).toContain('PUT /api/v1/plugins/file-lock {"allow_without":true}');
 	await expect(card).toContainText('Signed plugins run here without the file lock.');
 	await expect(page.getByTestId('plugin-nolock')).toHaveCount(4);
+	// The tag explains itself (tooltip on the tile) and opens in the plugin's window with the reason and a docs link.
+	await expect(page.getByTestId('plugin-nolock').first()).toHaveAttribute('title', /seccomp/);
+	await page.getByTestId('plugin-row').first().locator('.open').click();
+	const tag = page.getByTestId('plugin-detail').getByTestId('plugin-nolock');
+	await tag.locator('summary').click();
+	await expect(tag).toContainText("container's security profile (seccomp)");
+	await expect(tag.getByTestId('plugin-nolock-docs')).toHaveAttribute('href', /docs\.holyarrs\.com/);
+	await page.screenshot({ path: test.info().outputPath('nolock-window.png') });
+	await page.keyboard.press('Escape');
 	await card.getByRole('button', { name: 'Change' }).click();
 	await card.getByRole('button', { name: 'Keep off' }).click();
 	await expect.poll(() => calls).toContain('PUT /api/v1/plugins/file-lock {"allow_without":false}');
@@ -761,7 +843,7 @@ const stress = (() => {
 		{ ...base, id: 'ok', version: '1.0.0', name: 'Ok', author: 'HolyArrs', description: 'Tiny.', access: null },
 		{ ...base, id: 'host', version: '2.3.1', name: 'Long Host Relay', author: 'CoderLuii', description: 'Sends events to one very long web address.', access: { hosts: ['relay-endpoint.a-really-long-subdomain-name.example-hosting-provider-cloud.net'], folders: [], actions: [] }, stats: { downloads: 7 } },
 		{ ...base, id: 'de', version: '0.9.0', name: 'Untertitel-Synchronisierungswerkzeug', author: 'CoderLuii', description: 'Synchronisiert Untertitel automatisch mit der Tonspur und korrigiert Zeitverschiebungen.', access: { hosts: ['untertitel-datenbank.beispiel.de'], folders: ['untertitel'], actions: ['library.read'] }, stats: { downloads: 4321, stars: 3 } },
-		{ ...base, id: 'ar', version: '1.1.0', name: 'مزامنة المكتبة', author: 'CoderLuii', description: 'يحافظ على مكتبتك متزامنة مع خدمة المشاهدة عبر الإنترنت ويضيف الطلبات الجديدة تلقائيًا.', access: { hosts: [], folders: [], actions: ['library.read', 'requests.create'] }, stats: { downloads: 640, stars: 41 } }
+		{ ...base, id: 'ar', version: '1.1.0', name: 'Ù…Ø²Ø§Ù…Ù†Ø© Ø§Ù„Ù…ÙƒØªØ¨Ø©', author: 'CoderLuii', description: 'ÙŠØ­Ø§ÙØ¸ Ø¹Ù„Ù‰ Ù…ÙƒØªØ¨ØªÙƒ Ù…ØªØ²Ø§Ù…Ù†Ø© Ù…Ø¹ Ø®Ø¯Ù…Ø© Ø§Ù„Ù…Ø´Ø§Ù‡Ø¯Ø© Ø¹Ø¨Ø± Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª ÙˆÙŠØ¶ÙŠÙ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© ØªÙ„Ù‚Ø§Ø¦ÙŠÙ‹Ø§.', access: { hosts: [], folders: [], actions: ['library.read', 'requests.create'] }, stats: { downloads: 640, stars: 41 } }
 	];
 })();
 for (const [width, height, scheme] of [[1920, 1080, 'light'], [1530, 860, 'dark'], [1366, 768, 'light'], [1280, 800, 'dark'], [1024, 768, 'light'], [768, 1024, 'dark'], [390, 844, 'light']] as const) {
@@ -904,6 +986,7 @@ const heavy = {
 		actions: ['library.read', 'library.write', 'downloads.read', 'downloads.control', 'requests.read', 'requests.create', 'requests.approve', 'activity.read', 'watched.write', 'settings.read', 'schedules.run', 'subtitles.write']
 	},
 	installed_access: { hosts: [], folders: [], actions: [] },
+	scope_groups: [{ id: 'network', scopes: ['network.forward'], change: true, warnings: ['forward'] }],
 	settings: Array.from({ length: 16 }, (_, i) => ({ key: `opt${i}`, label: `Option number ${i + 1} with a longer label`, type: ['text', 'number', 'toggle', 'select', 'secret'][i % 5], options: ['One', 'Two', 'Three'], help: i % 3 ? undefined : 'A short line of help that explains what this option changes.', group: i < 8 ? 'Main' : 'Extra' }))
 };
 async function sameHeight(page: Page) {
@@ -938,6 +1021,8 @@ for (const [width, height] of [[1440, 900], [1280, 800], [390, 844]] as const) {
 		await expect(page.getByTestId('plugin-detail')).toBeVisible();
 		await page.waitForTimeout(400);
 		await shot('info');
+		// The red forwarding warning shows where the access is approved, with its icon.
+		await expect(page.getByTestId('approve-warning')).toContainText('Sees everything sent through it');
 		if (desk) await noScrollIn(page, 'plugin window');
 		if (desk) await sameHeight(page);
 		// Its settings.
@@ -975,3 +1060,27 @@ test('plugins: Language Packs row lines up in the list view', async ({ browser }
 	await page.screenshot({ path: test.info().outputPath('list-view-1280.png') });
 	await page.context().close();
 });
+
+// The card's Install on a developer plugin installs from the developer folder, not the signed list.
+for (const [width, height] of [[1280, 800], [390, 844]]) {
+	test(`plugins: card Install on a developer plugin uses dev-install at ${width}`, async ({ browser }) => {
+		const page = await (await browser.newContext({ viewport: { width, height } })).newPage();
+		await signIn(page, owner());
+		const ov = { ...fake, blocklist_stale: false, dev_mode: true, dev_dir: '/config/plugins/_dev', plugins: [{ id: 'subtitle-log', version: '0.1.0', installed: false, running: false, enabled: false, dev: true, access: { hosts: [], folders: [], actions: [] } }, { id: 'broken-dev', version: '0.1.0', installed: false, running: false, enabled: false, dev: true, dev_error: 'plugin.json is missing', access: { hosts: [], folders: [], actions: [] } }] };
+		const calls: string[] = [];
+		await page.route('**/api/v1/plugins**', async (route) => {
+			const r = route.request();
+			if (r.method() === 'GET') return route.fulfill({ json: ov });
+			calls.push(`${r.method()} ${new URL(r.url()).pathname}`);
+			return route.fulfill({ json: { ok: true } });
+		});
+		await page.goto('/plugins');
+		await page.locator('[data-testid="plugin-row"][data-id="subtitle-log"]').getByTestId('plugin-card-install').click();
+		await expect.poll(() => calls).toContain('POST /api/v1/plugins/subtitle-log/dev-install');
+		expect(calls).not.toContain('POST /api/v1/plugins/subtitle-log/install');
+		// One whose files can't be read can't be installed from the card either.
+		await expect(page.locator('[data-testid="plugin-row"][data-id="broken-dev"]').getByTestId('plugin-card-install')).toBeDisabled();
+		await noSidewaysScroll(page);
+		await page.context().close();
+	});
+}

@@ -6,6 +6,7 @@ const (
 	EventTitleAdded       = "title_added"
 	EventTitleEdited      = "title_edited"
 	EventTitleRefreshed   = "title_refreshed"
+	EventArtworkChanged   = "artwork_changed"       // a title got new cover art in place of its old one
 	EventTitleDropped     = "title_dropped"         // the metadata source no longer knows it
 	EventGateOpened       = "gate_opened"           // a Slot moved from not_out_yet to wanted
 	EventGateClosed       = "gate_closed"           // new dates moved the gate later
@@ -53,6 +54,7 @@ const (
 	EventFileBack          = "file_back"                  // a missing File is there again
 	EventTitleRemoved      = "title_removed"              // a movie was deleted from the Library
 	EventFileHeld          = "file_held"                  // a File went to the holding folder
+	EventMovieFileRemoved  = "movie_file_removed"         // one file of a movie was deleted; the movie stays
 	EventHoldingCleaned    = "holding_cleaned"            // old files left the holding folder
 )
 

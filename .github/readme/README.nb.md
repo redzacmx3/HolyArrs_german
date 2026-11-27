@@ -23,7 +23,7 @@
 <p align="center"><a href="https://holyarrs.com/sponsor"><img src="https://holyarrs.com/sponsors/banner.gif" alt="Sponsors"></a></p>
 
 > [!NOTE]
-> **HolyArrs 1.3.0: over 150 rettelser og funksjoner fra 101 personer.** Et system for utvidelser, en ny oppsettsveiviser og en hands-off-modus som aldri rører filene dine. [Se hva som er nytt](https://holyarrs.com/whats-new/)
+> **HolyArrs 1.3.2: importer filer for hånd fra Biblioteket.** Filmfiler sjekkes for lengde, bilde og lyd før import, pluss mange rettelser. [Se hva som er nytt](https://holyarrs.com/whats-new/)
 
 > Hver eneste plakat, trailer og vurdering i HolyArrs kommer fra en server jeg drifter og betaler for selv, slik at det forblir gratis for alle. Hvis HolyArrs har gjort filmkvelden din litt bedre, holder en sponsor lyset på for oss alle 💛
 >

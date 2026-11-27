@@ -34,7 +34,9 @@ func MomentOf(e domain.Event) string {
 		return MomentRename
 	case domain.EventTitleAdded:
 		return MomentAdd
-	case domain.EventTitleRemoved, domain.EventEpisodesRemoved:
+	case domain.EventArtworkChanged:
+		return MomentArtwork
+	case domain.EventTitleRemoved, domain.EventEpisodesRemoved, domain.EventMovieFileRemoved:
 		return MomentDelete
 	case domain.EventHealthBroken, domain.EventHealthRecovered:
 		return MomentHealth
@@ -56,40 +58,7 @@ func (s *Sender) MessageFor(ctx context.Context, e domain.Event) (Message, bool)
 		return Message{}, false
 	}
 	m := Message{Moment: moment, Event: &e, Text: e.Summary, lang: s.lang(ctx)}
-	db := s.Store.Read()
-	if e.TitleID != nil {
-		var mv Movie
-		var kind string
-		var year *int
-		var tmdb, imdb, tvdb, maze, mb *string
-		err := db.QueryRowContext(ctx, `SELECT id, kind, name, year, json_extract(source_ids, '$.tmdb'), json_extract(source_ids, '$.imdb'),
-			json_extract(source_ids, '$.tvdb'), json_extract(source_ids, '$.tvmaze'), json_extract(source_ids, '$.musicbrainz') FROM titles WHERE id = ?`,
-			*e.TitleID).Scan(&mv.ID, &kind, &mv.Name, &year, &tmdb, &imdb, &tvdb, &maze, &mb)
-		str := func(p *string) string {
-			if p == nil {
-				return ""
-			}
-			return *p
-		}
-		switch {
-		case err != nil:
-		case kind == "artist":
-			m.Artist = &Artist{ID: mv.ID, Name: mv.Name, MusicBrainz: str(mb)}
-			if e.Kind != domain.EventEpisodesRemoved && e.Kind != domain.EventTitleRemoved {
-				m.Tracks = tracksOf(ctx, db, slotIDsOf(ctx, db, e))
-			}
-		case kind == "show":
-			m.Show = &Show{ID: mv.ID, Name: mv.Name, Year: year, TMDB: str(tmdb), IMDb: str(imdb), TVDB: str(tvdb), TVMaze: str(maze)}
-			if e.Kind == domain.EventEpisodesRemoved {
-				m.Episodes = episodesFromLabels(e)
-			} else if e.Kind != domain.EventTitleRemoved {
-				m.Episodes = episodesOf(ctx, db, slotIDsOf(ctx, db, e))
-			}
-		default:
-			mv.Year, mv.TMDB, mv.IMDb = year, str(tmdb), str(imdb)
-			m.Movie = &mv
-		}
-	}
+	s.titleInto(ctx, e, &m)
 	name := ""
 	switch {
 	case m.Movie != nil:
@@ -115,15 +84,21 @@ func (s *Sender) MessageFor(ctx context.Context, e domain.Event) (Message, bool)
 			m.Text += "\n" + episodeLines(m.Episodes)
 		}
 	}
+	if moment == MomentImport && e.Data["upgraded"] == true {
+		m.head = "upgraded"
+		if lines := upgradeLines(e.Data); lines != "" {
+			m.Text += "\n" + lines
+		}
+	}
 	switch {
 	case moment == MomentHealth && e.Kind == domain.EventHealthRecovered:
 		m.Subject = say(m.lang, "health_fixed")
 	case moment == MomentHealth:
 		m.Subject = say(m.lang, "health_look")
 	case name != "":
-		m.Subject = say(m.lang, moment) + ": " + name
+		m.Subject = m.headWord() + ": " + name
 	default:
-		m.Subject = say(m.lang, moment)
+		m.Subject = m.headWord()
 	}
 	var extra []string
 	for _, k := range []string{"reason", "release", "downloader", "save_path", "from", "message"} {
@@ -136,6 +111,50 @@ func (s *Sender) MessageFor(ctx context.Context, e domain.Event) (Message, bool)
 		m.Text += "\n" + strings.Join(extra, "\n")
 	}
 	return m, true
+}
+
+// titleInto fills m's movie, show and episodes, or artist and tracks, from
+// the title e is about.
+func (s *Sender) titleInto(ctx context.Context, e domain.Event, m *Message) {
+	db := s.Store.Read()
+	if e.TitleID != nil {
+		var mv Movie
+		var kind string
+		var year *int
+		var tmdb, imdb, tvdb, maze, mb *string
+		var poster string
+		err := db.QueryRowContext(ctx, `SELECT id, kind, name, year, json_extract(source_ids, '$.tmdb'), json_extract(source_ids, '$.imdb'),
+			json_extract(source_ids, '$.tvdb'), json_extract(source_ids, '$.tvmaze'), json_extract(source_ids, '$.musicbrainz'), poster_url FROM titles WHERE id = ?`,
+			*e.TitleID).Scan(&mv.ID, &kind, &mv.Name, &year, &tmdb, &imdb, &tvdb, &maze, &mb, &poster)
+		if err == nil && kind != "artist" {
+			m.Poster = poster
+		}
+		str := func(p *string) string {
+			if p == nil {
+				return ""
+			}
+			return *p
+		}
+		switch {
+		case err != nil:
+		case kind == "artist":
+			m.Artist = &Artist{ID: mv.ID, Name: mv.Name, MusicBrainz: str(mb)}
+			if e.Kind != domain.EventEpisodesRemoved && e.Kind != domain.EventTitleRemoved {
+				m.Tracks = tracksOf(ctx, db, slotIDsOf(ctx, db, e))
+			}
+			m.Poster = s.musicPicture(m.Artist.MusicBrainz, m.Tracks)
+		case kind == "show":
+			m.Show = &Show{ID: mv.ID, Name: mv.Name, Year: year, TMDB: str(tmdb), IMDb: str(imdb), TVDB: str(tvdb), TVMaze: str(maze)}
+			if e.Kind == domain.EventEpisodesRemoved {
+				m.Episodes = episodesFromLabels(e)
+			} else if e.Kind != domain.EventTitleRemoved {
+				m.Episodes = episodesOf(ctx, db, slotIDsOf(ctx, db, e))
+			}
+		default:
+			mv.Year, mv.TMDB, mv.IMDb = year, str(tmdb), str(imdb)
+			m.Movie = &mv
+		}
+	}
 }
 
 // Watch sends every stored Library Event through the Alerts that speak for
@@ -152,7 +171,17 @@ func (s *Sender) Watch(base context.Context) {
 			jobs.Guard("alerts", func() {
 				ctx, cancel := context.WithTimeout(base, 10*time.Minute)
 				defer cancel()
-				for _, m := range s.MessagesFor(ctx, e) {
+				ms := s.MessagesFor(ctx, e)
+				if s.Tap != nil && len(ms) > 0 {
+					// Plugins get one message per Event, whatever the
+					// owner's pack setting split it into.
+					if whole, ok := s.MessageFor(ctx, e); ok && len(ms) > 1 {
+						s.Tap(whole)
+					} else {
+						s.Tap(ms[0])
+					}
+				}
+				for _, m := range ms {
 					if err := s.Send(ctx, m); err != nil {
 						log.Printf("alerts: %s: %s", m.Moment, redact(err.Error()))
 					}
@@ -189,14 +218,14 @@ func (s *Sender) MessagesFor(ctx context.Context, e domain.Event) []Message {
 	for _, ep := range eps {
 		one := m
 		one.Episodes = []Episode{ep}
-		one.Subject = say(m.lang, m.Moment) + ": " + m.Show.Name + " " + ep.Label()
+		one.Subject = m.headWord() + ": " + m.Show.Name + " " + ep.Label()
 		one.Text = say(m.lang, "in_library", "name", strings.TrimSpace(ep.Label()+" "+ep.Name))
 		out = append(out, one)
 	}
 	if len(rest) > 0 {
 		sum := m
 		sum.Episodes = rest
-		sum.Subject = say(m.lang, m.Moment) + ": " + m.Show.Name + " " + episodeWordsIn(m.lang, rest)
+		sum.Subject = m.headWord() + ": " + m.Show.Name + " " + episodeWordsIn(m.lang, rest)
 		sum.Text = say(m.lang, "more_episodes", "n", strconv.Itoa(len(rest))) + "\n" + episodeLines(rest)
 		out = append(out, sum)
 	}
@@ -218,14 +247,14 @@ func (s *Sender) trackMessages(ctx context.Context, m Message) []Message {
 	for _, t := range ts {
 		one := m
 		one.Tracks = []Track{t}
-		one.Subject = say(m.lang, m.Moment) + ": " + m.Artist.Name + " – " + trackWordsIn(m.lang, one.Tracks)
+		one.Subject = m.headWord() + ": " + m.Artist.Name + " – " + trackWordsIn(m.lang, one.Tracks)
 		one.Text = say(m.lang, "in_library", "name", strings.TrimSpace(t.albumName()+" "+t.Label()+" "+t.Name))
 		out = append(out, one)
 	}
 	if len(rest) > 0 {
 		sum := m
 		sum.Tracks = rest
-		sum.Subject = say(m.lang, m.Moment) + ": " + m.Artist.Name + " – " + trackWordsIn(m.lang, rest)
+		sum.Subject = m.headWord() + ": " + m.Artist.Name + " – " + trackWordsIn(m.lang, rest)
 		sum.Text = say(m.lang, "more_tracks", "n", strconv.Itoa(len(rest))) + "\n" + trackLines(rest)
 		out = append(out, sum)
 	}
@@ -244,4 +273,105 @@ func stallCount(data map[string]any) int {
 		return int(n)
 	}
 	return 0
+}
+
+// headWord is the word a Library moment's subject starts with.
+func (m Message) headWord() string {
+	if m.head != "" {
+		return say(m.lang, m.head)
+	}
+	return say(m.lang, m.Moment)
+}
+
+// upgradeLines shows what an upgrade replaced: "quality: 720p → 1080p",
+// the release names and sizes; a side that is not known is "?".
+func upgradeLines(data map[string]any) string {
+	var out []string
+	for _, k := range []string{"quality", "release", "size"} {
+		was, now := factText(k, data["old_"+k]), factText(k, data["new_"+k])
+		if was == "" && now == "" {
+			continue
+		}
+		if was == "" {
+			was = "?"
+		}
+		if now == "" {
+			now = "?"
+		}
+		out = append(out, k+": "+was+" → "+now)
+	}
+	return strings.Join(out, "\n")
+}
+
+// factText is an upgrade fact as text: sizes in bytes (a number in memory,
+// a float once read back from JSON) become "4.2 GB".
+func factText(key string, v any) string {
+	if key != "size" {
+		s, _ := v.(string)
+		return s
+	}
+	var n float64
+	switch x := v.(type) {
+	case int64:
+		n = float64(x)
+	case int:
+		n = float64(x)
+	case float64:
+		n = x
+	default:
+		return ""
+	}
+	if n <= 0 {
+		return ""
+	}
+	if n >= 1<<30 {
+		return fmt.Sprintf("%.1f GB", n/(1<<30))
+	}
+	return fmt.Sprintf("%.0f MB", n/(1<<20))
+}
+
+// musicPicture is the metadata server's public picture for a music
+// message: the album cover when the tracks are all from one album, else
+// the artist photo; "" with no picture address or no MusicBrainz id.
+func (s *Sender) musicPicture(artist string, tracks []Track) string {
+	base := strings.TrimRight(s.Pictures, "/")
+	if base == "" {
+		return ""
+	}
+	album := ""
+	for i, t := range tracks {
+		if i > 0 && t.albumMBID != album {
+			album = ""
+			break
+		}
+		album = t.albumMBID
+	}
+	if validMBID(album) {
+		return base + "/album/" + album + "/500.webp"
+	}
+	if validMBID(artist) {
+		return base + "/artist/" + strings.ToLower(artist) + "/500.webp"
+	}
+	return ""
+}
+
+// validMBID accepts a MusicBrainz id (8-4-4-4-12 hex), so nothing else is
+// put in an address.
+func validMBID(id string) bool {
+	if len(id) != 36 {
+		return false
+	}
+	for i, c := range strings.ToLower(id) {
+		switch i {
+		case 8, 13, 18, 23:
+			if c != '-' {
+				return false
+			}
+		default:
+			if !(c >= '0' && c <= '9' || c >= 'a' && c <= 'f') {
+				return false
+			}
+		}
+	}
+	return true
 }

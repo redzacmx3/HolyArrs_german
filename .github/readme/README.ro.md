@@ -23,7 +23,7 @@
 <p align="center"><a href="https://holyarrs.com/sponsor"><img src="https://holyarrs.com/sponsors/banner.gif" alt="Sponsors"></a></p>
 
 > [!NOTE]
-> **HolyArrs 1.3.0: peste 150 de remedieri și funcții de la 101 de oameni.** Un sistem de pluginuri, un nou asistent de configurare și un mod fără intervenție care nu-ți atinge niciodată fișierele. [Vezi ce e nou](https://holyarrs.com/whats-new/)
+> **HolyArrs 1.3.2: importă fișiere manual din Bibliotecă.** Fișierele de filme sunt verificate (durată, video și audio) înainte de import, plus multe remedieri. [Vezi ce e nou](https://holyarrs.com/whats-new/)
 
 > Fiecare poster, trailer și scor din HolyArrs-ul tău vine de la un server pe care îl țin și îl plătesc eu, ca să rămână gratuit pentru toată lumea. Dacă HolyArrs ți-a făcut seara de film puțin mai frumoasă, un sponsor ține luminile aprinse pentru noi toți 💛
 >

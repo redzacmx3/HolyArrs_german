@@ -7,16 +7,17 @@
 	import Menu, { type MenuItem } from '#lib/ui/Menu.svelte';
 	import Sheet from '#lib/ui/Sheet.svelte';
 	import type { OwnedTitle } from './title-owned.svelte.ts';
-	import { airWords, epFile, epQuality, epTone, getAllMissingShown, nothingQueuedKey, searchQueued, showOffHint } from './title-library-words.ts'; import SeasonPacksRow from './SeasonPacksRow.svelte'; import ReleaseNumbersRow from './ReleaseNumbersRow.svelte'; import TitleLeftovers from './TitleLeftovers.svelte';
+	import { addedOn, airWords, epFile, fileLangs as langs, pathEnd, epQuality, epTone, getAllMissingShown, nothingQueuedKey, searchQueued, showOffHint, qOrder, qHints, subsCodes } from './title-library-words.ts'; import SeasonPacksRow from './SeasonPacksRow.svelte'; import ReleaseNumbersRow from './ReleaseNumbersRow.svelte'; import TitleLeftovers from './TitleLeftovers.svelte';
 	import { ShowVersions, SeasonToolsSheet, EpisodeSheet, chosenWhy, type SheetEpisode } from '#lib/shows/index.ts';
 	import { HistoryLine as CompactRow, isRoutine, groupDownloads, downloadTone, FilePoints } from '#lib/downloads/index.ts';
-	import { leftInDownloader, qualityBadges, ShowDeleteDialog, standInFolder, splitSteps, TitleHeldCopies, type RenameStep } from '#lib/mediafiles/index.ts';
+	import { leftInDownloader, partlyKept, qualityBadges, ShowDeleteDialog, standInFolder, splitSteps, TitleHeldCopies, type RenameStep } from '#lib/mediafiles/index.ts';
 	import { copyBadges, MovieVersions } from '#lib/movies/index.ts';
 	import { SubtitlePanel, type TitleSubtitles } from '#lib/subtitles/index.ts';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { to } from '#lib/core/paths.ts';
+	import { episodeWords } from '#lib/core/episodes.ts';
 	import { api, message } from '#lib/core/api.ts';
 	import { toasts } from '#lib/core/toasts.svelte.ts';
 	import { session } from '#lib/core/session.svelte.ts';
@@ -25,6 +26,7 @@
 	import { orderLabel, splitOutside } from './episode-groups.ts';
 	import { EpisodeOrder } from './episode-order.svelte.ts';
 	import { releaseNumberLine } from './release-number.ts'; import { belowGoodEnough, pointsOf, shownEpisodes } from './episode-points.ts';
+	import { deriveSeasonPick, type SeasonPick } from './season-pick.ts';
 
 	let { own, folders, rules }: { own: OwnedTitle; folders: LibraryFolder[]; rules: PickRulesView[] } = $props();
 	const manage = $derived(own.manage);
@@ -108,13 +110,14 @@
 	}
 
 	// Look for one episode, or a whole season's missing ones.
-	async function epSearch(body: Record<string, unknown>, key: string, done: string) {
+	// The toast opens the show on the searched season, from wherever it is read later (the alerts list).
+	async function epSearch(body: Record<string, unknown>, key: string, done: string, more: { body?: string; season?: number } = {}) {
 		const o = owned;
 		if (!o) return;
 		own.busyAction = key;
 		try {
 			const res = await api.post(`/titles/${o.id}/search`, body);
-			if (searchQueued(res)) toasts.push(done, 'info'); else toasts.push(t(nothingQueuedKey(!!o.keep_up_to_date)), 'info');
+			if (searchQueued(res)) toasts.push(done, 'info', { body: more.body, href: `/library/${o.id}${more.season != null ? `?season=${more.season}` : ''}` }); else toasts.push(t(nothingQueuedKey(!!o.keep_up_to_date)), 'info');
 		} catch (e) {
 			toasts.push(t('discover.titleLibrary.couldntStartSearch'), 'fail', { body: message(e) });
 		} finally {
@@ -122,9 +125,6 @@
 		}
 	}
 
-	// Ready-made quality sets sit in the control (4K stays for second versions); every other set is in the Custom menu.
-	const qOrder = ['Lite', 'Standard', 'Best'];
-	const qHints = (): Record<string, string> => ({ Lite: t('discover.titleLibrary.hintLite'), Standard: t('discover.titleLibrary.hintStandard'), Best: t('discover.titleLibrary.hintBest'), '4K': t('discover.titleLibrary.hint4k') });
 	const qKind = $derived(rules.filter((r) => r.kinds.includes(owned?.kind ?? '')));
 	const qPresets = $derived(qKind.filter((r) => r.preset && r.name !== '4K').sort((a, b) => (qOrder.indexOf(a.name) + 1 || 99) - (qOrder.indexOf(b.name) + 1 || 99)));
 	const qOthers = $derived(qKind.filter((r) => !qPresets.includes(r)));
@@ -191,41 +191,37 @@
 		}
 	}
 
-	const pathEnd = (p: string) => p.split(/[\\/]+/).filter(Boolean).slice(-2).join('/');
-
 	const folderName = (f: LibraryFolder) => (kindFolders.filter((x) => x.label === f.label).length > 1 ? pathEnd(f.path) : f.label);
 
 	const folderMenu = $derived<MenuItem[]>(kindFolders.map((f) => ({ label: folderName(f), checked: f.id === owned?.library_folder_id, onselect: () => { if (f.id !== owned?.library_folder_id) moveTo = f; } })));
 
 	// One choice sets every season and new seasons together; a mix made season by season reads Custom.
-	type SeasonPick = 'all' | 'latest' | 'none';
-
 	const realSeasons = $derived((owned?.show?.seasons ?? []).filter((x) => x.number > 0));
 
 	const latestSeason = $derived(Math.max(0, ...realSeasons.map((x) => x.number)));
 
-	const seasonPick = $derived.by((): SeasonPick | 'custom' => {
-		const kept = realSeasons.filter((x) => x.keep_up_to_date);
-		const newOn = owned?.show?.new_seasons !== 'none';
-		if (kept.length === realSeasons.length && newOn) return 'all';
-		if (kept.length === 0 && !newOn) return 'none';
-		if (kept.length === 1 && kept[0].number === latestSeason && newOn) return 'latest';
-		return 'custom';
-	});
+	const seasonPick = $derived(deriveSeasonPick(owned?.show?.seasons ?? [], owned?.show?.new_seasons, owned?.show?.season_choice));
 
-	const seasonPickWords = $derived<Record<SeasonPick | 'custom', string>>({ all: t('discover.titleLibrary.pickAll'), latest: t('discover.titleLibrary.pickLatest'), none: t('discover.titleLibrary.pickNone'), custom: t('discover.titleLibrary.pickCustom') });
+	const seasonPickWords = $derived<Record<SeasonPick | 'custom', string>>({ all: t('discover.titleLibrary.pickAll'), future: t('shows.seasonChoice.future'), latest: t('discover.titleLibrary.pickLatest'), none: t('discover.titleLibrary.pickNone'), custom: t('discover.titleLibrary.pickCustom') });
 
 	async function setSeasons(pick: SeasonPick) {
 		const o = owned;
 		if (!o) return;
 		own.busyAction = 'seasons';
 		try {
-			for (const x of realSeasons) {
-				const want = pick === 'all' || (pick === 'latest' && x.number === latestSeason);
-				if (want !== x.keep_up_to_date) await api.put(`/titles/${o.id}/seasons/${x.number}`, { keep_up_to_date: want });
+			if (pick === 'future') {
+				await api.put(`/titles/${o.id}`, { season_choice: 'future' });
+			} else {
+				for (const x of realSeasons) {
+					const want = pick === 'all' || (pick === 'latest' && x.number === latestSeason);
+					if (want !== x.keep_up_to_date) await api.put(`/titles/${o.id}/seasons/${x.number}`, { keep_up_to_date: want });
+				}
+				const newSeasons = pick === 'none' ? 'none' : 'all';
+				const patch: Record<string, string> = {};
+				if (o.show?.new_seasons !== newSeasons) patch.new_seasons = newSeasons;
+				if (o.show?.season_choice !== pick) patch.season_choice = pick;
+				if (Object.keys(patch).length) await api.put(`/titles/${o.id}`, patch);
 			}
-			const newSeasons = pick === 'none' ? 'none' : 'all';
-			if (o.show?.new_seasons !== newSeasons) await api.put(`/titles/${o.id}`, { new_seasons: newSeasons });
 			seasonEps = {};
 			openSeasons.clear();
 			await own.loadOwned(o.id);
@@ -236,7 +232,7 @@
 		}
 	}
 
-	const seasonMenu = $derived<MenuItem[]>(([['all', t('discover.titleLibrary.allSeasons')], ['latest', t('discover.titleLibrary.latestSeason')], ['none', t('discover.titleLibrary.pickNone')]] as [SeasonPick, string][]).map(([v, l]) => ({ label: l, checked: seasonPick === v, onselect: () => void setSeasons(v) })));
+	const seasonMenu = $derived<MenuItem[]>(([['all', t('discover.titleLibrary.allSeasons')], ['future', t('shows.seasonChoice.future')], ['latest', t('discover.titleLibrary.latestSeason')], ['none', t('discover.titleLibrary.pickNone')]] as [SeasonPick, string][]).map(([v, l]) => ({ label: l, checked: seasonPick === v, onselect: () => void setSeasons(v) })));
 
 	const orders = $derived<[string, string][]>([['aired', t('discover.titleLibrary.orderAired')], ['daily', t('discover.titleLibrary.orderDaily')], ['absolute', t('discover.titleLibrary.orderAbsolute')]]);
 
@@ -301,7 +297,8 @@
 		if (folderName) out.push({ k: 'folder', icon: 'folder', v: folderName, title: o.folder_path ?? '' });
 		if (o.size_bytes) out.push({ k: 'size', icon: 'archive', v: bytes(o.size_bytes) });
 		if (o.pick_rules_name) out.push({ k: 'rules', icon: 'star', v: o.pick_rules_name });
-		out.push({ k: 'keep', icon: o.keep_up_to_date ? 'check' : 'x', v: o.keep_up_to_date ? t('discover.titleLibrary.keptUpToDate') : t('discover.titleLibrary.notKeptUpToDate') });
+		const part = partlyKept(o);
+		out.push({ k: 'keep', icon: o.keep_up_to_date || part ? 'check' : 'x', v: o.keep_up_to_date ? t('discover.titleLibrary.keptUpToDate') : part ? t('mediafiles.state.keptInPart') : t('discover.titleLibrary.notKeptUpToDate') });
 		if (o.show?.status) out.push({ k: 'status', icon: 'play', v: o.show.status.replace(/^./, (c) => c.toUpperCase()) });
 		if (o.show?.network) out.push({ k: 'net', icon: 'tv', v: o.show.network });
 		if (lang) out.push({ k: 'lang', icon: 'globe', v: lang, title: `${t('discover.titlePage.originalLanguage')}: ${lang}` });
@@ -311,9 +308,7 @@
 	const libFiles = $derived((owned?.kind === 'show' ? ownFiles : (owned?.slots ?? [])).map((x) => {
 		const f = x.file as Record<string, any>;
 		const m = (f?.MediaInfo ?? {}) as Record<string, any>;
-		const langs = (v: unknown) => (Array.isArray(v) ? v : typeof v === 'string' && v ? v.split(/[\/,]/) : []).map((s) => String(s).trim().toUpperCase()).filter(Boolean).slice(0, 6);
 		const name = String(f?.RelativePath ?? '').split(/[\\/]/).pop() ?? '';
-		const addedOn = (iso?: string) => { if (!iso) return ''; const d = new Date(iso); return d.toLocaleDateString(appLocale(), { month: 'short', day: 'numeric', ...(d.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {}) }); };
 		return { res: String(m.resolution ?? (f?.Quality?.resolution ? `${f.Quality.resolution}p` : '')), addedOn: addedOn(f?.AddedAt), id: x.id, versionId: x.version_id, has: !!x.file, left: leftInDownloader(x), state: x.state_label, label: x.version && x.version !== 'Main' ? x.version : t('discover.titleLibrary.mainCopy'), badges: copyBadges(qualityBadges([f]), m.edition ? String(m.edition) : '', f?.Protected ? t('mediafiles.copy.protectedBadge') : ''), codec: [m.video_codec, m.audio_codec].filter(Boolean).map((c) => String(c).toUpperCase()).join(' · '), size: f?.Size ? bytes(f.Size) : '', name, added: f?.AddedAt ? ago(f.AddedAt) : '', audio: langs(m.audio_languages), subs: langs(m.subtitle_languages ?? m.subtitles) };
 	}));
 
@@ -340,8 +335,6 @@
 	const subsOwn = $derived(subsData?.wishes.find((w) => !w.item_id && !w.version_id));
 
 	const subsMode = $derived<'default' | 'off' | 'custom'>(!subsOwn ? 'default' : subsOwn.languages.length ? 'custom' : 'off');
-
-	const subsCodes = (ws: { language: string }[]) => [...new Set(ws.map((w) => w.language.toUpperCase()))].join(', ');
 
 	const subsHint = $derived.by(() => {
 		if (subsMode === 'off') return t('discover.titleLibrary.noSubtitles');
@@ -436,7 +429,7 @@
 								</button>
 								{#if manage}
 									<span class="lib-sr-acts">
-										<button type="button" class="lib-ico" title={t('discover.titleLibrary.getTheMissingEpisodes')} aria-label={t('discover.titleLibrary.getTheMissingEpisodes2', { number: se.number })} disabled={!se.missing || busyAction === `s${se.number}`} onclick={() => epSearch({ season: se.number }, `s${se.number}`, t('discover.titleLibrary.searchingSeason', { n: se.number }))}><Icon name="search" size={15} /></button>
+										<button type="button" class="lib-ico" title={t('discover.titleLibrary.getTheMissingEpisodes')} aria-label={t('discover.titleLibrary.getTheMissingEpisodes2', { number: se.number })} disabled={!se.missing || busyAction === `s${se.number}`} onclick={() => epSearch({ season: se.number }, `s${se.number}`, t('discover.titleOwned.searchingFor', { name: o.name }), { body: t('discover.titleLibrary.seasonN', { n: se.number }), season: se.number })}><Icon name="search" size={15} /></button>
 										<button type="button" class="lib-ico" title={t('discover.titleLibrary.chooseAReleaseFor')} aria-label={t('discover.titleLibrary.chooseAReleaseFor2', { number: se.number })} onclick={() => own.openPick({ label: se.number === 0 ? t('discover.titleLibrary.specials') : t('discover.titleLibrary.seasonN', { n: se.number }), query: `season=${se.number}`, body: { season: se.number } })}><Icon name="grid" size={15} /></button>
 										<button type="button" class="lib-ico" title={t('discover.titleLibrary.seasonTools')} aria-label={t('discover.titleLibrary.seasonTools2', { number: se.number })} onclick={() => openTools(o.id, se.number)}><Icon name="more" size={15} /></button>
 									</span>
@@ -463,7 +456,7 @@
 											<span class="lib-ep-st {aired ? tone : 'future'}"><span class="own-dot {tone}" aria-hidden="true"></span>{aired ? epQuality(e) || (st?.state === 'not_out_yet' ? t('discover.titleLibrary.waitingAfterAir') : '') || serverWords(st?.state_label) || t('discover.titleLibrary.missing') : t('discover.titleLibrary.notOutYet')}</span>
 											{#if manage && st}
 												<span class="lib-ep-acts">
-													<button type="button" class="lib-ico" title={t('discover.titleLibrary.lookForItNow')} aria-label={t('discover.titleLibrary.lookForEpisode', { episode: e.episode })} disabled={tone === 'downloading' || busyAction === `e${e.id}`} onclick={(ev) => { ev.stopPropagation(); void epSearch({ slot_id: st.id }, `e${e.id}`, t('discover.titleLibrary.searchingEpisode', { episode: e.episode })); }}><Icon name="search" size={14} /></button>
+													<button type="button" class="lib-ico" title={t('discover.titleLibrary.lookForItNow')} aria-label={t('discover.titleLibrary.lookForEpisode', { episode: e.episode })} disabled={tone === 'downloading' || busyAction === `e${e.id}`} onclick={(ev) => { ev.stopPropagation(); void epSearch({ slot_id: st.id }, `e${e.id}`, t('discover.titleOwned.searchingFor', { name: o.name }), { body: episodeWords(se.number, e.episode, e.name), season: se.number }); }}><Icon name="search" size={14} /></button>
 													<button type="button" class="lib-ico" title={t('discover.titleLibrary.chooseAReleaseFor3')} aria-label={t('discover.titleLibrary.chooseAReleaseFor4', { episode: e.episode })} onclick={(ev) => { ev.stopPropagation(); own.openPick({ label: `S${se.number} E${e.episode}`, query: `item_id=${e.id}`, body: { slot_id: st.id } }); }}><Icon name="grid" size={14} /></button>
 												</span>
 											{/if}
@@ -527,9 +520,9 @@
 			{#if manage}
 				<h3 class="lib-h">{t('discover.titleLibrary.settings')}</h3>
 				<div class="lib-rows">
-					<button type="button" class="lib-row" role="switch" aria-checked={o.keep_up_to_date} disabled={busyAction === 'keep'} onclick={() => own.ownRun('keep')}>
+					<button type="button" class="lib-row" role="switch" aria-checked={o.keep_up_to_date ? 'true' : partlyKept(o) ? 'mixed' : 'false'} data-testid="show-keep-switch" disabled={busyAction === 'keep'} onclick={() => own.ownRun('keep')}>
 						<span><b>{t('discover.titleLibrary.keepUpToDate')}</b><small>{t('discover.titleLibrary.newAndBetterCopies')}</small></span>
-						<span class="lib-switch" class:on={o.keep_up_to_date} aria-hidden="true"></span>
+						<span class="lib-switch" class:on={o.keep_up_to_date} class:part={!o.keep_up_to_date && partlyKept(o)} aria-hidden="true"></span>
 					</button>
 					{#if (!o.gate_open || !o.keep_up_to_date) && o.gate_reason}
 						<div class="lib-row static">
@@ -553,10 +546,10 @@
 					{#if o.show}
 						<div class="lib-row static" data-testid="seasons-row">
 							<span><b>{t('discover.titleLibrary.seasons')}</b></span>
-							<div class="lib-pick"><Menu label={t('discover.titleLibrary.seasons')} variant="button" items={seasonMenu} width={200}>{#snippet trigger()}<span>{busyAction === 'seasons' ? t('discover.titleLibrary.saving') : seasonPickWords[seasonPick]}</span><Icon name="chevronDown" size={14} />{/snippet}</Menu></div>
+							<div class="lib-pick"><Menu label={t('discover.titleLibrary.seasons')} variant="button" items={seasonMenu} width={220}>{#snippet trigger()}<span>{busyAction === 'seasons' ? t('discover.titleLibrary.saving') : seasonPickWords[seasonPick]}</span><Icon name="chevronDown" size={14} />{/snippet}</Menu></div>
 						</div>
 						<div class="lib-row static">
-							<span><b>{t('discover.titleLibrary.episodeOrder')}</b>{#if eo.hint}<small>{eo.hint}</small>{/if}</span>
+							<span><b>{t('discover.titleLibrary.episodeOrder')}</b>{#if eo.hint}<small class="wrap">{eo.hint}</small>{/if}</span>
 							<div class="lib-pick"><Menu label={t('discover.titleLibrary.episodeOrder')} variant="button" items={eo.menu} width={eo.groupList?.groups.length ? 300 : 200}>{#snippet trigger()}<span>{busyAction === 'order' ? t('discover.titleLibrary.saving') : orderLabel(chosenGroup, orders.find(([v]) => v === o.show?.episode_order)?.[1] ?? t('discover.titleLibrary.orderAired'), t('discover.titleLibrary.orderUnavailable'))}</span><Icon name="chevronDown" size={14} />{/snippet}</Menu></div>
 						</div><ReleaseNumbersRow value={o.show?.release_numbers ?? ''} grouped={!!chosenGroup} busy={busyAction === 'numbers'} onpick={(v) => void putTitle({ release_numbers: v }, 'numbers')} /><SeasonPacksRow value={o.show?.pack_window ?? 0} busy={busyAction === 'pack'} onpick={(n) => void putTitle({ pack_window: n }, 'pack')} />
 					{/if}
@@ -748,23 +741,24 @@
 	.lib-rows { display: grid; grid-template-columns: minmax(0, 1fr); border-radius: var(--r-panel); background: var(--surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
 	.lib-rows.danger { margin-top: 16px; }
 	.lib-rows.danger b, .lib-rows.danger :global(svg) { color: var(--fail-text); }
+	/* These rows include child components (Season packs), so the rules reach into them. */
 	.lib-rows :global(.lib-row) { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 14px 20px; border: 0; background: none; color: var(--text); text-align: left; text-decoration: none; cursor: pointer; font: inherit; }
 	.lib-rows :global(.lib-row + .lib-row) { box-shadow: inset 0 .5px 0 color-mix(in srgb, var(--text) 10%, transparent); }
 	.lib-rows :global(.lib-row:hover) { background: color-mix(in srgb, var(--text) 4%, transparent); }
-	.lib-rows :global(.lib-row:focus-visible), .lib-rows :global(.lib-sr-main:focus-visible) { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
-	.lib-rows :global(.lib-row span) { display: grid; gap: 3px; min-width: 0; }
-	.lib-rows :global(.lib-row b) { font: 600 15px/1.2 var(--font-ui); }
-	.lib-rows :global(.lib-row small) { color: var(--text-muted); font: 500 13px/1.3 var(--font-ui); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+	.lib-rows :global(.lib-row:focus-visible), .lib-sr-main:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+	.lib-rows :global(.lib-row > span) { display: grid; gap: 3px; min-width: 0; }
+	.lib-rows :global(.lib-row > span > b) { font: 600 15px/1.2 var(--font-ui); }
+	.lib-rows :global(.lib-row > span > small) { color: var(--text-muted); font: 500 13px/1.3 var(--font-ui); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 	.lib-rows :global(.lib-row svg) { flex: none; color: var(--text-muted); }
 	.lib-rows :global(.lib-row.static) { cursor: default; }
 	.lib-rows :global(.lib-row.static:hover) { background: none; }
-	.lib-rows :global(.lib-row small.wrap) { white-space: normal; }
+	.lib-rows :global(.lib-row > span > small.wrap) { white-space: normal; overflow-wrap: anywhere; }
 	.lib-rows :global(.lib-pick) { flex: none; max-width: 55%; min-width: 0; }
 	.lib-rows :global(.lib-pick .ui-pop) { display: flex; max-width: 100%; }
 	.lib-rows :global(.lib-pick .trigger) { max-width: 100%; min-width: 0; overflow: hidden; height: 34px; padding: 0 10px; border-radius: 9px; color: var(--text-muted); font: 500 14px/1 var(--font-ui); }
 	.lib-rows :global(.lib-pick .trigger span) { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 	.lib-rows :global(.lib-pick .trigger svg) { flex: none; }
-	.lib-rows :global(.lib-pick .trigger:hover), .lib-rows :global(.lib-pick .trigger[aria-expanded='true']) { background: color-mix(in srgb, var(--text) 7%, transparent); color: var(--text); }
+	.lib-pick :global(.trigger:hover), .lib-pick :global(.trigger[aria-expanded='true']) { background: color-mix(in srgb, var(--text) 7%, transparent); color: var(--text); }
 	.lib-move-path { margin: 0 0 16px; color: var(--text-muted); font: 500 13px/1.4 var(--font-mono, ui-monospace, monospace); overflow-wrap: anywhere; }
 	.lib-move-actions { display: flex; justify-content: flex-end; gap: 8px; }
 	.q-row { display: grid; gap: 10px; }
@@ -794,6 +788,8 @@
 	.lib-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 99px; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 25%); transition: transform var(--dur-fast) var(--ease-out); }
 	.lib-switch.on { background: var(--ok); }
 	.lib-switch.on::after { transform: translateX(18px); }
+	.lib-switch.part { background: color-mix(in srgb, var(--ok) 55%, transparent); }
+	.lib-switch.part::after { transform: translateX(9px); }
 	@media (max-width: 600px) { .lib-status { padding: 18px; } .lib-btn { flex: 1; justify-content: center; } .lib-files { grid-template-columns: 1fr; } }
 	.lib-hist { display: grid; gap: 2px; margin: 0 -12px; }
 	/* A 44px-tall hit area over the 16px link line on touch phones. */

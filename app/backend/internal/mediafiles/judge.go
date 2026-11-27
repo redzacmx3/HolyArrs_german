@@ -17,7 +17,7 @@ type ReleaseFacts struct {
 	Name           string
 	Parse          releasename.Result
 	Size           int64
-	Protocol       string // torrent, usenet
+	Protocol       string // torrent, usenet or a plugin's own download type
 	Seeders        *int
 	PublishedAt    time.Time
 	InfoHash       string
@@ -174,6 +174,13 @@ func MatchTitle(p releasename.Result, lib []TitleRef) Match {
 				sides = append(sides, c)
 			}
 		}
+	}
+	// The title with its kana spelled out is a second name to try.
+	if p.KanaTitle != "" {
+		sides = append(sides, releasename.CleanName(p.KanaTitle))
+	}
+	if w := releasename.AmpReading(name); w != "" {
+		sides = append(sides, w)
 	}
 	var cands []*TitleRef
 	for i := range lib {
@@ -346,6 +353,9 @@ func traitMatchesAt(trait string, p releasename.Result, runtime int) (bool, stri
 		return strings.HasPrefix(p.Audio.Format, "dts"), "audio is DTS"
 	case "truehd_audio":
 		return p.Audio.Format == "truehd", "audio is TrueHD"
+	case "sdr_4k":
+		// 2160p with no HDR word in the name: often worse than a good 1080p.
+		return p.Resolution.Value >= 2160 && len(p.HDR.Value) == 0, "is 4K without HDR (SDR)"
 	case "dv_no_fallback":
 		// Dolby Vision with no HDR10 layer named: players without Dolby
 		// Vision show wrong colours.
@@ -383,6 +393,11 @@ func StepFor(p releasename.Result) string {
 	case "tv":
 		if band == "720p" || band == "1080p" {
 			return band + "_tv"
+		}
+		if band == "2160p" {
+			// The ladder has no 2160p TV step; a 2160p TV copy (Sonarr's
+			// "HDTV-2160p") is the lowest 2160p step, not SD.
+			return "2160p_web"
 		}
 		return "sd_tv"
 	case "web_dl", "web_rip":
@@ -652,7 +667,7 @@ func Judge(rel ReleaseFacts, set SlotSet, rules PickRulesBody) Verdict {
 
 	// 7. Protocol wait.
 	wait := rules.Protocol.WaitMinutesTorrent
-	if rel.Protocol == "usenet" {
+	if rel.Protocol != "torrent" { // a plugin's own download type waits like usenet
 		wait = rules.Protocol.WaitMinutesUsenet
 	}
 	until := rel.PublishedAt.Add(time.Duration(wait) * time.Minute)

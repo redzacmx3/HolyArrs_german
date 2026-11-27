@@ -23,7 +23,7 @@
 <p align="center"><a href="https://holyarrs.com/sponsor"><img src="https://holyarrs.com/sponsors/banner.gif" alt="Sponsors"></a></p>
 
 > [!NOTE]
-> **HolyArrs 1.3.0: meer dan 150 fixes en functies van 101 mensen.** Een plug-insysteem, een nieuwe installatiewizard en een handen-af-modus die nooit aan je bestanden komt. [Wat is er nieuw](https://holyarrs.com/whats-new/)
+> **HolyArrs 1.3.2: bestanden met de hand importeren vanuit de Bibliotheek.** Filmbestanden worden vóór het importeren gecontroleerd op lengte, beeld en geluid, plus veel fixes. [Wat is er nieuw](https://holyarrs.com/whats-new/)
 
 > Elke poster, trailer en score in je HolyArrs komt van een server die ik zelf draai en betaal, zodat het voor iedereen gratis blijft. Heeft HolyArrs je filmavond een beetje beter gemaakt? Met een sponsor blijven de lichten aan voor ons allemaal 💛
 >

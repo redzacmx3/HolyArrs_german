@@ -23,7 +23,7 @@
 <p align="center"><a href="https://holyarrs.com/sponsor"><img src="https://holyarrs.com/sponsors/banner.gif" alt="Sponsors"></a></p>
 
 > [!NOTE]
-> **HolyArrs 1.3.0: yli 150 korjausta ja ominaisuutta 101 ihmiseltä.** Laajennusjärjestelmä, uusi käyttöönottoavustaja ja koskematon tila, joka ei koskaan koske tiedostoihisi. [Katso mitä uutta](https://holyarrs.com/whats-new/)
+> **HolyArrs 1.3.2: tuo tiedostoja käsin Kirjastosta.** Elokuvatiedostojen pituus, kuva ja ääni tarkistetaan ennen tuontia, ja paljon korjauksia. [Katso mitä uutta](https://holyarrs.com/whats-new/)
 
 > Jokainen julisteesi, traileri ja arvosana HolyArrsissa tulee palvelimelta, jota ylläpidän ja maksan itse, jotta se pysyy kaikille ilmaisena. Jos HolyArrs paransi elokuvailtaasi edes vähän, sponsorointi pitää valot päällä meille kaikille 💛
 >

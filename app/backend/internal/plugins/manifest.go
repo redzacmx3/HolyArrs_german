@@ -11,6 +11,7 @@ import (
 	"io"
 	"path"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/HolyArrs/holyarrs/app/backend/internal/accounts"
@@ -27,8 +28,15 @@ const (
 	maxIcon        = 48 << 10
 )
 
+// A plugin brings at most maxDownloadTypes download types, each shaped like
+// sources.PluginTypeName (the Engine does not import sources).
+var (
+	maxDownloadTypes = 4
+	downloadTypeRe   = regexp.MustCompile(`^[a-z][a-z0-9-]{1,30}$`)
+)
+
 // detailKeys are the optional manifest keys.
-var detailKeys = []string{"description", "icon", "icon_url", "long_description", "how_it_works", "whats_new", "developers", "updated", "licence", "repo", "category", "platforms", "support_email", "support_url", "size", "settings", "resources"}
+var detailKeys = []string{"description", "icon", "icon_url", "long_description", "how_it_works", "whats_new", "developers", "updated", "licence", "repo", "category", "platforms", "support_email", "support_url", "size", "settings", "resources", "download_types"}
 
 // Limits for the optional page fields.
 const (
@@ -64,9 +72,12 @@ type Manifest struct {
 	Details
 	Access Access `json:"access"`
 	// Resources asks for caps above the defaults; the owner approves them.
-	Resources     *Resources `json:"resources,omitempty"`
-	MinAppVersion string     `json:"min_app_version"`
-	SHA256        string     `json:"sha256"`
+	Resources *Resources `json:"resources,omitempty"`
+	// DownloadTypes are download types the plugin brings itself, such as
+	// "soulseek", for its Sources and Downloaders; optional.
+	DownloadTypes []string `json:"download_types,omitempty"`
+	MinAppVersion string   `json:"min_app_version"`
+	SHA256        string   `json:"sha256"`
 }
 
 // Details are optional plain-text fields for the plugin's page in the app.
@@ -102,6 +113,24 @@ type Access struct {
 	Hosts   []string    `json:"hosts"`
 	Folders []FolderReq `json:"folders"`
 	Actions []string    `json:"actions"`
+	// Events are the moments the plugin wants told as they happen (see
+	// EventNames); optional, and older manifests have none.
+	Events []string `json:"events,omitempty"`
+}
+
+// EventNames are the events a plugin may ask for, in the order screens show
+// them: the staff Alerts moments and more Library, download, search and
+// system events. Requests and problem reports are offered with their title
+// and ids only, so a plugin never learns who asked, who decided or what
+// anyone wrote.
+var EventNames = []string{
+	"library.add", "library.delete", "library.import", "library.upgraded", "library.rename", "library.artwork", "library.subtitle",
+	"library.needs_decision", "library.edited", "library.refreshed", "library.moved", "library.episodes_changed", "library.adopted",
+	"library.file_missing", "library.file_back",
+	"download.grab", "download.done", "download.failed", "download.rejected", "download.vanished",
+	"search.done", "search.failed", "search.release_held",
+	"request.made", "request.approved", "request.declined", "request.available", "report.made", "report.fixed",
+	"system.health", "system.media_server_updated", "system.list_synced", "system.folder_unreachable", "system.disk_low",
 }
 
 // Folder modes.
@@ -153,7 +182,7 @@ func ParseManifest(data []byte) (*Manifest, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, err := strictKeys(top["access"], "access.", nil, "hosts", "folders", "actions"); err != nil {
+	if _, err := strictKeys(top["access"], "access.", []string{"events"}, "hosts", "folders", "actions"); err != nil {
 		return nil, err
 	}
 
@@ -196,6 +225,14 @@ func ParseManifest(data []byte) (*Manifest, error) {
 	if err := m.Access.check(); err != nil {
 		return nil, err
 	}
+	if len(m.DownloadTypes) > maxDownloadTypes {
+		return nil, fmt.Errorf("%w: more than %d download types", ErrManifest, maxDownloadTypes)
+	}
+	for i, t := range m.DownloadTypes {
+		if t == "torrent" || t == "usenet" || !downloadTypeRe.MatchString(t) || slices.Contains(m.DownloadTypes[:i], t) {
+			return nil, fmt.Errorf("%w: download type %q must be 2 to 31 lowercase letters, digits and dashes, not torrent or usenet, and not repeated", ErrManifest, t)
+		}
+	}
 	if m.Resources != nil && newerVersion(resourcesSince, m.MinAppVersion) {
 		return nil, fmt.Errorf("%w: \"resources\" needs min_app_version %s or newer", ErrManifest, resourcesSince)
 	}
@@ -231,6 +268,13 @@ func (a Access) check() error {
 			return fmt.Errorf("%w: unknown or repeated permission %q", ErrManifest, sc)
 		}
 		seenScope[sc] = true
+	}
+	seenEvent := map[string]bool{}
+	for _, ev := range a.Events {
+		if seenEvent[ev] || !slices.Contains(EventNames, ev) {
+			return fmt.Errorf("%w: unknown or repeated event %q", ErrManifest, ev)
+		}
+		seenEvent[ev] = true
 	}
 	if len(a.Hosts) > maxHosts {
 		return fmt.Errorf("%w: more than %d hosts", ErrManifest, maxHosts)

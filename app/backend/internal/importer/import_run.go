@@ -133,7 +133,11 @@ func (im *Importer) Import(ctx context.Context, downloadID int64, dryRun bool, b
 	if it.Runtime != nil {
 		minutes = *it.Runtime
 	}
-	up, err := checkUpgrade(ctx, db, sl, ver, d, plan, cands, im.refuseFakes(ctx, db), minutes)
+	original := ""
+	if ti.OriginalLanguage != nil {
+		original = *ti.OriginalLanguage
+	}
+	up, err := checkUpgrade(ctx, db, sl, ver, d, root, plan, cands, im.refuseFakes(ctx, db), minutes, original)
 	if err != nil {
 		return nil, err
 	}
@@ -332,7 +336,7 @@ func (im *Importer) Import(ctx context.Context, downloadID int64, dryRun bool, b
 			}
 		}
 	}
-	slotTo, reason := mediafiles.SlotNeedsADecision, im.nothingPlaced(dr, d.FilesSeen, plan)
+	slotTo, reason := mediafiles.SlotNeedsADecision, waitForFiles(d, im.nothingPlaced(dr, d.FilesSeen, plan), time.Now())
 	if why := notPlacedWhy(root, plan, imp.Result); why != "" {
 		reason = why
 	} else if why := im.unseenWhy(dr, d.FilesSeen, root, rootOK, plan, len(cands) == 0); why != "" {
@@ -435,7 +439,7 @@ func (im *Importer) Import(ctx context.Context, downloadID int64, dryRun bool, b
 		}
 		ge := false
 		if fileID > 0 {
-			ge = mediafiles.ReachesGoodEnough(newName, up.rules)
+			ge = mediafiles.ReachesGoodEnoughFor(newName, ti, up.rules)
 			if _, err := tx.Exec("UPDATE slots SET file_id = ?, active_download_id = NULL, good_enough = ? WHERE id = ?", fileID, ge, sl.ID); err != nil {
 				return err
 			}
@@ -471,6 +475,9 @@ func (im *Importer) Import(ctx context.Context, downloadID int64, dryRun bool, b
 	slotID, dlID, titleID := sl.ID, d.ID, ti.ID
 	e := &domain.Event{Actor: by, Kind: "import_" + imp.State, TitleID: &titleID, SlotID: &slotID, DownloadID: &dlID, Summary: summary,
 		Data: map[string]any{"import_id": imp.ID, "result": imp.Result, "from": imp.FromPath, "paths": planPaths(imp.Plan)}, GroupKey: "slot:" + strconv.FormatInt(slotID, 10)}
+	if up.old != nil && fileID > 0 {
+		im.markUpgrade(ctx, e.Data, map[int64]int64{up.old.ID: fileID})
+	}
 	if im.Store.AddEvent(ctx, e) == nil {
 		im.publish("event", e)
 	}

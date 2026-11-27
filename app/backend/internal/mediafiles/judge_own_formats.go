@@ -151,17 +151,20 @@ func languagesOf(p releasename.Result) []string {
 		return p.AudioLanguages
 	}
 	if len(p.Languages) > 0 {
-		if !p.OriginalAudio {
+		// A name that keeps the original language (German DL, ORIGINAL)
+		// has it too, as the old apps read it. Fork: German DL of a title
+		// whose original language is not known carries originalMark.
+		if !p.Has("original") && !p.OriginalAudio {
 			return p.Languages
 		}
 		orig := p.OriginalLanguage
-		if orig == "" {
+		if orig == "" && p.OriginalAudio {
 			orig = originalMark
 		}
-		if slices.ContainsFunc(p.Languages, func(l string) bool { return strings.EqualFold(l, orig) }) {
+		if orig == "" || slices.ContainsFunc(p.Languages, func(l string) bool { return strings.EqualFold(l, orig) }) {
 			return p.Languages
 		}
-		return append(slices.Clone(p.Languages), orig)
+		return append(slices.Clip(p.Languages), orig)
 	}
 	if p.OriginalLanguage != "" {
 		return []string{p.OriginalLanguage}

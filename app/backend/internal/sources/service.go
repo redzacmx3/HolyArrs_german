@@ -6,13 +6,13 @@
 package sources
 
 import (
+	"cmp"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 	"net/url"
 	"slices"
-	"strconv"
 	"strings"
 	"time"
 
@@ -30,8 +30,8 @@ var (
 	ErrName     = errors.New("give the Source a name of 1 to 80 characters")
 	ErrNameUsed = errors.New("another Source has that name")
 	ErrFormat   = errors.New("format must be torznab, newznab, rss or site")
-	ErrSite     = errors.New("site must be one of the built-in sites: knaben, torrentscsv, subsplease or iptorrents")
-	ErrProtocol = errors.New("protocol must be torrent or usenet")
+	ErrSite     = errors.New("site must be one of the built-in sites: knaben, torrentscsv, subsplease, yts or iptorrents")
+	ErrProtocol = errors.New("protocol must be torrent, usenet or a download type the Source's plugin brings")
 	ErrURL      = errors.New("the address must start with http:// or https:// and name a host")
 	// ErrQuery matches ErrURL under errors.Is, so callers that check ErrURL treat it the same.
 	ErrQuery      error = queryErr{}
@@ -64,7 +64,7 @@ type Input struct {
 	Name   string `json:"name"`
 	Format string `json:"format"`
 	// Site names the built-in site a site-format Source reads (knaben,
-	// torrentscsv, subsplease, iptorrents). It is set when the Source is added.
+	// torrentscsv, subsplease, yts, iptorrents). It is set when the Source is added.
 	Site string `json:"site,omitempty"`
 	// SiteUser is the person's user id on a built-in site that asks for one
 	// beside its key (IPTorrents: the passkey goes in APIKey). Nil keeps it.
@@ -196,6 +196,7 @@ func Change(ctx context.Context, s *database.Store, v *secrets.Vault, id int64, 
 		src.ProxyURL != "" && src.ProxyURL != old.ProxyURL {
 		return old, ErrKeyAgainProxy
 	}
+	pinBotCheck(&src, (src.SecretRef == nil || key != "" || in.ClearKey) && (src.PathSecretRef == nil || urlSent && !pathKept) && (src.ProxySecretRef == nil || pass != "" || src.ProxyURL == ""))
 	err = s.Write(ctx, func(tx *sql.Tx) error {
 		if err := nameUsed(tx, src.Name, src.ID); err != nil {
 			return err
@@ -305,7 +306,7 @@ func SetPaused(ctx context.Context, s *database.Store, id int64, paused bool, by
 
 // ConfigFor builds the Client settings for a Source and opens its key, passkey and proxy password.
 func ConfigFor(ctx context.Context, src domain.Source, sec SecretReader) (Config, error) {
-	cfg := Config{Site: src.Extra[extraSiteKind], SiteUser: src.Extra[extraSiteUser], SiteLogin: src.Extra[extraSiteLogin], SiteAgent: src.Extra[extraSiteAgent], URL: src.URL, AllowLocal: src.AllowLocal, Protocol: src.Protocol, Format: src.Format,
+	cfg := Config{Site: src.Extra[extraSiteKind], SiteUser: src.Extra[extraSiteUser], SiteLogin: src.Extra[extraSiteLogin], SiteAgent: src.Extra[extraSiteAgent], BotCheckPin: src.Extra[extraBotCheckPin], URL: src.URL, AllowLocal: src.AllowLocal, Protocol: src.Protocol, Format: src.Format,
 		GapMS: src.Limits.GapMS, PerWindow: src.Limits.SearchesPerWindow, ProxyAllowLocal: src.ProxyAllowLocal,
 		Window: time.Duration(src.Limits.WindowSeconds) * time.Second, Timeout: time.Duration(src.Limits.TimeoutMS) * time.Millisecond}
 	open := func(ref *int64) (string, error) {
@@ -540,28 +541,6 @@ func checkURL(raw string) (*url.URL, error) {
 	return u, nil
 }
 
-// parseProxy checks a proxy address and returns it without the password, which comes back apart.
-func parseProxy(raw string) (clean string, pass string, err error) {
-	raw = strings.TrimSpace(raw)
-	if raw == "" {
-		return "", "", nil
-	}
-	u, err := url.Parse(raw)
-	if err != nil || (u.Scheme != "http" && u.Scheme != "https" && u.Scheme != "socks5") || u.Port() == "" || u.Hostname() == "" ||
-		(u.Path != "" && u.Path != "/") || u.RawQuery != "" {
-		return "", "", ErrProxy
-	}
-	if n, err := strconv.Atoi(u.Port()); err != nil || n < 1 || n > 65535 {
-		return "", "", ErrProxy
-	}
-	out := url.URL{Scheme: u.Scheme, Host: u.Host}
-	if u.User != nil {
-		pass, _ = u.User.Password()
-		out.User = url.User(u.User.Username())
-	}
-	return out.String(), pass, nil
-}
-
 func hostOf(raw string) string {
 	u, err := url.Parse(raw)
 	if err != nil {
@@ -607,7 +586,7 @@ func fill(in Input, src *domain.Source, isNew bool) (key, proxyPass string, err 
 			in.Kinds = site.Kinds
 		}
 	}
-	proto := in.Protocol
+	proto := cmp.Or(in.Protocol, addressProto(in, src))
 	if proto == "" && isNew {
 		proto = "torrent"
 		if src.Format == "newznab" {
@@ -615,7 +594,7 @@ func fill(in Input, src *domain.Source, isNew bool) (key, proxyPass string, err 
 		}
 	}
 	if proto != "" {
-		if proto != "torrent" && proto != "usenet" {
+		if proto != "torrent" && proto != "usenet" && !pluginTypeFits(cmp.Or(strings.TrimSpace(in.URL), src.URL), proto) {
 			return "", "", ErrProtocol
 		}
 		src.Protocol = proto
@@ -735,7 +714,7 @@ func fill(in Input, src *domain.Source, isNew bool) (key, proxyPass string, err 
 	}
 	if isNew {
 		src.State = "enabled"
-		src.Extra = map[string]string{}
+		src.Extra = newSourceExtra()
 	}
 	if site.ID != "" {
 		if src.Extra == nil {

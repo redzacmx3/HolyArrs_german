@@ -31,6 +31,14 @@ Ab HolyArrs 1.3.0 ist nur Englisch im Programm, alle anderen Sprachen lädt der 
 
 HolyArrs führt jede noch nicht gelaufene Migration aus, auch eine mit kleinerer Nummer als die neueste schon gelaufene. Eine umnummerierte Fork-Migration wird über ihren Namen wiedererkannt und nicht doppelt ausgeführt (`app/backend/internal/core/database/migrate.go`, Test `TestForkMigrationRenumberedBehindUpstream`). So kann ein NAS mit dem Fork-Image jederzeit auf einen neueren Stand gehen.
 
+Achtung bei der Reihenfolge: Das Umbenennen läuft in einem Durchgang und verschiebt einen Eintrag nur auf eine freie Nummer. Darum behält das Skript die Nummern der Fork-Migrationen, die nicht kollidieren, und hängt nur die kollidierenden hinten an. Wenn dadurch zwei Fork-Migrationen dieselbe Tabelle umbauen und die Reihenfolge kippt (beim 1.3.6-Abgleich `own_trait_language` nach `own_trait_per_minute`), muss die spätere alle Werte der früheren mitnehmen. `TestFork136Renumbering` prüft beides: ein NAS mit dem alten Stand und eine neue Datenbank.
+
+## Fork-Teile in eigenen Dateien
+
+Damit Upstream-Dateien unter der 800-Zeilen-Grenze bleiben und beim Abgleich weniger Konflikte entstehen:
+- `app/backend/internal/accounts/scopes_fork.go`: Rechte der Fork-Routen (Upkeep, Wünsche).
+- `app/frontend/src/lib/mediafiles/fork-types.ts`: Fork-Felder an Upstream-Typen (`release_numbers`, `tags`, `decide_why`), per `declare module`.
+
 ## Von Hand
 
 ```
